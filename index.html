@@ -196,11 +196,11 @@
             ricevuta += "<span style='color:#0b942e;font-weight:bold;'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
 
             if (scaduta) {
-                ricevuta += "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
-                appButtonHtml = "<button onclick=\"window.location.href='appuntamento.html'\">Prenota il tuo appuntamento</button>";
-            } else {
-                appButtonHtml = "";
-            }
+    ricevuta += "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
+    appButtonHtml = ""; // Non mostrare nessun pulsante
+} else {
+    appButtonHtml = "";
+}
 
             ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
             document.getElementById("ricevuta").innerHTML = ricevuta;
