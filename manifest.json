@@ -1,6 +1,6 @@
 {
-  "name": "Folletto Tool - Super Dan Edition",
-  "short_name": "FollettoTool",
+  "name": "Folletto Tool - Serial Check",
+  "short_name": "FollettoCheck",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#e9f2f7",
