@@ -2,106 +2,192 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-   <link rel="manifest" href="manifest.json">
-     <title>Folletto Tool - Serial Check</title>
+    <link rel="manifest" href="manifest.json">
+    <title>Folletto Tool - Serial Check</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         if (location.protocol !== 'https:') {
             location.replace(`https:${location.href.substring(location.protocol.length)}`);
         }
     </script>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <!-- Font Awesome per le icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: #e9f2f7;
+            background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%);
+            min-height: 100vh;
             text-align: center;
             margin: 0;
             padding: 0;
         }
         .container {
-            margin: 40px auto;
+            margin: 60px auto 0 auto;
             background: #fff;
-            padding: 32px 24px;
+            padding: 38px 28px 36px 28px;
             max-width: 430px;
-            border-radius: 18px;
-            box-shadow: 0 6px 28px #bbc8cf;
+            border-radius: 24px;
+            box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05);
+            animation: fadeInUp 1.2s cubic-bezier(.39,.58,.57,1) both;
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px);}
+            100% { opacity: 1; transform: translateY(0);}
         }
         .logo {
             margin-bottom: 18px;
         }
         .logo img {
             width: 120px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d;
+            transition: box-shadow .3s, transform .3s;
+        }
+        .logo img:hover {
+            box-shadow: 0 0 36px 4px #36d78299;
+            transform: scale(1.07) rotate(-2deg);
         }
         h1 {
             color: #25788f;
-            margin-bottom: 8px;
-            font-size: 28px;
-            letter-spacing: 1px;
+            margin-bottom: 12px;
+            font-size: 32px;
+            letter-spacing: 1.3px;
+            font-weight: 700;
+            text-shadow: 0 2px 8px #c3dbe4;
         }
         h2 {
-            font-size: 18px;
-            color: #444;
+            font-size: 19px;
+            color: #555;
             margin-top: 0;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
+            letter-spacing: .8px;
+            font-weight: 500;
         }
-        input, button {
-            padding: 12px;
+        .input-group {
+            position: relative;
+            margin-bottom: 22px;
+        }
+        .input-group i {
+            position: absolute;
+            top: 14px;
+            left: 12px;
+            color: #8bb0bb;
             font-size: 18px;
-            border-radius: 6px;
-            border: 1px solid #bcd;
         }
         input {
-            margin-bottom: 15px;
+            padding: 12px 12px 12px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1.7px solid #d7e7ed;
+            background: #f5fafd;
+            outline: none;
             width: 85%;
+            transition: border .25s;
+            box-shadow: 0 1px 4px #cde2e944;
+        }
+        input:focus {
+            border: 2px solid #25d366;
+            background: #eefcf7;
         }
         button {
-            background: #25788f;
+            background: linear-gradient(90deg,#25d366 0,#1ebea5 100%);
             color: #fff;
             border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 20px;
+            padding: 13px 0;
+            width: 90%;
             cursor: pointer;
-            transition: background 0.2s;
+            margin-top: 6px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 16px #25d36622;
+            letter-spacing: 1px;
+            transition: transform 0.15s, box-shadow 0.2s;
         }
         button:hover {
-            background: #195a6a;
+            background: linear-gradient(90deg,#1ebea5 0,#25d366 100%);
+            transform: scale(1.045);
+            box-shadow: 0 2px 24px #25d36644;
         }
         #output {
-            margin-top: 26px;
+            margin-top: 28px;
             font-size: 21px;
         }
         #modelImg {
             margin-top: 18px;
             max-width: 230px;
-            border-radius: 11px;
-            box-shadow: 0 2px 12px #999;
+            border-radius: 16px;
+            box-shadow: 0 2px 18px #43c47744;
         }
         .ricevuta {
-            background: #f4f8fa;
+            background: linear-gradient(100deg, #f4f8fa 60%, #e4fbe9 100%);
             margin: 32px auto 0 auto;
-            padding: 18px;
-            border-radius: 9px;
-            border: 1px solid #d0e2ea;
+            padding: 24px 16px 20px 16px;
+            border-radius: 16px;
+            border: 1.5px solid #c3ead6;
             max-width: 340px;
             font-size: 18px;
+            box-shadow: 0 2px 14px #cde2e944;
+            position: relative;
+        }
+        .ricevuta:after {
+            content: "";
+            position: absolute;
+            bottom: 10px; right: 12px;
+            width: 64px; height: 26px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/Vorwerk_Logo_2019.svg') no-repeat center;
+            background-size: contain;
+            opacity: 0.12;
+            pointer-events: none;
         }
         .ok-message {
             color: #0b942e;
             font-weight: bold;
             margin: 18px 0 8px 0;
             font-size: 19px;
+            letter-spacing: .4px;
         }
         .note {
-            color: #2b3c48;
-            font-size: 14px;
-            margin-top: 10px;
+            color: #25788f;
+            font-size: 14.7px;
+            margin-top: 16px;
+            font-style: italic;
         }
         .warning {
             color: #c91818;
             font-weight: bold;
             margin-top: 15px;
+            font-size: 17px;
+            letter-spacing: .3px;
+            background: #ffdada;
+            border-radius: 5px;
+            padding: 4px 0;
         }
         #appButton {
-            margin-top: 18px;
+            margin-top: 20px;
+        }
+        /* Animazione Glow Input */
+        input:focus, button:focus {
+            box-shadow: 0 0 10px #25d36644, 0 1px 4px #cde2e944;
+        }
+        /* Responsive */
+        @media (max-width: 520px) {
+            .container {
+                margin: 22px 0 0 0;
+                padding: 16px 5px;
+                width: 99vw;
+                min-width: unset;
+                max-width: 97vw;
+            }
+            h1 { font-size: 22px;}
+            h2 { font-size: 15px;}
+            input, button { font-size: 16px; }
+            .ricevuta { font-size: 15px; }
         }
     </style>
 </head>
@@ -112,9 +198,15 @@
         </div>
         <h1>Assistenza Cliente Folletto</h1>
         <h2>Check Serial Number</h2>
-        <input type="text" id="nomeCliente" placeholder="Nome Cliente (opzionale)"><br>
-        <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)"><br>
-        <button onclick="checkModel()">Controlla Modello</button>
+        <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="text" id="nomeCliente" placeholder="Nome Cliente (opzionale)">
+        </div>
+        <div class="input-group">
+            <i class="fa fa-barcode"></i>
+            <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
+        </div>
+        <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
         <div id="output"></div>
         <img id="modelImg" src="" alt="" style="display:none;">
         <div class="ricevuta" id="ricevuta" style="display:none;"></div>
@@ -197,11 +289,11 @@
             ricevuta += "<span style='color:#0b942e;font-weight:bold;'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
 
             if (scaduta) {
-    ricevuta += "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
-    appButtonHtml = ""; // Non mostrare nessun pulsante
-} else {
-    appButtonHtml = "";
-}
+                ricevuta += "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
+                appButtonHtml = ""; // Non mostrare nessun pulsante
+            } else {
+                appButtonHtml = "";
+            }
 
             ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
             document.getElementById("ricevuta").innerHTML = ricevuta;
