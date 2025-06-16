@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Folletto Tool - Super Dan Edition</title>
-    <!-- Forza HTTPS -->
     <script>
         if (location.protocol !== 'https:') {
             location.replace(`https:${location.href.substring(location.protocol.length)}`);
@@ -108,7 +107,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="IMG_3611.jpeg" alt="Vorwerk Logo">
+            <img src="IMG_3611.jpg" alt="Vorwerk Logo">
         </div>
         <h1>Assistenza Cliente Folletto</h1>
         <h2>Check Serial Number</h2>
@@ -132,43 +131,43 @@
         if (["83","84","85","86","87","88","89","90","91","92","93","94","95","96"].includes(prefix)) {
             modello = "VK 120-122";
             anno = "1983-1996";
-            imgUrl = "IMG_3693.jpeg";
+            imgUrl = "IMG_3693.jpg";
         } else if (["97","98","99"].includes(prefix)) {
             modello = "VK 130";
             anno = "1997-1999";
-            imgUrl = "IMG_3692.jpeg";
+            imgUrl = "IMG_3692.jpg";
         } else if (["00", "01","02"].includes(prefix)) {
             modello = "VK 131";
             anno = "2000-2002";
-            imgUrl = "IMG_3691.jpeg";
+            imgUrl = "IMG_3691.jpg";
         } else if (["03","04","05","06","07"].includes(prefix)) {
             modello = "VK 135";
             anno = "2003-2007";
-            imgUrl = "IMG_3690.jpeg";
+            imgUrl = "IMG_3690.jpg";
         } else if (["08"].includes(prefix)) {
             modello = "VK 136";
             anno = "2008";
-            imgUrl = "IMG_3689.jpeg";
+            imgUrl = "IMG_3689.jpg";
         } else if (["09", "10", "11", "12", "13"].includes(prefix)) {
             modello = "VK140";
             anno = "2009-2013";
-            imgUrl = "IMG_3582.jpeg";
+            imgUrl = "IMG_3582.jpg";
         } else if (prefix === "14") {
             modello = "VK150";
             anno = "2014";
-            imgUrl = "IMG_3584.jpeg";
+            imgUrl = "IMG_3584.jpg";
         } else if (["15","16","17"].includes(prefix)) {
             modello = "VK 200";
             anno = "2015-2017";
-            imgUrl = "IMG_3595.jpeg";
+            imgUrl = "IMG_3595.jpg";
         } else if (["18", "19", "20", "21"].includes(prefix)) {
             modello = "VK 220S";
             anno = "2018-2021";
-            imgUrl = "IMG_3597.jpeg";
+            imgUrl = "IMG_3597.jpg";
         } else if (["22", "23", "24", "25"].includes(prefix)) {
             modello = "VK7S";
             anno = "2022-2025";
-            imgUrl = "IMG_3598.jpeg";
+            imgUrl = "IMG_3598.jpg";
             scaduta = false;
         } else {
             modello = "Modello non riconosciuto";
@@ -215,45 +214,42 @@
         document.getElementById("appButton").innerHTML = appButtonHtml;
     }
     </script>
-    
-<!-- NOTIFICA VISITA UTENTE (IPinfo + EmailJS, completamente invisibile, con esclusione IP) -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  (function(){
-      emailjs.init("TJsrScp6B_S1zXJNv");
-  })();
 
-  fetch("https://ipinfo.io/json?token=55094407a42c12")
-    .then(response => {
-      if (!response.ok) return;
-      return response.json();
-    })
-    .then(data => {
-      // *** METTI QUI I TUOI IP DA ESCLUDERE! ***
-      const mieiIp = ["95.235.47.117"];
-      if (mieiIp.includes(data.ip)) return;
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+      (function(){
+          emailjs.init("TJsrScp6B_S1zXJNv");
+      })();
 
-      // Solo se NON è il tuo IP, invia email di tracciamento
-      const visitData = {
-        ip: data.ip,
-        city: data.city,
-        region: data.region,
-        country: data.country,
-        org: data.org,
-        date: new Date().toLocaleString()
-      };
+      fetch("https://ipinfo.io/json?token=55094407a42c12")
+        .then(response => {
+          if (!response.ok) return;
+          return response.json();
+        })
+        .then(data => {
+          const mieiIp = ["95.235.47.117"];
+          if (mieiIp.includes(data.ip)) return;
 
-      emailjs.send("service_wgp5uwj", "template_mg10y3r", {
-        nome: "Visitatore Sito",
-        telefono: "-",
-        email: "-",
-        data: visitData.date,
-        orario: `${visitData.city}, ${visitData.region}, ${visitData.country} - IP: ${visitData.ip} - ${visitData.org}`
-      });
-    })
-    .catch(()=>{});
-</script>
-<!-- /NOTIFICA VISITA -->
-<script src="log_script_salva_visite.js"></script>
+          const visitData = {
+            ip: data.ip,
+            city: data.city,
+            region: data.region,
+            country: data.country,
+            org: data.org,
+            date: new Date().toLocaleString()
+          };
+
+          emailjs.send("service_wgp5uwj", "template_mg10y3r", {
+            nome: "Visitatore Sito",
+            telefono: "-",
+            email: "-",
+            data: visitData.date,
+            orario: `${visitData.city}, ${visitData.region}, ${visitData.country} - IP: ${visitData.ip} - ${visitData.org}`
+          });
+        })
+        .catch(()=>{});
+    </script>
+
+    <script src="log_script_salva_visite.js"></script>
 </body>
 </html>
