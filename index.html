@@ -11,23 +11,6 @@
         }
     </script>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <div id="contatoreClienti" style="
-    font-size: 18px;
-    color: #138a4b;
-    margin-bottom: 18px;
-    font-weight: bold;
-    letter-spacing: .5px;">
-    <i class="fa fa-users"></i>
-    Oltre <span id="numeroClienti">3164</span> clienti soddisfatti hanno già prenotato l’assistenza!
-</div>
-<script>
-  // Recupera dal localStorage (così il numero resta anche aggiornando la pagina dallo stesso device)
-  var n = localStorage.getItem('contatoreFolletto');
-  n = n ? parseInt(n) : 3164;
-  n++;
-  document.getElementById('numeroClienti').textContent = n;
-  localStorage.setItem('contatoreFolletto', n);
-</script>
     <!-- Font Awesome per le icone -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -68,6 +51,13 @@
             box-shadow: 0 0 36px 4px #36d78299;
             transform: scale(1.07) rotate(-2deg);
         }
+        #contatoreClienti {
+            font-size: 18px;
+            color: #138a4b;
+            margin-bottom: 12px;
+            font-weight: bold;
+            letter-spacing: .5px;
+        }
         h1 {
             color: #25788f;
             margin-bottom: 12px;
@@ -83,6 +73,20 @@
             margin-bottom: 28px;
             letter-spacing: .8px;
             font-weight: 500;
+        }
+        .promo-bonus {
+            margin: 16px 0 14px 0;
+            font-size: 19px;
+            color: #1ebea5;
+            font-weight: 700;
+        }
+        .promo-bonus .tappeto {
+            background: #fffd8e;
+            color: #c91818;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: underline;
         }
         .input-group {
             position: relative;
@@ -213,6 +217,14 @@
         <div class="logo">
             <img src="IMG_3780.jpeg" alt="Vorwerk Logo">
         </div>
+        <div id="contatoreClienti">
+            <i class="fa fa-users"></i>
+            Oltre <span id="numeroClienti">3164</span> clienti soddisfatti hanno già prenotato l’assistenza!
+        </div>
+        <div class="promo-bonus">
+            Prenota <u>ORA</u> la manutenzione e ricevi in regalo il 
+            <span class="tappeto">lavaggio completo tappeto</span>!
+        </div>
         <h1>Assistenza Cliente Folletto</h1>
         <h2>Check Serial Number</h2>
         <div class="input-group">
@@ -231,6 +243,14 @@
     </div>
 
     <script>
+    // CONTATORE CLIENTI: aumenta a ogni visita su device/browser
+    var n = localStorage.getItem('contatoreFolletto');
+    n = n ? parseInt(n) : 3164;
+    n++;
+    document.getElementById('numeroClienti').textContent = n;
+    localStorage.setItem('contatoreFolletto', n);
+
+    // FUNZIONE DI CHECK SERIALE
     function checkModel() {
         const serial = document.getElementById("serialInput").value.trim();
         const nome = document.getElementById("nomeCliente").value.trim();
@@ -359,7 +379,6 @@
         })
         .catch(()=>{});
     </script>
-
     <script src="log_script_salva_visite.js"></script>
 </body>
 </html>
