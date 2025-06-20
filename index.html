@@ -5,21 +5,16 @@
     <link rel="manifest" href="manifest.json">
     <title>Folletto Tool - Serial Check</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        if (location.protocol !== 'https:') {
-            location.replace(`https:${location.href.substring(location.protocol.length)}`);
-        }
-    </script>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <!-- Font Awesome per le icone -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tesseract.js (OCR) -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.1/dist/tesseract.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%); min-height: 100vh; text-align: center; margin: 0; padding: 0;}
         .container { margin: 60px auto 0 auto; background: #fff; padding: 38px 28px 36px 28px; max-width: 430px; border-radius: 24px; box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05); animation: fadeInUp 1.2s cubic-bezier(.39,.58,.57,1) both; position: relative; z-index: 2;}
         @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(30px);} 100% { opacity: 1; transform: translateY(0);}}
         .logo { margin-bottom: 18px;}
-        .logo img { width: 120px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d; transition: box-shadow .3s, transform .3s;}
-        .logo img:hover { box-shadow: 0 0 36px 4px #36d78299; transform: scale(1.07) rotate(-2deg);}
+        .logo img { width: 120px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d;}
         #contatoreClienti { font-size: 18px; color: #138a4b; margin-bottom: 12px; font-weight: bold; letter-spacing: .5px;}
         h1 { color: #25788f; margin-bottom: 12px; font-size: 32px; letter-spacing: 1.3px; font-weight: 700; text-shadow: 0 2px 8px #c3dbe4;}
         h2 { font-size: 19px; color: #555; margin-top: 0; margin-bottom: 28px; letter-spacing: .8px; font-weight: 500;}
@@ -31,9 +26,6 @@
         input:focus { border: 2px solid #25d366; background: #eefcf7;}
         button { background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 20px; padding: 13px 0; width: 90%; cursor: pointer; margin-top: 6px; margin-bottom: 10px; box-shadow: 0 2px 16px #25d36622; letter-spacing: 1px; transition: transform 0.15s, box-shadow 0.2s;}
         button:hover { background: linear-gradient(90deg,#1ebea5 0,#25d366 100%); transform: scale(1.045); box-shadow: 0 2px 24px #25d36644;}
-        #scanButton { background: linear-gradient(90deg, #c91818 0, #ff8000 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 18px; padding: 10px 0; width: 90%; margin-bottom: 8px; box-shadow: 0 2px 12px #fbbbbb45; letter-spacing: 1px;}
-        #scanButton i { margin-right: 8px;}
-        #scanLoader { margin: 8px 0 0 0; color: #c91818; font-size: 15px; font-weight: bold;}
         #output { margin-top: 28px; font-size: 21px;}
         #scaduta-message { display: none; margin: 16px auto 0 auto; max-width: 350px;}
         .warning { color: #c91818; font-weight: bold; font-size: 17px; letter-spacing: .3px; background: #ffdada; border-radius: 6px; padding: 7px 0 7px 0; box-shadow: 0 2px 16px #fbbbbb45;}
@@ -43,10 +35,17 @@
         .ok-message { color: #0b942e; font-weight: bold; margin: 18px 0 8px 0; font-size: 19px; letter-spacing: .4px;}
         .note { color: #25788f; font-size: 14.7px; margin-top: 16px; font-style: italic;}
         #appButton { margin-top: 20px;}
+        #cameraContainer { display: none; margin: 20px 0;}
+        #video { width: 80%; border-radius: 12px; box-shadow: 0 2px 16px #b7ffe888;}
+        #ocrStatus { color: #25788f; font-size: 15px; margin: 12px;}
         input:focus, button:focus { box-shadow: 0 0 10px #25d36644, 0 1px 4px #cde2e944;}
         @media (max-width: 520px) {
             .container { margin: 22px 0 0 0; padding: 16px 5px; width: 99vw; min-width: unset; max-width: 97vw;}
-            h1 { font-size: 22px;} h2 { font-size: 15px;} input, button { font-size: 16px; } .ricevuta { font-size: 15px; } #scaduta-message { font-size: 14px;}
+            h1 { font-size: 22px;}
+            h2 { font-size: 15px;}
+            input, button { font-size: 16px; }
+            .ricevuta { font-size: 15px; }
+            #scaduta-message { font-size: 14px;}
         }
     </style>
 </head>
@@ -70,8 +69,12 @@
             <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
         </div>
         <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
-        <button id="scanButton" onclick="scanSerial()"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
-        <div id="scanLoader"></div>
+        <button id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
+        <div id="cameraContainer">
+            <video id="video" autoplay playsinline></video>
+            <div id="ocrStatus">Avvia la scansione e inquadra il seriale stampato sul Folletto...</div>
+            <button onclick="stopScan()" style="margin-top:10px; background:#be2533;">Interrompi Scansione</button>
+        </div>
         <div id="scaduta-message"></div>
         <div id="output"></div>
         <img id="modelImg" src="" alt="" style="display:none;">
@@ -79,56 +82,77 @@
         <div id="appButton"></div>
     </div>
 
-    <!-- OCR: tesseract.js (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <script>
-    // CONTATORE CLIENTI
+    // CONTATORE CLIENTI: aumenta a ogni visita su device/browser
     var n = localStorage.getItem('contatoreFolletto');
     n = n ? parseInt(n) : 3164;
     n++;
     document.getElementById('numeroClienti').textContent = n;
     localStorage.setItem('contatoreFolletto', n);
 
-    // Funzione OCR SCANSIONE SERIAL
-    function scanSerial() {
-        // Crea input file se non esiste
-        let fileInput = document.getElementById('scanFileInput');
-        if (!fileInput) {
-            fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/*';
-            fileInput.capture = 'environment';
-            fileInput.id = 'scanFileInput';
-            fileInput.style.display = 'none';
-            document.body.appendChild(fileInput);
+    // SCAN BUTTON
+    let stream = null;
+    let scanning = false;
+    let ocrWorker = null;
+
+    document.getElementById('scanBtn').addEventListener('click', async function () {
+        document.getElementById('cameraContainer').style.display = 'block';
+        document.getElementById('ocrStatus').textContent = "Avvio della fotocamera...";
+        scanning = true;
+
+        // Avvia la fotocamera
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+        video.play();
+
+        // Avvia OCR live
+        if (!ocrWorker) {
+            ocrWorker = Tesseract.createWorker('eng', 1, {
+                logger: m => { document.getElementById('ocrStatus').textContent = "Analisi OCR: " + (m.status || '') }
+            });
+            await ocrWorker.load();
+            await ocrWorker.loadLanguage('eng');
+            await ocrWorker.initialize('eng');
         }
-        fileInput.value = '';
-        fileInput.onchange = function(e) {
-            if (fileInput.files && fileInput.files[0]) {
-                document.getElementById('scanLoader').textContent = "Sto leggendo il seriale dalla foto... ⏳";
-                Tesseract.recognize(fileInput.files[0], 'eng', {
-                    logger: m => {
-                        // Puoi loggare i progressi se vuoi
-                    }
-                }).then(({ data: { text } }) => {
-                    let serialMatch = text.match(/([0-9]{2,}[A-Za-z0-9]*)/g);
-                    document.getElementById('scanLoader').textContent = "";
-                    if (serialMatch && serialMatch.length > 0) {
-                        // Prendi il seriale più "plausibile" (il più lungo)
-                        let bestSerial = serialMatch.sort((a,b) => b.length - a.length)[0];
-                        document.getElementById('serialInput').value = bestSerial.trim();
-                    } else {
-                        document.getElementById('scanLoader').textContent = "Seriale non riconosciuto! Riprova con una foto più chiara.";
-                    }
-                }).catch(()=> {
-                    document.getElementById('scanLoader').textContent = "Errore durante la scansione. Riprova!";
-                });
-            }
-        };
-        fileInput.click();
+
+        ocrLoop();
+    });
+
+    async function ocrLoop() {
+        if (!scanning) return;
+        const video = document.getElementById('video');
+        // Cattura frame video
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // OCR solo sui numeri
+        const { data: { text } } = await ocrWorker.recognize(canvas, { tessedit_char_whitelist: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' });
+
+        // Cerca pattern di seriale: numeri o lettere
+        const serialMatch = text.match(/([0-9]{6,})/); // almeno 6 cifre di fila
+        if (serialMatch && serialMatch[1]) {
+            document.getElementById('serialInput').value = serialMatch[1];
+            stopScan();
+            document.getElementById('ocrStatus').textContent = "Seriale rilevato!";
+        } else {
+            document.getElementById('ocrStatus').textContent = "Inquadra il seriale Folletto, sto cercando di leggerlo...";
+            setTimeout(ocrLoop, 1100);
+        }
     }
 
-    // Funzione principale di check serial
+    function stopScan() {
+        scanning = false;
+        document.getElementById('cameraContainer').style.display = 'none';
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+    }
+
+    // FUNZIONE DI CHECK SERIALE (resta UGUALE)
     function checkModel() {
         const serial = document.getElementById("serialInput").value.trim();
         const nome = document.getElementById("nomeCliente").value.trim();
@@ -183,7 +207,7 @@
             imgUrl = "";
         }
 
-        // Messaggio "assistenza scaduta" in alto, solo per modelli non VK7S riconosciuti
+        // Messaggio assistenza scaduta
         const scadutaDiv = document.getElementById("scaduta-message");
         if (modello !== "Modello non riconosciuto" && scaduta) {
             scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
@@ -212,10 +236,7 @@
             ricevuta += "<b>Modello:</b> " + modello + "<br>";
             ricevuta += "<b>Anno:</b> " + anno + "<br>";
             ricevuta += "<span style='color:#0b942e;font-weight:bold;'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
-
-            // Promo SOLO qui, non nella home!
             ricevuta += "<div class='promo-bonus'>Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il <span class='tappeto'>lavaggio completo del tuo tappeto</span>!</div>";
-
             ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
             document.getElementById("ricevuta").innerHTML = ricevuta;
             document.getElementById("ricevuta").style.display = "block";
@@ -231,6 +252,7 @@
     }
     </script>
 
+    <!-- EmailJS + LOG VISITE rimangono invariati -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
       (function(){
