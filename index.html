@@ -2,228 +2,136 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <link rel="manifest" href="manifest.json">
-    <title>Folletto Tool - Serial Check</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Font Awesome per le icone -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js"></script>
+    <title>Folletto Tool - Serial OCR PRO</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%); min-height: 100vh; text-align: center; margin: 0; padding: 0;}
-        .container { margin: 60px auto 0 auto; background: #fff; padding: 38px 28px 36px 28px; max-width: 430px; border-radius: 24px; box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05);}
-        .logo { margin-bottom: 18px;}
-        .logo img { width: 120px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d;}
-        #contatoreClienti { font-size: 18px; color: #138a4b; margin-bottom: 12px; font-weight: bold; letter-spacing: .5px;}
-        h1 { color: #25788f; margin-bottom: 12px; font-size: 32px; letter-spacing: 1.3px; font-weight: 700;}
-        h2 { font-size: 19px; color: #555; margin-top: 0; margin-bottom: 28px; letter-spacing: .8px; font-weight: 500;}
-        .input-group { position: relative; margin-bottom: 22px;}
-        .input-group i { position: absolute; top: 14px; left: 12px; color: #8bb0bb; font-size: 18px;}
-        input { padding: 12px 12px 12px 40px; font-size: 18px; border-radius: 8px; border: 1.7px solid #d7e7ed; background: #f5fafd; outline: none; width: 85%;}
-        input:focus { border: 2px solid #25d366; background: #eefcf7;}
-        button { background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 20px; padding: 13px 0; width: 90%; cursor: pointer; margin-top: 6px; margin-bottom: 10px;}
-        button:hover { background: linear-gradient(90deg,#1ebea5 0,#25d366 100%); transform: scale(1.045);}
-        #scaduta-message { display: none; margin: 16px auto 0 auto; max-width: 350px;}
-        .warning { color: #c91818; font-weight: bold; font-size: 17px; letter-spacing: .3px; background: #ffdada; border-radius: 6px; padding: 7px 0; box-shadow: 0 2px 16px #fbbbbb45;}
-        #output { margin-top: 28px; font-size: 21px;}
-        #modelImg { margin-top: 18px; max-width: 230px; border-radius: 16px; box-shadow: 0 2px 18px #43c47744;}
-        .ricevuta { background: linear-gradient(100deg, #f4f8fa 60%, #e4fbe9 100%); margin: 32px auto 0 auto; padding: 24px 16px 20px 16px; border-radius: 16px; border: 1.5px solid #c3ead6; max-width: 340px; font-size: 18px; box-shadow: 0 2px 14px #cde2e944; position: relative;}
-        .ricevuta:after { content: ""; position: absolute; bottom: 10px; right: 12px; width: 64px; height: 26px; background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/Vorwerk_Logo_2019.svg') no-repeat center; background-size: contain; opacity: 0.12;}
-        .ok-message { color: #0b942e; font-weight: bold; margin: 18px 0 8px 0; font-size: 19px;}
-        .note { color: #25788f; font-size: 14.7px; margin-top: 16px; font-style: italic;}
-        .promo-bonus { margin: 18px 0 10px 0; font-size: 19px; color: #1ebea5; font-weight: 700;}
-        .promo-bonus .tappeto { background: #fffd8e; color: #c91818; padding: 2px 7px; border-radius: 6px; font-weight: bold; text-decoration: underline;}
-        #videoBox { display:none; margin-top:20px;}
-        #videoPreview { width:260px; border-radius:12px; border:2px solid #25d366;}
-        #appButton { margin-top: 20px;}
-        @media (max-width: 520px) {.container{margin:22px 0 0 0;padding:16px 5px;width:99vw;max-width:97vw;}h1{font-size:22px;}h2{font-size:15px;}input,button{font-size:16px;}.ricevuta{font-size:15px;}#scaduta-message{font-size:14px;}}
+        body { font-family: Arial; background: #e9f2f7; text-align: center; margin: 0; padding: 0;}
+        .container { margin: 40px auto; background: #fff; padding: 32px 24px; max-width: 430px; border-radius: 18px; }
+        .ocr-preview { margin: 15px auto; max-width: 300px;}
+        .warning { color: #c91818; background: #ffdada; padding: 6px 0; border-radius: 8px; font-weight: bold;}
+        .promo-bonus {margin:18px 0 10px 0; font-size:19px; color:#1ebea5; font-weight:700;}
+        .promo-bonus .tappeto {background:#fffd8e;color:#c91818;padding:2px 7px;border-radius:6px;font-weight:bold;text-decoration:underline;}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <img src="IMG_3780.jpeg" alt="Vorwerk Logo">
-        </div>
-        <div id="contatoreClienti">
-            <i class="fa fa-users"></i>
-            Oltre <span id="numeroClienti">3164</span> clienti soddisfatti hanno già prenotato l’assistenza!
-        </div>
-        <h1>Assistenza Cliente Folletto</h1>
-        <h2>Check Serial Number</h2>
-        <div class="input-group">
-            <i class="fa fa-user"></i>
-            <input type="text" id="nomeCliente" placeholder="Nome Cliente (opzionale)">
-        </div>
-        <div class="input-group">
-            <i class="fa fa-barcode"></i>
-            <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
-        </div>
-        <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
-        <button onclick="startScan()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
-        <div id="videoBox">
-            <video id="videoPreview" autoplay playsinline></video>
-            <br>
-            <button onclick="captureAndOCR()">Scatta e Riconosci</button>
-            <button onclick="stopScan()">Annulla</button>
-        </div>
-        <div id="scaduta-message"></div>
-        <div id="output"></div>
-        <img id="modelImg" src="" alt="" style="display:none;">
-        <div class="ricevuta" id="ricevuta" style="display:none;"></div>
-        <div id="appButton"></div>
-        <canvas id="ocrCanvas" style="display:none;"></canvas>
-    </div>
-    <script>
-    // CONTATORE CLIENTI
-    var n = localStorage.getItem('contatoreFolletto');
-    n = n ? parseInt(n) : 3164;
-    n++;
-    document.getElementById('numeroClienti').textContent = n;
-    localStorage.setItem('contatoreFolletto', n);
+<div class="container">
+    <h1>Assistenza Cliente Folletto</h1>
+    <h2>Check Serial Number</h2>
+    <input type="text" id="nomeCliente" placeholder="Nome Cliente (opzionale)" style="margin-bottom:10px;width:90%"><br>
+    <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)" style="width:90%">
+    <br><br>
+    <button onclick="checkModel()">Controlla Modello</button>
+    <button onclick="document.getElementById('ocrfile').click()">📸 Scansiona Serial Number</button>
+    <input type="file" id="ocrfile" accept="image/*" style="display:none" onchange="startOCR(event)">
+    <div id="ocr-preview" class="ocr-preview"></div>
+    <div id="scaduta-message"></div>
+    <div id="output"></div>
+    <img id="modelImg" src="" alt="" style="display:none;">
+    <div class="ricevuta" id="ricevuta" style="display:none;"></div>
+</div>
 
-    // MODELLO & SERIALE LOGIC
-    function checkModel() {
-        const serial = document.getElementById("serialInput").value.trim();
-        const nome = document.getElementById("nomeCliente").value.trim();
-        const prefix = serial.substring(0, 2);
-        let modello = "", anno = "", imgUrl = "", scaduta = true;
-        if (["83","84","85","86","87","88","89","90","91","92","93","94","95","96"].includes(prefix)) {
-            modello = "VK 120-122"; anno = "1983-1996"; imgUrl = "IMG_3693.jpg";
-        } else if (["97","98","99"].includes(prefix)) {
-            modello = "VK 130"; anno = "1997-1999"; imgUrl = "IMG_3692.jpg";
-        } else if (["00","01","02"].includes(prefix)) {
-            modello = "VK 131"; anno = "2000-2002"; imgUrl = "IMG_3691.jpg";
-        } else if (["03","04","05","06","07"].includes(prefix)) {
-            modello = "VK 135"; anno = "2003-2007"; imgUrl = "IMG_3690.jpg";
-        } else if (["08"].includes(prefix)) {
-            modello = "VK 136"; anno = "2008"; imgUrl = "IMG_3689.jpg";
-        } else if (["09","10","11","12","13"].includes(prefix)) {
-            modello = "VK140"; anno = "2009-2013"; imgUrl = "IMG_3582.jpg";
-        } else if (prefix === "14") {
-            modello = "VK150"; anno = "2014"; imgUrl = "IMG_3584.jpg";
-        } else if (["15","16","17"].includes(prefix)) {
-            modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
-        } else if (["18","19","20","21"].includes(prefix)) {
-            modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3597.jpg";
-        } else if (["22","23","24","25"].includes(prefix)) {
-            modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
+<script>
+async function startOCR(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    document.getElementById('ocr-preview').innerHTML = "⏳ Scansione in corso...";
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("OCREngine", "2"); // Usa motore OCR avanzato
+    formData.append("language", "ita"); // Italiano!
+    formData.append("isOverlayRequired", "false");
+
+    // OCR.space FREE KEY
+    const apiKey = "helloworld"; // Free test key! (mettila nel codice reale solo per demo, per uso intensivo prendi la tua su https://ocr.space/ocrapi)
+    const resp = await fetch("https://api.ocr.space/parse/image", {
+        method: "POST",
+        headers: { apikey: apiKey },
+        body: formData
+    });
+    const data = await resp.json();
+
+    if (!data || !data.ParsedResults || data.ParsedResults.length === 0) {
+        document.getElementById('ocr-preview').innerHTML = "<span class='warning'>OCR non riuscito, riprova con una foto più nitida.</span>";
+        return;
+    }
+    const text = data.ParsedResults[0].ParsedText;
+    document.getElementById('ocr-preview').innerHTML = "<b>Testo rilevato:</b><br><pre>"+text+"</pre>";
+
+    // Cerca una riga con almeno 8 numeri di fila (tipico seriale)
+    let found = (text.match(/\b\d{8,}\b/g) || [])[0];
+    if (found) {
+        document.getElementById('serialInput').value = found;
+        document.getElementById('ocr-preview').innerHTML += "<br><b style='color:green'>Seriale rilevato:</b> "+found;
+    } else {
+        document.getElementById('ocr-preview').innerHTML += "<br><b style='color:red'>Seriale NON rilevato! Seleziona la parte giusta e copia.</b>";
+    }
+}
+
+// Resto delle funzioni identiche a prima (checkModel, ecc)
+function checkModel() {
+    const serial = document.getElementById("serialInput").value.trim();
+    const nome = document.getElementById("nomeCliente").value.trim();
+    const prefix = serial.substring(0, 2);
+    let modello = "", anno = "", imgUrl = "", scaduta = true;
+    if (["83","84","85","86","87","88","89","90","91","92","93","94","95","96"].includes(prefix)) {
+        modello = "VK 120-122"; anno = "1983-1996"; imgUrl = "IMG_3693.jpg";
+    } else if (["97","98","99"].includes(prefix)) {
+        modello = "VK 130"; anno = "1997-1999"; imgUrl = "IMG_3692.jpg";
+    } else if (["00", "01","02"].includes(prefix)) {
+        modello = "VK 131"; anno = "2000-2002"; imgUrl = "IMG_3691.jpg";
+    } else if (["03","04","05","06","07"].includes(prefix)) {
+        modello = "VK 135"; anno = "2003-2007"; imgUrl = "IMG_3690.jpg";
+    } else if (["08"].includes(prefix)) {
+        modello = "VK 136"; anno = "2008"; imgUrl = "IMG_3689.jpg";
+    } else if (["09", "10", "11", "12", "13"].includes(prefix)) {
+        modello = "VK140"; anno = "2009-2013"; imgUrl = "IMG_3582.jpg";
+    } else if (prefix === "14") {
+        modello = "VK150"; anno = "2014"; imgUrl = "IMG_3584.jpg";
+    } else if (["15","16","17"].includes(prefix)) {
+        modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
+    } else if (["18", "19", "20", "21"].includes(prefix)) {
+        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3597.jpg";
+    } else if (["22", "23", "24", "25"].includes(prefix)) {
+        modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
+    } else {
+        modello = "Modello non riconosciuto"; anno = ""; imgUrl = "";
+    }
+    const scadutaDiv = document.getElementById("scaduta-message");
+    if (modello !== "Modello non riconosciuto" && scaduta) {
+        scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
+        scadutaDiv.style.display = "block";
+    } else {
+        scadutaDiv.innerHTML = "";
+        scadutaDiv.style.display = "none";
+    }
+    let output = "";
+    if (modello !== "Modello non riconosciuto") {
+        output = "<span class='ok-message'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
+        output += "Modello: <b>" + modello + "</b><br>Anno di produzione: <b>" + anno + "</b>";
+        if (imgUrl) {
+            document.getElementById("modelImg").src = imgUrl;
+            document.getElementById("modelImg").style.display = "block";
         } else {
-            modello = "Modello non riconosciuto"; anno = ""; imgUrl = "";
-        }
-        // Messaggio assistenza scaduta
-        const scadutaDiv = document.getElementById("scaduta-message");
-        if (modello !== "Modello non riconosciuto" && scaduta) {
-            scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
-            scadutaDiv.style.display = "block";
-        } else {
-            scadutaDiv.innerHTML = ""; scadutaDiv.style.display = "none";
-        }
-        let output = "", appButtonHtml = "";
-        if (modello !== "Modello non riconosciuto") {
-            output = "<span class='ok-message'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
-            output += "Modello: <b>" + modello + "</b><br>Anno di produzione: <b>" + anno + "</b>";
-            if (imgUrl) {
-                document.getElementById("modelImg").src = imgUrl;
-                document.getElementById("modelImg").style.display = "block";
-            } else {
-                document.getElementById("modelImg").style.display = "none";
-            }
-            let ricevuta = "";
-            if (nome) ricevuta += "<b>Cliente:</b> " + nome + "<br>";
-            ricevuta += "<b>Serial:</b> " + serial + "<br>";
-            ricevuta += "<b>Modello:</b> " + modello + "<br>";
-            ricevuta += "<b>Anno:</b> " + anno + "<br>";
-            ricevuta += "<span style='color:#0b942e;font-weight:bold;'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
-            ricevuta += "<div class='promo-bonus'>Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il <span class='tappeto'>lavaggio completo del tuo tappeto</span>!</div>";
-            ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
-            document.getElementById("ricevuta").innerHTML = ricevuta;
-            document.getElementById("ricevuta").style.display = "block";
-        } else {
-            output = "<span style='color:#b02b2b'>Modello non riconosciuto!<br>Controlla il serial.</span>";
             document.getElementById("modelImg").style.display = "none";
-            document.getElementById("ricevuta").style.display = "none";
-            scadutaDiv.innerHTML = ""; scadutaDiv.style.display = "none";
         }
-        document.getElementById("output").innerHTML = output;
-        document.getElementById("appButton").innerHTML = appButtonHtml;
+        let ricevuta = "";
+        if (nome) ricevuta += "<b>Cliente:</b> " + nome + "<br>";
+        ricevuta += "<b>Serial:</b> " + serial + "<br>";
+        ricevuta += "<b>Modello:</b> " + modello + "<br>";
+        ricevuta += "<b>Anno:</b> " + anno + "<br>";
+        ricevuta += "<span style='color:#0b942e;font-weight:bold;'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
+        ricevuta += "<div class='promo-bonus'>Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il <span class='tappeto'>lavaggio completo del tuo tappeto</span>!</div>";
+        ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
+        document.getElementById("ricevuta").innerHTML = ricevuta;
+        document.getElementById("ricevuta").style.display = "block";
+    } else {
+        output = "<span style='color:#b02b2b'>Modello non riconosciuto!<br>Controlla il serial.</span>";
+        document.getElementById("modelImg").style.display = "none";
+        document.getElementById("ricevuta").style.display = "none";
+        scadutaDiv.innerHTML = "";
+        scadutaDiv.style.display = "none";
     }
-
-    // ========== SCANSIONE E OCR ==========
-
-    let videoStream = null;
-
-    async function startScan() {
-        document.getElementById('videoBox').style.display = 'block';
-        try {
-            videoStream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: "environment",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    // Attiva flash se supportato
-                    advanced: [{torch: true}]
-                }
-            });
-            const video = document.getElementById('videoPreview');
-            video.srcObject = videoStream;
-
-            // Prova ad attivare il torch (flash)
-            const tracks = videoStream.getVideoTracks();
-            if (tracks[0] && tracks[0].getCapabilities().torch) {
-                tracks[0].applyConstraints({advanced: [{torch: true}]});
-            }
-        } catch (err) {
-            alert('Fotocamera non disponibile o permessi negati');
-            stopScan();
-        }
-    }
-
-    function stopScan() {
-        document.getElementById('videoBox').style.display = 'none';
-        const video = document.getElementById('videoPreview');
-        if (videoStream) {
-            videoStream.getTracks().forEach(track => track.stop());
-        }
-        video.srcObject = null;
-    }
-
-    async function captureAndOCR() {
-        const video = document.getElementById('videoPreview');
-        const canvas = document.getElementById('ocrCanvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        enhanceCanvasContrast(canvas);
-
-        document.getElementById('serialInput').value = "Riconoscimento in corso...";
-        stopScan();
-
-        // OCR
-        try {
-            const result = await Tesseract.recognize(canvas, 'eng', { logger: m => {} });
-            let out = (result.data.text || '').replace(/\s/g, '');
-            // Cerca solo cifre di almeno 8 caratteri (modifica se necessario)
-            let serialMatch = out.match(/[0-9]{8,}/);
-            document.getElementById('serialInput').value = serialMatch ? serialMatch[0] : (out || "");
-        } catch (e) {
-            document.getElementById('serialInput').value = "";
-            alert('Errore riconoscimento testo. Riprova.');
-        }
-    }
-
-    // Enhance (contrasto e B/N)
-    function enhanceCanvasContrast(canvas) {
-        const ctx = canvas.getContext('2d');
-        let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        let d = imgData.data;
-        for (let i = 0; i < d.length; i += 4) {
-            let v = 0.2126*d[i] + 0.7152*d[i+1] + 0.0722*d[i+2];
-            v = v > 120 ? 255 : 0;
-            d[i] = d[i+1] = d[i+2] = v;
-        }
-        ctx.putImageData(imgData, 0, 0);
-    }
-    </script>
-    <!-- (i tuoi script aggiuntivi, es: emailjs, tracking visite ecc. vanno qui) -->
+    document.getElementById("output").innerHTML = output;
+}
+</script>
 </body>
 </html>
