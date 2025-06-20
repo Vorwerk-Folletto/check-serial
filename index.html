@@ -37,6 +37,7 @@
         #ocr-status {color:#166a86;font-size:15px;margin-top:10px;}
         #flash-warning { color: #e95353; margin-bottom: 8px;}
         #appButton { margin-top: 20px;}
+        .hidden { display: none !important; }
         @media (max-width: 520px) {
             .container { margin: 22px 0 0 0; padding: 16px 5px; width: 99vw; min-width: unset; max-width: 97vw;}
             h1 { font-size: 22px;}
@@ -64,6 +65,7 @@
             <i class="fa fa-barcode"></i>
             <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
         </div>
+        <button onclick="checkModel()" style="margin-top:6px;"><i class="fa fa-search"></i> Controlla Modello</button>
         <div id="ocr-section">
             <button id="scan-btn" style="background:linear-gradient(90deg,#24b4d6 0,#14ce77 100%);font-size:18px;"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
             <button id="read-btn" class="hidden" style="background:#0b942e;font-size:18px;"><i class="fa fa-barcode"></i> Leggi Numero</button>
@@ -72,7 +74,6 @@
             <canvas id="canvas" class="hidden"></canvas>
             <div id="ocr-status"></div>
         </div>
-        <button onclick="checkModel()" style="margin-top:6px;"><i class="fa fa-search"></i> Controlla Modello</button>
         <div id="scaduta-message"></div>
         <div id="output"></div>
         <img id="modelImg" src="" alt="" style="display:none;">
@@ -235,6 +236,8 @@
         document.getElementById("output").innerHTML = output;
     }
     </script>
+
+    <!-- Tracking/EmailJS ecc. (uguale al tuo script precedente) -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
       (function(){
