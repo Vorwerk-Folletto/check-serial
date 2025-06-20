@@ -75,7 +75,7 @@
             font-weight: 500;
         }
         .promo-bonus {
-            margin: 16px 0 14px 0;
+            margin: 18px 0 10px 0;
             font-size: 19px;
             color: #1ebea5;
             font-weight: 700;
@@ -192,11 +192,9 @@
         #appButton {
             margin-top: 20px;
         }
-        /* Animazione Glow Input */
         input:focus, button:focus {
             box-shadow: 0 0 10px #25d36644, 0 1px 4px #cde2e944;
         }
-        /* Responsive */
         @media (max-width: 520px) {
             .container {
                 margin: 22px 0 0 0;
@@ -221,8 +219,6 @@
             <i class="fa fa-users"></i>
             Oltre <span id="numeroClienti">3164</span> clienti soddisfatti hanno già prenotato l’assistenza!
         </div>
-        
-        
         <h1>Assistenza Cliente Folletto</h1>
         <h2>Check Serial Number</h2>
         <div class="input-group">
@@ -323,6 +319,9 @@
             ricevuta += "<b>Anno:</b> " + anno + "<br>";
             ricevuta += "<span style='color:#0b942e;font-weight:bold;'>Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore.</span><br>";
 
+            // Promo SOLO qui, non nella home!
+            ricevuta += "<div class='promo-bonus'>Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il <span class='tappeto'>lavaggio completo del tuo tappeto</span>!</div>";
+
             if (scaduta) {
                 ricevuta += "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
                 appButtonHtml = ""; // Non mostrare nessun pulsante
@@ -378,9 +377,5 @@
         .catch(()=>{});
     </script>
     <script src="log_script_salva_visite.js"></script>
-            <div class="promo-bonus">
-            Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il 
-            <span class="tappeto">lavaggio completo del tuo tappeto</span>!
-        </div>
 </body>
 </html>
