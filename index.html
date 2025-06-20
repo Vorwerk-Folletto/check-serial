@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Font Awesome per le icone -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%); min-height: 100vh; text-align: center; margin: 0; padding: 0;}
         .container { margin: 60px auto 0 auto; background: #fff; padding: 38px 28px 36px 28px; max-width: 430px; border-radius: 24px; box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05);}
@@ -32,8 +31,7 @@
         .note { color: #25788f; font-size: 14.7px; margin-top: 16px; font-style: italic;}
         .promo-bonus { margin: 18px 0 10px 0; font-size: 19px; color: #1ebea5; font-weight: 700;}
         .promo-bonus .tappeto { background: #fffd8e; color: #c91818; padding: 2px 7px; border-radius: 6px; font-weight: bold; text-decoration: underline;}
-        #videoBox { display:none; margin-top:20px;}
-        #videoPreview { width:260px; border-radius:12px; border:2px solid #25d366;}
+        #ocr-preview { margin-top:10px; color:#444; font-size:16px;}
         #appButton { margin-top: 20px;}
         @media (max-width: 520px) {.container{margin:22px 0 0 0;padding:16px 5px;width:99vw;max-width:97vw;}h1{font-size:22px;}h2{font-size:15px;}input,button{font-size:16px;}.ricevuta{font-size:15px;}#scaduta-message{font-size:14px;}}
     </style>
@@ -58,19 +56,14 @@
             <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
         </div>
         <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
-        <button onclick="startScan()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
-        <div id="videoBox">
-            <video id="videoPreview" autoplay playsinline></video>
-            <br>
-            <button onclick="captureAndOCR()">Scatta e Riconosci</button>
-            <button onclick="stopScan()">Annulla</button>
-        </div>
+        <button onclick="document.getElementById('ocrfile').click()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
+        <input type="file" id="ocrfile" accept="image/*" style="display:none" onchange="scanOCR(event)">
+        <div id="ocr-preview"></div>
         <div id="scaduta-message"></div>
         <div id="output"></div>
         <img id="modelImg" src="" alt="" style="display:none;">
         <div class="ricevuta" id="ricevuta" style="display:none;"></div>
         <div id="appButton"></div>
-        <canvas id="ocrCanvas" style="display:none;"></canvas>
     </div>
     <script>
     // CONTATORE CLIENTI
@@ -147,83 +140,42 @@
         document.getElementById("appButton").innerHTML = appButtonHtml;
     }
 
-    // ========== SCANSIONE E OCR ==========
+    // CLOUD OCR via OCR.SPACE
+    function scanOCR(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        document.getElementById('ocr-preview').innerHTML = "⏳ Scansione in corso...";
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("OCREngine", "2");
+        formData.append("language", "ita");
+        formData.append("isOverlayRequired", "false");
 
-    let videoStream = null;
-
-    async function startScan() {
-        document.getElementById('videoBox').style.display = 'block';
-        try {
-            videoStream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: "environment",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    // Attiva flash se supportato
-                    advanced: [{torch: true}]
-                }
-            });
-            const video = document.getElementById('videoPreview');
-            video.srcObject = videoStream;
-
-            // Prova ad attivare il torch (flash)
-            const tracks = videoStream.getVideoTracks();
-            if (tracks[0] && tracks[0].getCapabilities().torch) {
-                tracks[0].applyConstraints({advanced: [{torch: true}]});
+        fetch("https://api.ocr.space/parse/image", {
+            method: "POST",
+            headers: { apikey: "helloworld" }, // API KEY demo, cambiala se vuoi più richieste
+            body: formData
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            if (!data.ParsedResults || !data.ParsedResults[0]) {
+                document.getElementById('ocr-preview').innerHTML = "OCR non riuscito, riprova.";
+                return;
             }
-        } catch (err) {
-            alert('Fotocamera non disponibile o permessi negati');
-            stopScan();
-        }
-    }
-
-    function stopScan() {
-        document.getElementById('videoBox').style.display = 'none';
-        const video = document.getElementById('videoPreview');
-        if (videoStream) {
-            videoStream.getTracks().forEach(track => track.stop());
-        }
-        video.srcObject = null;
-    }
-
-    async function captureAndOCR() {
-        const video = document.getElementById('videoPreview');
-        const canvas = document.getElementById('ocrCanvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        enhanceCanvasContrast(canvas);
-
-        document.getElementById('serialInput').value = "Riconoscimento in corso...";
-        stopScan();
-
-        // OCR
-        try {
-            const result = await Tesseract.recognize(canvas, 'eng', { logger: m => {} });
-            let out = (result.data.text || '').replace(/\s/g, '');
-            // Cerca solo cifre di almeno 8 caratteri (modifica se necessario)
-            let serialMatch = out.match(/[0-9]{8,}/);
-            document.getElementById('serialInput').value = serialMatch ? serialMatch[0] : (out || "");
-        } catch (e) {
-            document.getElementById('serialInput').value = "";
-            alert('Errore riconoscimento testo. Riprova.');
-        }
-    }
-
-    // Enhance (contrasto e B/N)
-    function enhanceCanvasContrast(canvas) {
-        const ctx = canvas.getContext('2d');
-        let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        let d = imgData.data;
-        for (let i = 0; i < d.length; i += 4) {
-            let v = 0.2126*d[i] + 0.7152*d[i+1] + 0.0722*d[i+2];
-            v = v > 120 ? 255 : 0;
-            d[i] = d[i+1] = d[i+2] = v;
-        }
-        ctx.putImageData(imgData, 0, 0);
+            const text = data.ParsedResults[0].ParsedText;
+            document.getElementById('ocr-preview').innerHTML = "<b>Testo rilevato:</b><br><pre>"+text+"</pre>";
+            let found = (text.match(/\b\d{8,}\b/g) || [])[0];
+            if (found) {
+                document.getElementById('serialInput').value = found;
+                document.getElementById('ocr-preview').innerHTML += "<br><b style='color:green'>Seriale rilevato:</b> "+found;
+            } else {
+                document.getElementById('ocr-preview').innerHTML += "<br><b style='color:red'>Seriale NON rilevato! Scegli meglio la zona oppure copia il numero.";
+            }
+        })
+        .catch(() => {
+            document.getElementById('ocr-preview').innerHTML = "Errore connessione OCR.space";
+        });
     }
     </script>
-    <!-- (i tuoi script aggiuntivi, es: emailjs, tracking visite ecc. vanno qui) -->
 </body>
 </html>
