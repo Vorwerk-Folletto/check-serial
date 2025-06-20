@@ -14,205 +14,39 @@
     <!-- Font Awesome per le icone -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%);
-            min-height: 100vh;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            margin: 60px auto 0 auto;
-            background: #fff;
-            padding: 38px 28px 36px 28px;
-            max-width: 430px;
-            border-radius: 24px;
-            box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05);
-            animation: fadeInUp 1.2s cubic-bezier(.39,.58,.57,1) both;
-            position: relative;
-            z-index: 2;
-        }
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(30px);}
-            100% { opacity: 1; transform: translateY(0);}
-        }
-        .logo {
-            margin-bottom: 18px;
-        }
-        .logo img {
-            width: 120px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d;
-            transition: box-shadow .3s, transform .3s;
-        }
-        .logo img:hover {
-            box-shadow: 0 0 36px 4px #36d78299;
-            transform: scale(1.07) rotate(-2deg);
-        }
-        #contatoreClienti {
-            font-size: 18px;
-            color: #138a4b;
-            margin-bottom: 12px;
-            font-weight: bold;
-            letter-spacing: .5px;
-        }
-        h1 {
-            color: #25788f;
-            margin-bottom: 12px;
-            font-size: 32px;
-            letter-spacing: 1.3px;
-            font-weight: 700;
-            text-shadow: 0 2px 8px #c3dbe4;
-        }
-        h2 {
-            font-size: 19px;
-            color: #555;
-            margin-top: 0;
-            margin-bottom: 28px;
-            letter-spacing: .8px;
-            font-weight: 500;
-        }
-        .promo-bonus {
-            margin: 18px 0 10px 0;
-            font-size: 19px;
-            color: #1ebea5;
-            font-weight: 700;
-        }
-        .promo-bonus .tappeto {
-            background: #fffd8e;
-            color: #c91818;
-            padding: 2px 7px;
-            border-radius: 6px;
-            font-weight: bold;
-            text-decoration: underline;
-        }
-        .input-group {
-            position: relative;
-            margin-bottom: 22px;
-        }
-        .input-group i {
-            position: absolute;
-            top: 14px;
-            left: 12px;
-            color: #8bb0bb;
-            font-size: 18px;
-        }
-        input {
-            padding: 12px 12px 12px 40px;
-            font-size: 18px;
-            border-radius: 8px;
-            border: 1.7px solid #d7e7ed;
-            background: #f5fafd;
-            outline: none;
-            width: 85%;
-            transition: border .25s;
-            box-shadow: 0 1px 4px #cde2e944;
-        }
-        input:focus {
-            border: 2px solid #25d366;
-            background: #eefcf7;
-        }
-        button {
-            background: linear-gradient(90deg,#25d366 0,#1ebea5 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 20px;
-            padding: 13px 0;
-            width: 90%;
-            cursor: pointer;
-            margin-top: 6px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 16px #25d36622;
-            letter-spacing: 1px;
-            transition: transform 0.15s, box-shadow 0.2s;
-        }
-        button:hover {
-            background: linear-gradient(90deg,#1ebea5 0,#25d366 100%);
-            transform: scale(1.045);
-            box-shadow: 0 2px 24px #25d36644;
-        }
-        #output {
-            margin-top: 28px;
-            font-size: 21px;
-        }
-        #scaduta-message {
-            display: none;
-            margin: 16px auto 0 auto;
-            max-width: 350px;
-        }
-        .warning {
-            color: #c91818;
-            font-weight: bold;
-            font-size: 17px;
-            letter-spacing: .3px;
-            background: #ffdada;
-            border-radius: 6px;
-            padding: 7px 0 7px 0;
-            box-shadow: 0 2px 16px #fbbbbb45;
-        }
-        #modelImg {
-            margin-top: 18px;
-            max-width: 230px;
-            border-radius: 16px;
-            box-shadow: 0 2px 18px #43c47744;
-        }
-        .ricevuta {
-            background: linear-gradient(100deg, #f4f8fa 60%, #e4fbe9 100%);
-            margin: 32px auto 0 auto;
-            padding: 24px 16px 20px 16px;
-            border-radius: 16px;
-            border: 1.5px solid #c3ead6;
-            max-width: 340px;
-            font-size: 18px;
-            box-shadow: 0 2px 14px #cde2e944;
-            position: relative;
-        }
-        .ricevuta:after {
-            content: "";
-            position: absolute;
-            bottom: 10px; right: 12px;
-            width: 64px; height: 26px;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/Vorwerk_Logo_2019.svg') no-repeat center;
-            background-size: contain;
-            opacity: 0.12;
-            pointer-events: none;
-        }
-        .ok-message {
-            color: #0b942e;
-            font-weight: bold;
-            margin: 18px 0 8px 0;
-            font-size: 19px;
-            letter-spacing: .4px;
-        }
-        .note {
-            color: #25788f;
-            font-size: 14.7px;
-            margin-top: 16px;
-            font-style: italic;
-        }
-        #appButton {
-            margin-top: 20px;
-        }
-        input:focus, button:focus {
-            box-shadow: 0 0 10px #25d36644, 0 1px 4px #cde2e944;
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%); min-height: 100vh; text-align: center; margin: 0; padding: 0;}
+        .container { margin: 60px auto 0 auto; background: #fff; padding: 38px 28px 36px 28px; max-width: 430px; border-radius: 24px; box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05); animation: fadeInUp 1.2s cubic-bezier(.39,.58,.57,1) both; position: relative; z-index: 2;}
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(30px);} 100% { opacity: 1; transform: translateY(0);}}
+        .logo { margin-bottom: 18px;}
+        .logo img { width: 120px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d; transition: box-shadow .3s, transform .3s;}
+        .logo img:hover { box-shadow: 0 0 36px 4px #36d78299; transform: scale(1.07) rotate(-2deg);}
+        #contatoreClienti { font-size: 18px; color: #138a4b; margin-bottom: 12px; font-weight: bold; letter-spacing: .5px;}
+        h1 { color: #25788f; margin-bottom: 12px; font-size: 32px; letter-spacing: 1.3px; font-weight: 700; text-shadow: 0 2px 8px #c3dbe4;}
+        h2 { font-size: 19px; color: #555; margin-top: 0; margin-bottom: 28px; letter-spacing: .8px; font-weight: 500;}
+        .promo-bonus { margin: 18px 0 10px 0; font-size: 19px; color: #1ebea5; font-weight: 700;}
+        .promo-bonus .tappeto { background: #fffd8e; color: #c91818; padding: 2px 7px; border-radius: 6px; font-weight: bold; text-decoration: underline;}
+        .input-group { position: relative; margin-bottom: 22px;}
+        .input-group i { position: absolute; top: 14px; left: 12px; color: #8bb0bb; font-size: 18px;}
+        input { padding: 12px 12px 12px 40px; font-size: 18px; border-radius: 8px; border: 1.7px solid #d7e7ed; background: #f5fafd; outline: none; width: 85%; transition: border .25s; box-shadow: 0 1px 4px #cde2e944;}
+        input:focus { border: 2px solid #25d366; background: #eefcf7;}
+        button { background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 20px; padding: 13px 0; width: 90%; cursor: pointer; margin-top: 6px; margin-bottom: 10px; box-shadow: 0 2px 16px #25d36622; letter-spacing: 1px; transition: transform 0.15s, box-shadow 0.2s;}
+        button:hover { background: linear-gradient(90deg,#1ebea5 0,#25d366 100%); transform: scale(1.045); box-shadow: 0 2px 24px #25d36644;}
+        #scanButton { background: linear-gradient(90deg, #c91818 0, #ff8000 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 18px; padding: 10px 0; width: 90%; margin-bottom: 8px; box-shadow: 0 2px 12px #fbbbbb45; letter-spacing: 1px;}
+        #scanButton i { margin-right: 8px;}
+        #scanLoader { margin: 8px 0 0 0; color: #c91818; font-size: 15px; font-weight: bold;}
+        #output { margin-top: 28px; font-size: 21px;}
+        #scaduta-message { display: none; margin: 16px auto 0 auto; max-width: 350px;}
+        .warning { color: #c91818; font-weight: bold; font-size: 17px; letter-spacing: .3px; background: #ffdada; border-radius: 6px; padding: 7px 0 7px 0; box-shadow: 0 2px 16px #fbbbbb45;}
+        #modelImg { margin-top: 18px; max-width: 230px; border-radius: 16px; box-shadow: 0 2px 18px #43c47744;}
+        .ricevuta { background: linear-gradient(100deg, #f4f8fa 60%, #e4fbe9 100%); margin: 32px auto 0 auto; padding: 24px 16px 20px 16px; border-radius: 16px; border: 1.5px solid #c3ead6; max-width: 340px; font-size: 18px; box-shadow: 0 2px 14px #cde2e944; position: relative;}
+        .ricevuta:after { content: ""; position: absolute; bottom: 10px; right: 12px; width: 64px; height: 26px; background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/Vorwerk_Logo_2019.svg') no-repeat center; background-size: contain; opacity: 0.12; pointer-events: none;}
+        .ok-message { color: #0b942e; font-weight: bold; margin: 18px 0 8px 0; font-size: 19px; letter-spacing: .4px;}
+        .note { color: #25788f; font-size: 14.7px; margin-top: 16px; font-style: italic;}
+        #appButton { margin-top: 20px;}
+        input:focus, button:focus { box-shadow: 0 0 10px #25d36644, 0 1px 4px #cde2e944;}
         @media (max-width: 520px) {
-            .container {
-                margin: 22px 0 0 0;
-                padding: 16px 5px;
-                width: 99vw;
-                min-width: unset;
-                max-width: 97vw;
-            }
-            h1 { font-size: 22px;}
-            h2 { font-size: 15px;}
-            input, button { font-size: 16px; }
-            .ricevuta { font-size: 15px; }
-            #scaduta-message { font-size: 14px;}
+            .container { margin: 22px 0 0 0; padding: 16px 5px; width: 99vw; min-width: unset; max-width: 97vw;}
+            h1 { font-size: 22px;} h2 { font-size: 15px;} input, button { font-size: 16px; } .ricevuta { font-size: 15px; } #scaduta-message { font-size: 14px;}
         }
     </style>
 </head>
@@ -236,7 +70,8 @@
             <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
         </div>
         <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
-        
+        <button id="scanButton" onclick="scanSerial()"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
+        <div id="scanLoader"></div>
         <div id="scaduta-message"></div>
         <div id="output"></div>
         <img id="modelImg" src="" alt="" style="display:none;">
@@ -244,14 +79,56 @@
         <div id="appButton"></div>
     </div>
 
+    <!-- OCR: tesseract.js (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <script>
-    // CONTATORE CLIENTI: aumenta a ogni visita su device/browser
+    // CONTATORE CLIENTI
     var n = localStorage.getItem('contatoreFolletto');
     n = n ? parseInt(n) : 3164;
     n++;
     document.getElementById('numeroClienti').textContent = n;
     localStorage.setItem('contatoreFolletto', n);
 
+    // Funzione OCR SCANSIONE SERIAL
+    function scanSerial() {
+        // Crea input file se non esiste
+        let fileInput = document.getElementById('scanFileInput');
+        if (!fileInput) {
+            fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.capture = 'environment';
+            fileInput.id = 'scanFileInput';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+        }
+        fileInput.value = '';
+        fileInput.onchange = function(e) {
+            if (fileInput.files && fileInput.files[0]) {
+                document.getElementById('scanLoader').textContent = "Sto leggendo il seriale dalla foto... ⏳";
+                Tesseract.recognize(fileInput.files[0], 'eng', {
+                    logger: m => {
+                        // Puoi loggare i progressi se vuoi
+                    }
+                }).then(({ data: { text } }) => {
+                    let serialMatch = text.match(/([0-9]{2,}[A-Za-z0-9]*)/g);
+                    document.getElementById('scanLoader').textContent = "";
+                    if (serialMatch && serialMatch.length > 0) {
+                        // Prendi il seriale più "plausibile" (il più lungo)
+                        let bestSerial = serialMatch.sort((a,b) => b.length - a.length)[0];
+                        document.getElementById('serialInput').value = bestSerial.trim();
+                    } else {
+                        document.getElementById('scanLoader').textContent = "Seriale non riconosciuto! Riprova con una foto più chiara.";
+                    }
+                }).catch(()=> {
+                    document.getElementById('scanLoader').textContent = "Errore durante la scansione. Riprova!";
+                });
+            }
+        };
+        fileInput.click();
+    }
+
+    // Funzione principale di check serial
     function checkModel() {
         const serial = document.getElementById("serialInput").value.trim();
         const nome = document.getElementById("nomeCliente").value.trim();
@@ -306,7 +183,7 @@
             imgUrl = "";
         }
 
-        // Gestione messaggio assistenza scaduta
+        // Messaggio "assistenza scaduta" in alto, solo per modelli non VK7S riconosciuti
         const scadutaDiv = document.getElementById("scaduta-message");
         if (modello !== "Modello non riconosciuto" && scaduta) {
             scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
