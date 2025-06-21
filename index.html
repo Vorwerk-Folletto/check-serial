@@ -56,8 +56,8 @@
             <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
         </div>
         <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
-        <button onclick="document.getElementById('ocrfile').click()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
-        <input type="file" id="ocrfile" accept="image/*" style="display:none" onchange="scanOCR(event)">
+        <button onclick="scanOCR()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
+        <!-- <input type="file" id="ocrfile" accept="image/*" style="display:none" onchange="scanOCR(event)"> -->
         <div id="ocr-preview"></div>
         <div id="scaduta-message"></div>
         <div id="output"></div>
@@ -140,41 +140,10 @@
         document.getElementById("appButton").innerHTML = appButtonHtml;
     }
 
-    // CLOUD OCR via OCR.SPACE
-    function scanOCR(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        document.getElementById('ocr-preview').innerHTML = "⏳ Scansione in corso...";
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("OCREngine", "2");
-        formData.append("language", "ita");
-        formData.append("isOverlayRequired", "false");
-
-        fetch("https://api.ocr.space/parse/image", {
-            method: "POST",
-            headers: { apikey: "helloworld" }, // API KEY demo, cambiala se vuoi più richieste
-            body: formData
-        })
-        .then(resp => resp.json())
-        .then(data => {
-            if (!data.ParsedResults || !data.ParsedResults[0]) {
-                document.getElementById('ocr-preview').innerHTML = "OCR non riuscito, riprova.";
-                return;
-            }
-            const text = data.ParsedResults[0].ParsedText;
-            document.getElementById('ocr-preview').innerHTML = "<b>Testo rilevato:</b><br><pre>"+text+"</pre>";
-            let found = (text.match(/\b\d{8,}\b/g) || [])[0];
-            if (found) {
-                document.getElementById('serialInput').value = found;
-                document.getElementById('ocr-preview').innerHTML += "<br><b style='color:green'>Seriale rilevato:</b> "+found;
-            } else {
-                document.getElementById('ocr-preview').innerHTML += "<br><b style='color:red'>Seriale NON rilevato! Scegli meglio la zona oppure copia il numero.";
-            }
-        })
-        .catch(() => {
-            document.getElementById('ocr-preview').innerHTML = "Errore connessione OCR.space";
-        });
+    // **Fase test**: la funzione scansione NON fa nulla
+    function scanOCR() {
+        // Messaggio di funzione in sviluppo
+        alert("Funzione scansione seriale in fase di test. Sarà disponibile a breve!");
     }
     </script>
 </body>
