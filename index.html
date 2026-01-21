@@ -104,34 +104,10 @@
     #apptClose { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: 900; }
 
     /* progress bar */
-    #apptProgressWrap{
-      position:absolute;
-      left:0; right:0;
-      bottom:0;
-      height:6px;
-      background: rgba(255,255,255,0.22);
-    }
-    #apptProgressBar{
-      height:100%;
-      width:0%;
-      background: rgba(255,255,255,0.95);
-      transition: width .18s ease-out;
-      border-top-right-radius: 10px;
-      border-bottom-right-radius: 10px;
-    }
-    #apptHeader .miniStatus{
-      font-weight: 900;
-      font-size: 12px;
-      opacity: .95;
-      margin-left: 10px;
-    }
-    #apptMiniStatus.ready {
-      background: rgba(255,255,255,0.28);
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-left: 10px;
-      letter-spacing: .6px;
-    }
+    #apptProgressWrap{ position:absolute; left:0; right:0; bottom:0; height:6px; background: rgba(255,255,255,0.22); }
+    #apptProgressBar{ height:100%; width:0%; background: rgba(255,255,255,0.95); transition: width .18s ease-out; border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+    #apptHeader .miniStatus{ font-weight: 900; font-size: 12px; opacity: .95; margin-left: 10px; }
+    #apptMiniStatus.ready { background: rgba(255,255,255,0.28); padding: 4px 10px; border-radius: 999px; margin-left: 10px; letter-spacing: .6px; }
 
     /* header flash */
     #apptHeader.flash::after{
@@ -159,43 +135,17 @@
     .apptField input:focus, .apptField textarea:focus { border: 2px solid #25d366; background: #eefcf7; }
     .apptFull { grid-column: 1 / -1; }
 
-    /* ===== NOTE CHIPS ===== */
-    .noteChips{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
+    .noteChips{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
     .noteChips button{
-      width:auto !important;
-      margin:0 !important;
-      padding:10px 12px !important;
-      font-size:14px !important;
-      border-radius:999px !important;
-      font-weight:900 !important;
+      width:auto !important; margin:0 !important; padding:10px 12px !important;
+      font-size:14px !important; border-radius:999px !important; font-weight:900 !important;
       background: linear-gradient(90deg,#25788f 0,#1ebea5 100%);
     }
     .noteChips button:hover{ transform: scale(1.03); }
 
-    /* ✅ 4 BOTTONI */
-    .apptActions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .apptActions button{
-      width: 100%;
-      margin: 0;
-      padding: 16px 14px;
-      font-size: 18px;
-      border-radius: 14px;
-      font-weight: 900;
-    }
-    .apptActions button i{
-      font-size: 20px;
-      margin-right: 6px;
-    }
+    .apptActions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .apptActions button{ width: 100%; margin: 0; padding: 16px 14px; font-size: 18px; border-radius: 14px; font-weight: 900; }
+    .apptActions button i{ font-size: 20px; margin-right: 6px; }
 
     .btnDark { background: linear-gradient(90deg,#111 0,#444 100%); }
     .btnBlue { background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
@@ -207,7 +157,6 @@
       .apptActions button{ font-size: 17px; padding: 16px 12px; }
     }
 
-    /* ===== TOAST ===== */
     #toast {
       position: fixed;
       left: 50%;
@@ -229,32 +178,6 @@
     @keyframes toastIn {
       from { opacity: 0; transform: translateX(-50%) translateY(10px) scale(.98); }
       to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-    }
-
-    /* ==========================================================
-       ✅ FIX SCROLL iPhone/PWA (LA MODAL SCROLLA, LO SFONDO NO)
-       ========================================================== */
-    body.modal-open{
-      overflow: hidden;
-      position: fixed;
-      width: 100%;
-    }
-
-    #apptBox{
-      max-height: calc(100vh - 24px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .apptBody{
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      max-height: calc(100vh - 140px);
-      padding-bottom: 24px;
-    }
-
-    #apptOverlay{
-      overscroll-behavior: contain;
     }
   </style>
 </head>
@@ -366,7 +289,7 @@
         </div>
 
         <div class="apptActions">
-          <button class="btnDark" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Copia su MYA</button>
+          <button class="btnDark" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Trascrivi informazioni su MYA</button>
           <button class="btnBlue" onclick="sendWhatsAppOnly()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
           <button class="btnDark" onclick="downloadICSOnly()"><i class="fa fa-calendar-days"></i> Calendario</button>
           <button class="btnGreen" onclick="clearApptFields()"><i class="fa fa-eraser"></i> Pulisci</button>
@@ -433,12 +356,12 @@
       const h = document.getElementById("apptHeader");
       if (!h) return;
       h.classList.remove("flash");
-      void h.offsetWidth; // reflow
+      void h.offsetWidth;
       h.classList.add("flash");
       setTimeout(() => h.classList.remove("flash"), 420);
     }
 
-    // ===== MODELLO & SERIALE =====
+    // ===== MODELLO & SERIALE (pagina principale) =====
     function checkModel() {
       const serial = document.getElementById("serialInput").value.trim();
       const nome = document.getElementById("nomeCliente").value.trim();
@@ -463,7 +386,7 @@
       } else if (["15","16","17"].includes(prefix)) {
         modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
       } else if (["18","19","20","21"].includes(prefix)) {
-        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg";
+        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg"; // stessa foto VK200
       } else if (["22","23","24","25"].includes(prefix)) {
         modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
       } else {
@@ -548,10 +471,6 @@
       if (!document.getElementById("apptOra").value) document.getElementById("apptOra").value = `${hh}:${mi}`;
 
       document.getElementById("apptOverlay").style.display = "flex";
-
-      /* ✅ FIX SCROLL: blocca pagina dietro */
-      document.body.classList.add("modal-open");
-
       setTimeout(() => document.getElementById("apptNome").focus(), 150);
 
       startApptBootProgress();
@@ -560,9 +479,6 @@
 
     function closeApptModal() {
       document.getElementById("apptOverlay").style.display = "none";
-
-      /* ✅ FIX SCROLL: sblocca pagina dietro */
-      document.body.classList.remove("modal-open");
     }
 
     function overlayClose(e) {
@@ -579,7 +495,7 @@
       const note = document.getElementById("apptNote").value.trim();
 
       if (!nome || !cognome || !telefono || !via) {
-        showToast("✍🏻Trascrivi informazioni su MYA");
+        showToast("⚠️ Trascrivi info su MYA: Nome, Cognome, Telefono, Via");
         haptic(40);
         flashHeader();
         return null;
@@ -587,9 +503,35 @@
       return { nome, cognome, telefono, via, data, ora, note };
     }
 
+    /* ===========================================================
+       ✅ AGGIUNTA RICHIESTA: modello + annata preso dal seriale
+       =========================================================== */
+    function getModelAndYearFromSerial(serial) {
+      const s = (serial || "").trim();
+      const prefix = s.substring(0, 2);
+
+      if (["83","84","85","86","87","88","89","90","91","92","93","94","95","96"].includes(prefix)) return { modello: "VK 120-122", anno: "1983-1996" };
+      if (["97","98","99"].includes(prefix)) return { modello: "VK 130", anno: "1997-1999" };
+      if (["00","01","02"].includes(prefix)) return { modello: "VK 131", anno: "2000-2002" };
+      if (["03","04","05","06","07"].includes(prefix)) return { modello: "VK 135", anno: "2003-2007" };
+      if (["08"].includes(prefix)) return { modello: "VK 136", anno: "2008" };
+      if (["09","10","11","12","13"].includes(prefix)) return { modello: "VK140", anno: "2009-2013" };
+      if (["14"].includes(prefix)) return { modello: "VK150", anno: "2014" };
+      if (["15","16","17"].includes(prefix)) return { modello: "VK 200", anno: "2015-2017" };
+      if (["18","19","20","21"].includes(prefix)) return { modello: "VK 220S", anno: "2018-2021" };
+      if (["22","23","24","25"].includes(prefix)) return { modello: "VK7S", anno: "2022-2025" };
+
+      return null;
+    }
+
     function formatApptMessage(a) {
       const when = (a.data ? a.data : "—") + (a.ora ? (" " + a.ora) : "");
       const serial = (document.getElementById("serialInput").value || "").trim();
+
+      // ✅ qui aggiungiamo SOLO modello + annata
+      const info = getModelAndYearFromSerial(serial);
+      const modelLine = info ? `🧩 Modello: ${info.modello} (${info.anno})` : "";
+
       return [
         "📅 *APPUNTAMENTO FOLLETTO*",
         `👤 ${a.nome} ${a.cognome}`,
@@ -597,6 +539,7 @@
         `📍 ${a.via}`,
         `🕒 ${when}`,
         serial ? `🔢 Serial: ${serial}` : "",
+        modelLine,
         a.note ? `📝 Note: ${a.note}` : "",
       ].filter(Boolean).join("\n");
     }
@@ -616,7 +559,7 @@
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(txt)
-          .then(() => { showToast("✅ Copiato"); haptic(20); flashHeader(); })
+          .then(() => { showToast("✅ Copiato (formato MYA)"); haptic(20); flashHeader(); })
           .catch(() => fallbackCopy(txt));
       } else {
         fallbackCopy(txt);
@@ -630,7 +573,7 @@
       t.select();
       document.execCommand("copy");
       document.body.removeChild(t);
-      showToast("✅ Copiato");
+      showToast("✅ Copiato (formato MYA)");
       haptic(20);
       flashHeader();
     }
@@ -726,16 +669,7 @@ END:VCALENDAR`;
       if (e.key === "Escape") closeApptModal();
     });
 
-    /* ✅ FIX iOS: impedisce scroll dietro quando modal è aperta */
-    document.addEventListener("touchmove", function(e) {
-      const overlay = document.getElementById("apptOverlay");
-      if (overlay && overlay.style.display === "flex") {
-        const inside = e.target.closest(".apptBody");
-        if (!inside) e.preventDefault();
-      }
-    }, { passive: false });
-
-    // ====== PROGRESS "VIDEOGIOCO": 0→100 + ✅ READY + poi target reale ======
+    // ====== PROGRESS "VIDEOGIOCO" ======
     let __pCur = 0;
     let __pTarget = 0;
     let __pTimer = null;
