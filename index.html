@@ -82,11 +82,9 @@
       padding: 32px 24px;
       border-radius: 16px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-
       width: min(360px, calc(100vw - 40px));
       margin: 0 auto;
       box-sizing: border-box;
-
       text-align:center;
     }
     #passwordBox h2 { color:#138a4b; margin:0 0 16px 0; font-size:22px; }
@@ -295,8 +293,8 @@
   <div id="toast"></div>
 
   <script>
-    // PASSWORD
     const ACCESS_PASSWORD = "1232";
+
     function checkPassword() {
       const userInput = document.getElementById("passwordInput").value.trim();
       if (userInput === ACCESS_PASSWORD) {
@@ -310,14 +308,14 @@
       }
     }
 
-    // CONTATORE
+    // contatore
     var n = localStorage.getItem('contatoreFolletto');
     n = n ? parseInt(n) : 3164;
     n++;
     document.getElementById('numeroClienti').textContent = n;
     localStorage.setItem('contatoreFolletto', n);
 
-    // TOAST
+    // toast
     let toastTimer = null;
     function showToast(msg) {
       const t = document.getElementById("toast");
@@ -327,7 +325,7 @@
       toastTimer = setTimeout(() => t.style.display = "none", 1700);
     }
 
-    // CHECK MODEL
+    // check model
     function checkModel() {
       const serial = document.getElementById("serialInput").value.trim();
       const nome = document.getElementById("nomeCliente").value.trim();
@@ -407,31 +405,17 @@
       }
 
       document.getElementById("output").innerHTML = output;
-      document.getElementById("appButton").innerHTML = "";
     }
 
     function scanOCR() { showToast("📷 Scansione in test (presto disponibile)"); }
 
-    // MODAL
+    // modal
     function openApptModal() { document.getElementById("apptOverlay").style.display = "flex"; }
     function closeApptModal() { document.getElementById("apptOverlay").style.display = "none"; }
     function overlayClose(e) { if (e.target && e.target.id === "apptOverlay") closeApptModal(); }
 
-   function getApptData(actionLabel = "Trascrivi info su MYA") {
-  const nome = document.getElementById("apptNome").value.trim();
-  const cognome = document.getElementById("apptCognome").value.trim();
-  const telefono = document.getElementById("apptTelefono").value.trim();
-  const via = document.getElementById("apptVia").value.trim();
-  const data = document.getElementById("apptData").value.trim();
-  const ora = document.getElementById("apptOra").value.trim();
-  const note = document.getElementById("apptNote").value.trim();
-
-  if (!nome || !cognome || !telefono || !via) {
-    showToast(`⚠️ ${actionLabel}: Nome, Cognome, Telefono, Via`);
-    return null;
-  }
-  return { nome, cognome, telefono, via, data, ora, note };
-}
+    // ✅ getApptData con label personalizzata
+    function getApptData(actionLabel = "Trascrivi info su MYA") {
       const nome = document.getElementById("apptNome").value.trim();
       const cognome = document.getElementById("apptCognome").value.trim();
       const telefono = document.getElementById("apptTelefono").value.trim();
@@ -441,13 +425,12 @@
       const note = document.getElementById("apptNote").value.trim();
 
       if (!nome || !cognome || !telefono || !via) {
-        showToast("⚠️ Trascrivi info su MYA: Nome, Cognome, Telefono, Via");
+        showToast(`⚠️ ${actionLabel}: Nome, Cognome, Telefono, Via`);
         return null;
       }
       return { nome, cognome, telefono, via, data, ora, note };
     }
 
-    // MODELLO+ANNATA
     function getModelAndYearFromSerial(serial) {
       const s = (serial || "").trim();
       const prefix = s.substring(0, 2);
@@ -462,14 +445,12 @@
       if (["15","16","17"].includes(prefix)) return { modello: "VK 200", anno: "2015-2017" };
       if (["18","19","20","21"].includes(prefix)) return { modello: "VK 220S", anno: "2018-2021" };
       if (["22","23","24","25"].includes(prefix)) return { modello: "VK7S", anno: "2022-2025" };
-
       return null;
     }
 
     function formatApptMessage(a) {
       const when = (a.data ? a.data : "—") + (a.ora ? (" " + a.ora) : "");
       const serial = (document.getElementById("serialInput").value || "").trim();
-
       const info = getModelAndYearFromSerial(serial);
       const modelLine = info ? `Modello: ${info.modello} (${info.anno})` : "";
 
@@ -486,7 +467,7 @@
     }
 
     function copyAppointmentText() {
-      const a = getApptData();
+      const a = getApptData("Trascrivi info su MYA");
       if (!a) return;
       const txt = formatApptMessage(a);
 
@@ -517,16 +498,12 @@
       return p.replace(/\+/g, "");
     }
 
-    /* ✅ WHATSAPP: messaggio professionale "Gentile Cliente" */
     function sendWhatsAppOnly() {
-    const a = getApptData("Invio promemoria cliente su WhatsApp");
+      const a = getApptData("Invio promemoria cliente su WhatsApp");
       if (!a) return;
 
       const num = normalizePhoneIT(a.telefono);
-      if (!num) {
-        showToast("⚠️ Numero non valido");
-        return;
-      }
+      if (!num) { showToast("⚠️ Numero non valido"); return; }
 
       let dataITA = "";
       if (a.data) {
@@ -554,7 +531,7 @@ Per eventuali variazioni di orario, risponda a questo messaggio.`;
     }
 
     function downloadICSOnly() {
-      const a = getApptData();
+      const a = getApptData("Calendario");
       if (!a) return;
 
       const dateStr = a.data || new Date().toISOString().slice(0,10);
