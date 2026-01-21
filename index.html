@@ -11,7 +11,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
-  <!-- ✅ AUTO-FIX PRO: forza URL con ?v=2 + reload una volta in modalità app -->
+  <!-- ✅ AUTO-FIX PRO: forza URL con ?v=3 + reload una volta in modalità app -->
   <script>
     (function () {
       const VERSION = "3";
@@ -177,7 +177,7 @@
     }
     .noteChips button:hover{ transform: scale(1.03); }
 
-    /* ✅ 4 BOTTONI: grandi e comodi */
+    /* ✅ 4 BOTTONI */
     .apptActions {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -207,7 +207,7 @@
       .apptActions button{ font-size: 17px; padding: 16px 12px; }
     }
 
-    /* ===== TOAST (notifiche fighe) ===== */
+    /* ===== TOAST ===== */
     #toast {
       position: fixed;
       left: 50%;
@@ -229,6 +229,32 @@
     @keyframes toastIn {
       from { opacity: 0; transform: translateX(-50%) translateY(10px) scale(.98); }
       to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    }
+
+    /* ==========================================================
+       ✅ FIX SCROLL iPhone/PWA (LA MODAL SCROLLA, LO SFONDO NO)
+       ========================================================== */
+    body.modal-open{
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+    }
+
+    #apptBox{
+      max-height: calc(100vh - 24px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .apptBody{
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      max-height: calc(100vh - 140px);
+      padding-bottom: 24px;
+    }
+
+    #apptOverlay{
+      overscroll-behavior: contain;
     }
   </style>
 </head>
@@ -283,7 +309,7 @@
   <!-- ✅ Bottone fisso -->
   <button id="quickApptBtn" onclick="openApptModal()">📅 Programma appuntamento</button>
 
-  <!-- ✅ Modal Appuntamento (NO SALVATAGGI) -->
+  <!-- ✅ Modal Appuntamento -->
   <div id="apptOverlay" onclick="overlayClose(event)">
     <div id="apptBox" onclick="event.stopPropagation()">
       <div id="apptHeader">
@@ -339,7 +365,6 @@
           </div>
         </div>
 
-        <!-- ✅ 4 BOTTONI (NO SALVA) -->
         <div class="apptActions">
           <button class="btnDark" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Copia</button>
           <button class="btnBlue" onclick="sendWhatsAppOnly()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
@@ -350,7 +375,6 @@
     </div>
   </div>
 
-  <!-- ✅ Toast -->
   <div id="toast"></div>
 
   <script>
@@ -439,20 +463,18 @@
       } else if (["15","16","17"].includes(prefix)) {
         modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
       } else if (["18","19","20","21"].includes(prefix)) {
-        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg"; // stessa foto VK200
+        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg";
       } else if (["22","23","24","25"].includes(prefix)) {
         modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
       } else {
         modello = "Modello non riconosciuto"; anno = ""; imgUrl = "";
       }
 
-      // Testo intervento: VK7 diverso dagli altri
       const isVK7 = ["22","23","24","25"].includes(prefix);
       const interventoText = isVK7
         ? "Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore"
         : "Intervento di manutenzione gratuito disponibile al prodotto:<br>Ripristino potenza motore";
 
-      // Assistenza scaduta
       const scadutaDiv = document.getElementById("scaduta-message");
       if (modello !== "Modello non riconosciuto" && scaduta) {
         scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
@@ -462,7 +484,6 @@
         scadutaDiv.style.display = "none";
       }
 
-      // Output + immagine + ricevuta
       let output = "";
       const modelImg = document.getElementById("modelImg");
 
@@ -514,7 +535,6 @@
         document.getElementById("apptCognome").value = parts.slice(1).join(" ") || "";
       }
 
-      // default: tra 2 ore
       const now = new Date();
       now.setHours(now.getHours() + 2);
 
@@ -528,15 +548,21 @@
       if (!document.getElementById("apptOra").value) document.getElementById("apptOra").value = `${hh}:${mi}`;
 
       document.getElementById("apptOverlay").style.display = "flex";
+
+      /* ✅ FIX SCROLL: blocca pagina dietro */
+      document.body.classList.add("modal-open");
+
       setTimeout(() => document.getElementById("apptNome").focus(), 150);
 
-      // effetto videogame progress
       startApptBootProgress();
       setTimeout(() => updateApptProgress(), 900);
     }
 
     function closeApptModal() {
       document.getElementById("apptOverlay").style.display = "none";
+
+      /* ✅ FIX SCROLL: sblocca pagina dietro */
+      document.body.classList.remove("modal-open");
     }
 
     function overlayClose(e) {
@@ -575,7 +601,6 @@
       ].filter(Boolean).join("\n");
     }
 
-    // ===== WhatsApp diretto su numero =====
     function normalizePhoneIT(raw){
       let p = (raw || "").trim().replace(/[^\d+]/g, "");
       if (!p) return "";
@@ -584,7 +609,6 @@
       return p.replace(/\+/g, "");
     }
 
-    // ✅ COPIA (NO SALVATAGGI)
     function copyAppointmentText() {
       const a = getApptData();
       if (!a) return;
@@ -598,6 +622,7 @@
         fallbackCopy(txt);
       }
     }
+
     function fallbackCopy(text) {
       const t = document.createElement("textarea");
       t.value = text;
@@ -610,7 +635,6 @@
       flashHeader();
     }
 
-    // ✅ WHATSAPP (diretto al numero)
     function sendWhatsAppOnly() {
       const a = getApptData();
       if (!a) return;
@@ -632,7 +656,6 @@
       flashHeader();
     }
 
-    // ✅ CALENDARIO (.ics)
     function downloadICSOnly() {
       const a = getApptData();
       if (!a) return;
@@ -688,7 +711,6 @@ END:VCALENDAR`;
       flashHeader();
     }
 
-    // ✅ PULISCI (NO SALVATAGGI)
     function clearApptFields() {
       ["apptNome","apptCognome","apptTelefono","apptVia","apptData","apptOra","apptNote"].forEach(id => {
         const el = document.getElementById(id);
@@ -700,16 +722,24 @@ END:VCALENDAR`;
       flashHeader();
     }
 
-    // ESC chiude modal
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeApptModal();
     });
 
-    // ====== PROGRESS "VIDEOGIOCO": 0→100 (finto) + ✅ READY + poi target reale ======
+    /* ✅ FIX iOS: impedisce scroll dietro quando modal è aperta */
+    document.addEventListener("touchmove", function(e) {
+      const overlay = document.getElementById("apptOverlay");
+      if (overlay && overlay.style.display === "flex") {
+        const inside = e.target.closest(".apptBody");
+        if (!inside) e.preventDefault();
+      }
+    }, { passive: false });
+
+    // ====== PROGRESS "VIDEOGIOCO": 0→100 + ✅ READY + poi target reale ======
     let __pCur = 0;
     let __pTarget = 0;
     let __pTimer = null;
-    let __pMode = "idle"; // "boot" | "target" | "idle"
+    let __pMode = "idle";
 
     function __getRealTarget() {
       const reqIds = ["apptNome","apptCognome","apptTelefono","apptVia"];
@@ -726,10 +756,6 @@ END:VCALENDAR`;
       const mini = document.getElementById("apptMiniStatus");
       if (bar) bar.style.width = pct + "%";
       if (mini && !mini.classList.contains("ready")) mini.textContent = pct + "%";
-    }
-
-    function __flashSafe() {
-      try { if (typeof flashHeader === "function") flashHeader(); } catch(e){}
     }
 
     function __stopProgress() {
@@ -756,9 +782,8 @@ END:VCALENDAR`;
           __setProgressUI(__pCur);
 
           if (__pCur >= 100) {
-            __flashSafe();
+            flashHeader();
 
-            // ✅ READY effetto videogame
             const mini = document.getElementById("apptMiniStatus");
             if (mini) {
               mini.classList.add("ready");
