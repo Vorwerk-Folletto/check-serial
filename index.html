@@ -498,51 +498,50 @@
       return p.replace(/\+/g, "");
     }
 
+    /* ✅✅✅ FIX: template literal chiuso correttamente, script non si rompe, login ok */
     function sendWhatsAppOnly() {
-  const a = getApptData("Invio promemoria cliente su WhatsApp");
-  if (!a) return;
+      const a = getApptData("Invio promemoria cliente su WhatsApp");
+      if (!a) return;
 
-  const num = normalizePhoneIT(a.telefono);
-  if (!num) { showToast("⚠️ Numero non valido"); return; }
+      const num = normalizePhoneIT(a.telefono);
+      if (!num) { showToast("⚠️ Numero non valido"); return; }
 
-  // Data ITA (dd/mm/yyyy)
-  let dataITA = "";
-  if (a.data) {
-    const [yyyy, mm, dd] = a.data.split("-");
-    if (yyyy && mm && dd) dataITA = `${dd}/${mm}/${yyyy}`;
-  }
+      // Data ITA (dd/mm/yyyy)
+      let dataITA = "";
+      if (a.data) {
+        const [yyyy, mm, dd] = a.data.split("-");
+        if (yyyy && mm && dd) dataITA = `${dd}/${mm}/${yyyy}`;
+      }
 
-  // Modello + annata dal seriale
-  const serial = (document.getElementById("serialInput").value || "").trim();
-  const info = getModelAndYearFromSerial(serial);
-  const modelloTxt = info ? `${info.modello} (${info.anno})` : "";
+      // Modello + annata dal seriale
+      const serial = (document.getElementById("serialInput").value || "").trim();
+      const info = getModelAndYearFromSerial(serial);
+      const modelloTxt = info ? `${info.modello} (${info.anno})` : "";
 
-  // Messaggio professionale
-  const msg =
-`Gentile Cliente,
+      // Messaggio professionale (CHIUSO)
+      const msg = `Gentile Cliente,
 Le confermiamo l’appuntamento per la manutenzione Folletto.
 
 📅 Data: ${dataITA || a.data || "—"}
 🕒 Ora: ${a.ora || "—"}
-📍 Indirizzo: ${a.via}${modelloTxt ? `\n🧩 Modello: ${modelloTxt}` : ""}
+📍 Indirizzo: ${a.via}${modelloTxt ? `\n🧩 Modello: ${modelloTxt}` : ""}${serial ? `\n🔢 Serial: ${serial}` : ""}${a.note ? `\n📝 Note: ${a.note}` : ""}
 
+Cordiali saluti.`;
 
-  // ✅ Link diretto app WhatsApp (più veloce su iPhone/PWA)
-  const urlApp = "whatsapp://send?phone=" + num + "&text=" + encodeURIComponent(msg);
+      // ✅ Link diretto app WhatsApp
+      const urlApp = "whatsapp://send?phone=" + num + "&text=" + encodeURIComponent(msg);
 
-  // ✅ Fallback web sempre funzionante
-  const urlWeb = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
+      // ✅ Fallback web
+      const urlWeb = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
 
-  // 🚀 tenta apertura app
-  showToast("🟢 Invio promemoria cliente su WhatsApp...");
-  window.location.href = urlApp;
+      showToast("🟢 Invio promemoria cliente su WhatsApp...");
+      window.location.href = urlApp;
 
-  // se non si apre l’app entro 700ms → fallback su wa.me
-  setTimeout(() => {
-    // se siamo ancora qui (non ha cambiato app/tab), allora fallback
-    window.open(urlWeb, "_blank");
-  }, 700);
-}
+      setTimeout(() => {
+        window.open(urlWeb, "_blank");
+      }, 700);
+    }
+
     function downloadICSOnly() {
       const a = getApptData("Calendario");
       if (!a) return;
