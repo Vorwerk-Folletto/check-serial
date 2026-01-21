@@ -17,14 +17,12 @@
       const VERSION = "2";
       const url = new URL(window.location.href);
 
-      // Forza sempre ?v=2
       if (url.searchParams.get("v") !== VERSION) {
         url.searchParams.set("v", VERSION);
         window.location.replace(url.toString());
         return;
       }
 
-      // Reload UNA volta in modalità app/standalone (iOS PWA fix)
       const isStandalone =
         (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
         window.navigator.standalone === true;
@@ -88,7 +86,7 @@
       border: none;
       cursor: pointer;
       z-index: 9998;
-      font-weight: 800;
+      font-weight: 900;
       font-size: 18px;
       color: #fff;
       background: linear-gradient(90deg,#25788f 0,#1ebea5 100%);
@@ -107,38 +105,43 @@
     .apptBody { padding: 16px 18px 18px 18px; }
     .apptGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .apptField { display:flex; flex-direction:column; gap:6px; }
-    .apptField label { font-size: 13px; color: #25788f; font-weight: 700; }
+    .apptField label { font-size: 13px; color: #25788f; font-weight: 800; }
     .apptField input, .apptField textarea {
-      width: 100%; box-sizing: border-box; padding: 12px; border-radius: 10px;
-      border: 1.6px solid #d7e7ed; background: #f5fafd; font-size: 16px; outline: none;
+      width: 100%; box-sizing: border-box; padding: 13px; border-radius: 12px;
+      border: 1.6px solid #d7e7ed; background: #f5fafd; font-size: 17px; outline: none;
     }
     .apptField textarea { resize: none; min-height: 78px; }
     .apptField input:focus, .apptField textarea:focus { border: 2px solid #25d366; background: #eefcf7; }
     .apptFull { grid-column: 1 / -1; }
 
-    .apptActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-    .apptActions button { width: 100%; margin: 0; padding: 12px 12px; font-size: 16px; border-radius: 12px; }
-    .btnSecondary { background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
+    /* ✅ 4 BOTTONI: grandi e comodi */
+    .apptActions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .apptActions button{
+      width: 100%;
+      margin: 0;
+      padding: 16px 14px;
+      font-size: 18px;
+      border-radius: 14px;
+      font-weight: 900;
+    }
+    .apptActions button i{
+      font-size: 20px;
+      margin-right: 6px;
+    }
+
     .btnDark { background: linear-gradient(90deg,#111 0,#444 100%); }
-
-    #apptReceipt { margin-top: 14px; background: #f4f8fa; border: 1.5px dashed #c3ead6; border-radius: 14px; padding: 12px; font-size: 14px; color: #333; display: none; }
-
-    /* ====== HISTORY LIST ====== */
-    #apptHistoryList{ display:flex; flex-direction:column; gap:10px; }
-    .apptCard{ background:#ffffff; border:1.5px solid #d7e7ed; border-radius:14px; padding:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
-    .apptCardTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
-    .apptCardTitle{ font-weight:900; color:#111; font-size:15px; }
-    .apptCardMeta{ margin-top:6px; font-size:13px; color:#333; line-height:1.35; }
-    .apptMiniBtns{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-    .apptMiniBtns button{ width:auto !important; padding:9px 10px !important; font-size:13px !important; border-radius:12px !important; margin:0 !important; }
-    .apptMiniBtns .miniGrey{ background:linear-gradient(90deg,#111 0,#444 100%); }
-    .apptMiniBtns .miniBlue{ background:linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
-    .apptMiniBtns .miniGreen{ background:linear-gradient(90deg,#25d366 0,#1ebea5 100%); }
-    .apptMiniBtns .miniRed{ background:linear-gradient(90deg,#c91818 0,#ff5a5a 100%); }
+    .btnBlue { background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
+    .btnGreen { background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); }
 
     @media (max-width: 520px) {
       #quickApptBtn { font-size: 16px; }
       .apptGrid { grid-template-columns: 1fr; }
+      .apptActions button{ font-size: 17px; padding: 16px 12px; }
     }
   </style>
 </head>
@@ -193,7 +196,7 @@
   <!-- ✅ Bottone fisso -->
   <button id="quickApptBtn" onclick="openApptModal()">📅 Programma appuntamento</button>
 
-  <!-- ✅ Modal Appuntamento -->
+  <!-- ✅ Modal Appuntamento (NO SALVATAGGI) -->
   <div id="apptOverlay" onclick="overlayClose(event)">
     <div id="apptBox" onclick="event.stopPropagation()">
       <div id="apptHeader">
@@ -237,18 +240,12 @@
           </div>
         </div>
 
-        <div class="apptActions" id="apptActions">
-          <button class="btnDark" id="copyBtn" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Copia</button>
-          <button class="btnSecondary" onclick="sendWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
-          <button class="btnDark" onclick="downloadICS()"><i class="fa fa-calendar-days"></i> Calendario</button>
-          <button class="btnSecondary" onclick="clearApptFields()"><i class="fa fa-eraser"></i> Pulisci</button>
-        </div>
-
-        <div id="apptReceipt"></div>
-
-        <div id="apptHistory" style="margin-top:14px; display:none;">
-          <div style="font-weight:800;color:#25788f;margin-bottom:8px;">📌 Ultimi appuntamenti</div>
-          <div id="apptHistoryList"></div>
+        <!-- ✅ 4 BOTTONI (NO SALVA) -->
+        <div class="apptActions">
+          <button class="btnDark" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Copia</button>
+          <button class="btnBlue" onclick="sendWhatsAppOnly()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+          <button class="btnDark" onclick="downloadICSOnly()"><i class="fa fa-calendar-days"></i> Calendario</button>
+          <button class="btnGreen" onclick="clearApptFields()"><i class="fa fa-eraser"></i> Pulisci</button>
         </div>
       </div>
     </div>
@@ -309,13 +306,11 @@
         modello = "Modello non riconosciuto"; anno = ""; imgUrl = "";
       }
 
-      // Testo intervento: VK7 diverso dagli altri
       const isVK7 = ["22","23","24","25"].includes(prefix);
       const interventoText = isVK7
         ? "Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore"
         : "Intervento di manutenzione gratuito disponibile al prodotto:<br>Ripristino potenza motore";
 
-      // Assistenza scaduta
       const scadutaDiv = document.getElementById("scaduta-message");
       if (modello !== "Modello non riconosciuto" && scaduta) {
         scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
@@ -325,7 +320,6 @@
         scadutaDiv.style.display = "none";
       }
 
-      // Output + immagine + ricevuta
       let output = "";
       const modelImg = document.getElementById("modelImg");
 
@@ -367,11 +361,8 @@
       alert("Funzione scansione seriale in fase di test. Sarà disponibile a breve!");
     }
 
-    // ===== APPUNTAMENTI =====
-    const APPT_KEY = "folletto_appointments";
-
+    // ===== MODAL =====
     function openApptModal() {
-      // precompila da Nome Cliente (se presente)
       const n = (document.getElementById("nomeCliente").value || "").trim();
       if (n && !document.getElementById("apptNome").value.trim() && !document.getElementById("apptCognome").value.trim()) {
         const parts = n.split(" ");
@@ -379,9 +370,9 @@
         document.getElementById("apptCognome").value = parts.slice(1).join(" ") || "";
       }
 
-      // default: tra 2 ore
       const now = new Date();
       now.setHours(now.getHours() + 2);
+
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth()+1).padStart(2,'0');
       const dd = String(now.getDate()).padStart(2,'0');
@@ -393,7 +384,6 @@
 
       document.getElementById("apptOverlay").style.display = "flex";
       setTimeout(() => document.getElementById("apptNome").focus(), 150);
-      renderAppointmentHistory();
     }
 
     function closeApptModal() {
@@ -402,15 +392,6 @@
 
     function overlayClose(e) {
       if (e.target && e.target.id === "apptOverlay") closeApptModal();
-    }
-
-    function clearApptFields() {
-      ["apptNome","apptCognome","apptTelefono","apptVia","apptData","apptOra","apptNote"].forEach(id => {
-        document.getElementById(id).value = "";
-      });
-      const r = document.getElementById("apptReceipt");
-      r.style.display = "none";
-      r.innerHTML = "";
     }
 
     function getApptData() {
@@ -443,42 +424,32 @@
       ].filter(Boolean).join("\n");
     }
 
-    function readAppointments() {
-      try { return JSON.parse(localStorage.getItem(APPT_KEY) || "[]"); }
-      catch { return []; }
-    }
-    function writeAppointments(list) { localStorage.setItem(APPT_KEY, JSON.stringify(list)); }
-
-    function saveAppointment() {
+    // ✅ COPIA (NO SALVATAGGI)
+    function copyAppointmentText() {
       const a = getApptData();
       if (!a) return;
+      const txt = formatApptMessage(a);
 
-      const appt = {
-        ...a,
-        createdAt: new Date().toISOString(),
-        serial: (document.getElementById("serialInput").value || "").trim()
-      };
-
-      const list = readAppointments();
-      list.unshift(appt);
-      writeAppointments(list);
-
-      const receipt = document.getElementById("apptReceipt");
-      receipt.style.display = "block";
-      receipt.innerHTML =
-        `<b>✅ Appuntamento salvato!</b><br>` +
-        `<b>Cliente:</b> ${escapeHtml(appt.nome)} ${escapeHtml(appt.cognome)}<br>` +
-        `<b>Tel:</b> ${escapeHtml(appt.telefono)}<br>` +
-        `<b>Indirizzo:</b> ${escapeHtml(appt.via)}<br>` +
-        `<b>Quando:</b> ${escapeHtml(appt.data || "—")} ${escapeHtml(appt.ora || "")}<br>` +
-        (appt.serial ? `<b>Serial:</b> ${escapeHtml(appt.serial)}<br>` : "") +
-        (appt.note ? `<b>Note:</b> ${escapeHtml(appt.note)}` : "");
-
-      if (navigator.vibrate) navigator.vibrate(40);
-      renderAppointmentHistory();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => alert("✅ Copiato negli appunti!"))
+          .catch(() => fallbackCopy(txt));
+      } else {
+        fallbackCopy(txt);
+      }
     }
 
-    function sendWhatsApp() {
+    function fallbackCopy(text) {
+      const t = document.createElement("textarea");
+      t.value = text;
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand("copy");
+      document.body.removeChild(t);
+      alert("✅ Copiato negli appunti!");
+    }
+
+    // ✅ WHATSAPP (NO SALVATAGGI)
+    function sendWhatsAppOnly() {
       const a = getApptData();
       if (!a) return;
       const msg = formatApptMessage(a);
@@ -486,22 +457,8 @@
       window.open(url, "_blank");
     }
 
-    function normalizePhone(phone) { return (phone || "").replace(/[^\d+]/g, ""); }
-
-    function openWhatsAppToNumber(phone, message) {
-      const p = normalizePhone(phone);
-      const msg = encodeURIComponent(message);
-      const url = p ? `https://wa.me/${p}?text=${msg}` : `https://wa.me/?text=${msg}`;
-      window.open(url, "_blank");
-    }
-
-    function callNumber(phone) {
-      const p = normalizePhone(phone);
-      if (!p) return alert("Numero non valido.");
-      window.location.href = `tel:${p}`;
-    }
-
-    function downloadICS() {
+    // ✅ CALENDARIO (NO SALVATAGGI)
+    function downloadICSOnly() {
       const a = getApptData();
       if (!a) return;
 
@@ -552,123 +509,14 @@ END:VCALENDAR`;
       URL.revokeObjectURL(link.href);
     }
 
-    // Clipboard
-    function copyAppointmentText() {
-      const a = getApptData();
-      if (!a) return;
-      const txt = formatApptMessage(a);
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(txt).then(() => alert("✅ Copiato negli appunti!"))
-          .catch(() => fallbackCopy(txt));
-      } else fallbackCopy(txt);
-    }
-    function fallbackCopy(text) {
-      const t = document.createElement("textarea");
-      t.value = text;
-      document.body.appendChild(t);
-      t.select();
-      document.execCommand("copy");
-      document.body.removeChild(t);
-      alert("✅ Copiato negli appunti!");
+    // ✅ PULISCI (NO SALVATAGGI)
+    function clearApptFields() {
+      ["apptNome","apptCognome","apptTelefono","apptVia","apptData","apptOra","apptNote"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
     }
 
-    // History UI
-    function escapeHtml(str) {
-      return (str || "").replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-      }[m]));
-    }
-
-    function fillApptFields(appt) {
-      document.getElementById("apptNome").value = appt.nome || "";
-      document.getElementById("apptCognome").value = appt.cognome || "";
-      document.getElementById("apptTelefono").value = appt.telefono || "";
-      document.getElementById("apptVia").value = appt.via || "";
-      document.getElementById("apptData").value = appt.data || "";
-      document.getElementById("apptOra").value = appt.ora || "";
-      document.getElementById("apptNote").value = appt.note || "";
-    }
-
-    function deleteAppointmentByIndex(idx) {
-      const list = readAppointments();
-      if (idx < 0 || idx >= list.length) return;
-      list.splice(idx, 1);
-      writeAppointments(list);
-      renderAppointmentHistory();
-    }
-
-    function useAppointment(idx) {
-      const list = readAppointments();
-      const a = list[idx];
-      if (!a) return;
-      fillApptFields(a);
-      const r = document.getElementById("apptReceipt");
-      r.style.display = "none";
-      r.innerHTML = "";
-      if (navigator.vibrate) navigator.vibrate(30);
-    }
-
-    function miniWhatsApp(idx) {
-      const list = readAppointments();
-      const a = list[idx];
-      if (!a) return;
-      openWhatsAppToNumber(a.telefono, formatApptMessage(a));
-    }
-
-    function miniCall(idx) {
-      const list = readAppointments();
-      const a = list[idx];
-      if (!a) return;
-      callNumber(a.telefono);
-    }
-
-    function renderAppointmentHistory() {
-      const list = readAppointments();
-      const wrap = document.getElementById("apptHistory");
-      const container = document.getElementById("apptHistoryList");
-      if (!wrap || !container) return;
-
-      if (!list.length) {
-        wrap.style.display = "none";
-        container.innerHTML = "";
-        return;
-      }
-
-      wrap.style.display = "block";
-      const last = list.slice(0, 10);
-
-      container.innerHTML = last.map((a, idx) => {
-        const when = (a.data ? a.data : "—") + (a.ora ? (" " + a.ora) : "");
-        const serial = a.serial ? `🔢 ${escapeHtml(a.serial)}` : "";
-        const note = a.note ? `📝 ${escapeHtml(a.note)}` : "";
-        return `
-          <div class="apptCard">
-            <div class="apptCardTop">
-              <div>
-                <div class="apptCardTitle">👤 ${escapeHtml(a.nome)} ${escapeHtml(a.cognome)}</div>
-                <div class="apptCardMeta">
-                  📞 ${escapeHtml(a.telefono)}<br>
-                  📍 ${escapeHtml(a.via)}<br>
-                  🕒 ${escapeHtml(when)}<br>
-                  ${serial ? serial + "<br>" : ""}
-                  ${note ? note : ""}
-                </div>
-              </div>
-            </div>
-
-            <div class="apptMiniBtns">
-              <button class="miniBlue" onclick="useAppointment(${idx})"><i class="fa fa-pen"></i> Usa</button>
-              <button class="miniGreen" onclick="miniWhatsApp(${idx})"><i class="fa-brands fa-whatsapp"></i></button>
-              <button class="miniGrey" onclick="miniCall(${idx})"><i class="fa fa-phone"></i></button>
-              <button class="miniRed" onclick="deleteAppointmentByIndex(${idx})"><i class="fa fa-trash"></i></button>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    // ESC chiude modal
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeApptModal();
     });
