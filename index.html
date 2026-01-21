@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <link rel="manifest" href="manifest.json?v=2">
+  <link rel="manifest" href="manifest.json?v=3">
   <title>Folletto Tool - Serial Check</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,7 +14,7 @@
   <!-- ✅ AUTO-FIX PRO: forza URL con ?v=2 + reload una volta in modalità app -->
   <script>
     (function () {
-      const VERSION = "2";
+      const VERSION = "3";
       const url = new URL(window.location.href);
 
       if (url.searchParams.get("v") !== VERSION) {
@@ -98,9 +98,54 @@
     /* ====== MODAL APPUNTAMENTO ====== */
     #apptOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 16px; }
     #apptBox { width: min(520px, 100%); background: #fff; border-radius: 18px; box-shadow: 0 18px 60px rgba(0,0,0,0.25); overflow: hidden; text-align: left; }
-    #apptHeader { padding: 16px 18px; background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+
+    #apptHeader { padding: 16px 18px; background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; }
     #apptHeader h3 { margin: 0; font-size: 18px; letter-spacing: .3px; }
     #apptClose { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: 900; }
+
+    /* progress bar */
+    #apptProgressWrap{
+      position:absolute;
+      left:0; right:0;
+      bottom:0;
+      height:6px;
+      background: rgba(255,255,255,0.22);
+    }
+    #apptProgressBar{
+      height:100%;
+      width:0%;
+      background: rgba(255,255,255,0.95);
+      transition: width .18s ease-out;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    #apptHeader .miniStatus{
+      font-weight: 900;
+      font-size: 12px;
+      opacity: .95;
+      margin-left: 10px;
+    }
+    #apptMiniStatus.ready {
+      background: rgba(255,255,255,0.28);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-left: 10px;
+      letter-spacing: .6px;
+    }
+
+    /* header flash */
+    #apptHeader.flash::after{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0) 55%);
+      animation: headerFlash .35s ease-out;
+      pointer-events:none;
+    }
+    @keyframes headerFlash{
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
     .apptBody { padding: 16px 18px 18px 18px; }
     .apptGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -113,6 +158,24 @@
     .apptField textarea { resize: none; min-height: 78px; }
     .apptField input:focus, .apptField textarea:focus { border: 2px solid #25d366; background: #eefcf7; }
     .apptFull { grid-column: 1 / -1; }
+
+    /* ===== NOTE CHIPS ===== */
+    .noteChips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .noteChips button{
+      width:auto !important;
+      margin:0 !important;
+      padding:10px 12px !important;
+      font-size:14px !important;
+      border-radius:999px !important;
+      font-weight:900 !important;
+      background: linear-gradient(90deg,#25788f 0,#1ebea5 100%);
+    }
+    .noteChips button:hover{ transform: scale(1.03); }
 
     /* ✅ 4 BOTTONI: grandi e comodi */
     .apptActions {
@@ -142,6 +205,30 @@
       #quickApptBtn { font-size: 16px; }
       .apptGrid { grid-template-columns: 1fr; }
       .apptActions button{ font-size: 17px; padding: 16px 12px; }
+    }
+
+    /* ===== TOAST (notifiche fighe) ===== */
+    #toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 92px;
+      z-index: 20000;
+      background: rgba(20, 20, 20, 0.92);
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: .2px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.22);
+      display: none;
+      max-width: min(520px, calc(100vw - 24px));
+    }
+    #toast.show { display: block; animation: toastIn .22s ease-out; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(10px) scale(.98); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
     }
   </style>
 </head>
@@ -200,8 +287,12 @@
   <div id="apptOverlay" onclick="overlayClose(event)">
     <div id="apptBox" onclick="event.stopPropagation()">
       <div id="apptHeader">
-        <h3>📅 Programma appuntamento (rapidissimo)</h3>
+        <h3>📅 Programma appuntamento <span class="miniStatus" id="apptMiniStatus">0%</span></h3>
         <button id="apptClose" onclick="closeApptModal()">✕</button>
+
+        <div id="apptProgressWrap">
+          <div id="apptProgressBar"></div>
+        </div>
       </div>
 
       <div class="apptBody">
@@ -237,6 +328,14 @@
           <div class="apptField apptFull">
             <label>Note (opzionale)</label>
             <textarea id="apptNote" placeholder="Es: citofono Rossi, 2° piano, preferisce pomeriggio..."></textarea>
+
+            <div class="noteChips">
+              <button type="button" onclick="addNoteChip('Citofono: ')">Citofono</button>
+              <button type="button" onclick="addNoteChip('Piano: ')">Piano</button>
+              <button type="button" onclick="addNoteChip('Preferisce: pomeriggio')">Pomeriggio</button>
+              <button type="button" onclick="addNoteChip('Preferisce: mattina')">Mattina</button>
+              <button type="button" onclick="addNoteChip('Lasciare telefono in ingresso')">Info</button>
+            </div>
           </div>
         </div>
 
@@ -250,6 +349,9 @@
       </div>
     </div>
   </div>
+
+  <!-- ✅ Toast -->
+  <div id="toast"></div>
 
   <script>
     // ===== PASSWORD =====
@@ -273,6 +375,44 @@
     n++;
     document.getElementById('numeroClienti').textContent = n;
     localStorage.setItem('contatoreFolletto', n);
+
+    // ===== TOAST + HAPTIC =====
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add("show");
+      t.style.display = "block";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        t.classList.remove("show");
+        t.style.display = "none";
+      }, 1700);
+    }
+    function haptic(ms=25){ try{ if(navigator.vibrate) navigator.vibrate(ms);}catch(e){} }
+
+    // ===== NOTE CHIPS =====
+    function addNoteChip(text){
+      const el = document.getElementById("apptNote");
+      if (!el) return;
+      const cur = el.value.trim();
+      el.value = cur ? (cur + " • " + text) : text;
+      el.focus();
+      haptic(20);
+      showToast("✍️ Nota aggiunta");
+      flashHeader();
+    }
+
+    // ===== HEADER FLASH =====
+    function flashHeader() {
+      const h = document.getElementById("apptHeader");
+      if (!h) return;
+      h.classList.remove("flash");
+      void h.offsetWidth; // reflow
+      h.classList.add("flash");
+      setTimeout(() => h.classList.remove("flash"), 420);
+    }
 
     // ===== MODELLO & SERIALE =====
     function checkModel() {
@@ -306,11 +446,13 @@
         modello = "Modello non riconosciuto"; anno = ""; imgUrl = "";
       }
 
+      // Testo intervento: VK7 diverso dagli altri
       const isVK7 = ["22","23","24","25"].includes(prefix);
       const interventoText = isVK7
         ? "Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore"
         : "Intervento di manutenzione gratuito disponibile al prodotto:<br>Ripristino potenza motore";
 
+      // Assistenza scaduta
       const scadutaDiv = document.getElementById("scaduta-message");
       if (modello !== "Modello non riconosciuto" && scaduta) {
         scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
@@ -320,6 +462,7 @@
         scadutaDiv.style.display = "none";
       }
 
+      // Output + immagine + ricevuta
       let output = "";
       const modelImg = document.getElementById("modelImg");
 
@@ -358,7 +501,8 @@
     }
 
     function scanOCR() {
-      alert("Funzione scansione seriale in fase di test. Sarà disponibile a breve!");
+      showToast("📷 Scansione in test (presto disponibile)");
+      haptic(20);
     }
 
     // ===== MODAL =====
@@ -370,6 +514,7 @@
         document.getElementById("apptCognome").value = parts.slice(1).join(" ") || "";
       }
 
+      // default: tra 2 ore
       const now = new Date();
       now.setHours(now.getHours() + 2);
 
@@ -384,6 +529,10 @@
 
       document.getElementById("apptOverlay").style.display = "flex";
       setTimeout(() => document.getElementById("apptNome").focus(), 150);
+
+      // effetto videogame progress
+      startApptBootProgress();
+      setTimeout(() => updateApptProgress(), 900);
     }
 
     function closeApptModal() {
@@ -404,7 +553,9 @@
       const note = document.getElementById("apptNote").value.trim();
 
       if (!nome || !cognome || !telefono || !via) {
-        alert("Compila almeno: Nome, Cognome, Telefono e Via ✅");
+        showToast("⚠️ Compila: Nome, Cognome, Telefono, Via");
+        haptic(40);
+        flashHeader();
         return null;
       }
       return { nome, cognome, telefono, via, data, ora, note };
@@ -424,6 +575,15 @@
       ].filter(Boolean).join("\n");
     }
 
+    // ===== WhatsApp diretto su numero =====
+    function normalizePhoneIT(raw){
+      let p = (raw || "").trim().replace(/[^\d+]/g, "");
+      if (!p) return "";
+      if (p.startsWith("00")) p = "+" + p.slice(2);
+      if (!p.startsWith("+")) p = "+39" + p;
+      return p.replace(/\+/g, "");
+    }
+
     // ✅ COPIA (NO SALVATAGGI)
     function copyAppointmentText() {
       const a = getApptData();
@@ -431,13 +591,13 @@
       const txt = formatApptMessage(a);
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(txt).then(() => alert("✅ Copiato negli appunti!"))
+        navigator.clipboard.writeText(txt)
+          .then(() => { showToast("✅ Copiato"); haptic(20); flashHeader(); })
           .catch(() => fallbackCopy(txt));
       } else {
         fallbackCopy(txt);
       }
     }
-
     function fallbackCopy(text) {
       const t = document.createElement("textarea");
       t.value = text;
@@ -445,19 +605,34 @@
       t.select();
       document.execCommand("copy");
       document.body.removeChild(t);
-      alert("✅ Copiato negli appunti!");
+      showToast("✅ Copiato");
+      haptic(20);
+      flashHeader();
     }
 
-    // ✅ WHATSAPP (NO SALVATAGGI)
+    // ✅ WHATSAPP (diretto al numero)
     function sendWhatsAppOnly() {
       const a = getApptData();
       if (!a) return;
+
       const msg = formatApptMessage(a);
-      const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+      const num = normalizePhoneIT(a.telefono);
+
+      if (!num) {
+        showToast("⚠️ Numero non valido");
+        haptic(40);
+        flashHeader();
+        return;
+      }
+
+      const url = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
       window.open(url, "_blank");
+      showToast("🟢 WhatsApp pronto");
+      haptic(25);
+      flashHeader();
     }
 
-    // ✅ CALENDARIO (NO SALVATAGGI)
+    // ✅ CALENDARIO (.ics)
     function downloadICSOnly() {
       const a = getApptData();
       if (!a) return;
@@ -507,6 +682,10 @@ END:VCALENDAR`;
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
+
+      showToast("📅 Calendario pronto");
+      haptic(25);
+      flashHeader();
     }
 
     // ✅ PULISCI (NO SALVATAGGI)
@@ -515,11 +694,144 @@ END:VCALENDAR`;
         const el = document.getElementById(id);
         if (el) el.value = "";
       });
+      resetApptProgressGaming();
+      showToast("🧽 Pulito");
+      haptic(25);
+      flashHeader();
     }
 
+    // ESC chiude modal
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeApptModal();
     });
+
+    // ====== PROGRESS "VIDEOGIOCO": 0→100 (finto) + ✅ READY + poi target reale ======
+    let __pCur = 0;
+    let __pTarget = 0;
+    let __pTimer = null;
+    let __pMode = "idle"; // "boot" | "target" | "idle"
+
+    function __getRealTarget() {
+      const reqIds = ["apptNome","apptCognome","apptTelefono","apptVia"];
+      let filled = 0;
+      reqIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value.trim()) filled++;
+      });
+      return Math.round((filled / reqIds.length) * 100);
+    }
+
+    function __setProgressUI(pct) {
+      const bar = document.getElementById("apptProgressBar");
+      const mini = document.getElementById("apptMiniStatus");
+      if (bar) bar.style.width = pct + "%";
+      if (mini && !mini.classList.contains("ready")) mini.textContent = pct + "%";
+    }
+
+    function __flashSafe() {
+      try { if (typeof flashHeader === "function") flashHeader(); } catch(e){}
+    }
+
+    function __stopProgress() {
+      if (__pTimer) {
+        clearInterval(__pTimer);
+        __pTimer = null;
+      }
+      __pMode = "idle";
+    }
+
+    function __startTimerIfNeeded() {
+      if (__pTimer) return;
+
+      __pTimer = setInterval(() => {
+        if (__pMode === "boot") {
+          const diffTo100 = 100 - __pCur;
+          let step = 1;
+          if (diffTo100 > 60) step = 5;
+          else if (diffTo100 > 35) step = 4;
+          else if (diffTo100 > 18) step = 3;
+          else if (diffTo100 > 8) step = 2;
+
+          __pCur = Math.min(__pCur + step, 100);
+          __setProgressUI(__pCur);
+
+          if (__pCur >= 100) {
+            __flashSafe();
+
+            // ✅ READY effetto videogame
+            const mini = document.getElementById("apptMiniStatus");
+            if (mini) {
+              mini.classList.add("ready");
+              mini.textContent = "✅ READY";
+              setTimeout(() => {
+                mini.classList.remove("ready");
+                mini.textContent = (__pTarget || 0) + "%";
+              }, 550);
+            }
+
+            __pMode = "target";
+            __pTarget = __getRealTarget();
+          }
+          return;
+        }
+
+        if (__pMode === "target") {
+          __pTarget = __getRealTarget();
+
+          if (__pCur === __pTarget) {
+            __stopProgress();
+            return;
+          }
+
+          const diff = Math.abs(__pTarget - __pCur);
+          let step = 1;
+          if (diff > 40) step = 4;
+          else if (diff > 20) step = 3;
+          else if (diff > 10) step = 2;
+
+          if (__pCur < __pTarget) __pCur = Math.min(__pCur + step, __pTarget);
+          else __pCur = Math.max(__pCur - step, __pTarget);
+
+          __setProgressUI(__pCur);
+          return;
+        }
+
+        __stopProgress();
+      }, 16);
+    }
+
+    function updateApptProgress() {
+      if (__pMode === "boot") return;
+      __pMode = "target";
+      __pTarget = __getRealTarget();
+      __startTimerIfNeeded();
+    }
+
+    function startApptBootProgress() {
+      __stopProgress();
+      __pCur = 0;
+      __pTarget = 0;
+      __setProgressUI(0);
+      __pMode = "boot";
+      __startTimerIfNeeded();
+    }
+
+    function resetApptProgressGaming() {
+      __stopProgress();
+      __pCur = 0;
+      __pTarget = 0;
+      __setProgressUI(0);
+    }
+
+    (function attachProgressGamingListeners(){
+      const ids = ["apptNome","apptCognome","apptTelefono","apptVia","apptData","apptOra","apptNote"];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener("input", () => updateApptProgress());
+        el.addEventListener("change", () => updateApptProgress());
+      });
+    })();
   </script>
 </body>
 </html>
