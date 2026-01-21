@@ -1,14 +1,20 @@
 {
   "name": "Folletto Tool - Serial Check",
-  "short_name": "FollettoCheck",
-  "start_url": "index.html?v=2",
+  "short_name": "Folletto Tool",
+  "description": "Check serial number Folletto + appuntamenti rapidi",
+  "start_url": "./?v=3",
   "scope": "./",
   "display": "standalone",
   "background_color": "#e9f2f7",
-  "theme_color": "#25788f",
+  "theme_color": "#25d366",
   "icons": [
     {
-      "src": "IMG_3788.jpeg",
+      "src": "IMG_3780.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "IMG_3780.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg"
     }
