@@ -325,6 +325,16 @@
       toastTimer = setTimeout(() => t.style.display = "none", 1700);
     }
 
+    // ✅✅✅ FIX iOS/PWA: se torni da WhatsApp evita schermata bianca ricaricando
+    let comingBackFromWhatsApp = false;
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && comingBackFromWhatsApp) {
+        comingBackFromWhatsApp = false;
+        setTimeout(() => window.location.reload(), 120);
+      }
+    });
+
     // check model
     function checkModel() {
       const serial = document.getElementById("serialInput").value.trim();
@@ -350,7 +360,7 @@
       } else if (["15","16","17"].includes(prefix)) {
         modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
       } else if (["18","19","20","21"].includes(prefix)) {
-        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg"; // foto vk200
+        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg";
       } else if (["22","23","24","25"].includes(prefix)) {
         modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
       } else {
@@ -414,7 +424,6 @@
     function closeApptModal() { document.getElementById("apptOverlay").style.display = "none"; }
     function overlayClose(e) { if (e.target && e.target.id === "apptOverlay") closeApptModal(); }
 
-    // ✅ getApptData con label personalizzata
     function getApptData(actionLabel = "Trascrivi info su MYA") {
       const nome = document.getElementById("apptNome").value.trim();
       const cognome = document.getElementById("apptCognome").value.trim();
@@ -498,7 +507,7 @@
       return p.replace(/\+/g, "");
     }
 
-    /* ✅✅✅ FIX: template literal chiuso correttamente, script non si rompe, login ok */
+    // ✅ WhatsApp con FIX PWA
     function sendWhatsAppOnly() {
       const a = getApptData("Invio promemoria cliente su WhatsApp");
       if (!a) return;
@@ -506,19 +515,16 @@
       const num = normalizePhoneIT(a.telefono);
       if (!num) { showToast("⚠️ Numero non valido"); return; }
 
-      // Data ITA (dd/mm/yyyy)
       let dataITA = "";
       if (a.data) {
         const [yyyy, mm, dd] = a.data.split("-");
         if (yyyy && mm && dd) dataITA = `${dd}/${mm}/${yyyy}`;
       }
 
-      // Modello + annata dal seriale
       const serial = (document.getElementById("serialInput").value || "").trim();
       const info = getModelAndYearFromSerial(serial);
       const modelloTxt = info ? `${info.modello} (${info.anno})` : "";
 
-      // Messaggio professionale (CHIUSO)
       const msg = `Gentile Cliente,
 Le confermiamo l’appuntamento per la manutenzione Folletto.
 
@@ -528,13 +534,14 @@ Le confermiamo l’appuntamento per la manutenzione Folletto.
 
 Cordiali saluti.`;
 
-      // ✅ Link diretto app WhatsApp
       const urlApp = "whatsapp://send?phone=" + num + "&text=" + encodeURIComponent(msg);
-
-      // ✅ Fallback web
       const urlWeb = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
 
       showToast("🟢 Invio promemoria cliente su WhatsApp...");
+
+      // ✅ Segnala che stiamo uscendo verso WhatsApp, al ritorno reload
+      comingBackFromWhatsApp = true;
+
       window.location.href = urlApp;
 
       setTimeout(() => {
