@@ -66,9 +66,7 @@
     #appButton { margin-top: 20px;}
     @media (max-width: 520px) {.container{margin:22px 0 0 0;padding:16px 5px;width:99vw;max-width:97vw;}h1{font-size:22px;}h2{font-size:15px;}input,button{font-size:16px;}.ricevuta{font-size:15px;}#scaduta-message{font-size:14px;}}
 
-    /* =======================
-       PASSWORD OVERLAY (centrato perfetto)
-       ======================= */
+    /* PASSWORD OVERLAY */
     #passwordOverlay{
       position: fixed; inset: 0;
       background: linear-gradient(160deg, #e8fdf3, #d1f5ea);
@@ -105,9 +103,7 @@
     #passwordInput:focus{ border-color:#25d366; }
     #passwordError { color:#c91818; font-weight:700; margin-top:10px; display:none; }
 
-    /* =======================
-       BOTTONE APPUNTAMENTO
-       ======================= */
+    /* Bottone fisso appuntamento */
     #quickApptBtn {
       position: fixed;
       left: 50%;
@@ -126,35 +122,14 @@
       box-shadow: 0 14px 34px rgba(37,120,143,0.25);
       display:none;
     }
-    #quickApptBtn:active { transform: translateX(-50%) scale(0.98); }
 
-    /* =======================
-       MODAL APPUNTAMENTO
-       ======================= */
+    /* Modal appuntamento */
     #apptOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 16px; }
     #apptBox { width: min(520px, 100%); background: #fff; border-radius: 18px; box-shadow: 0 18px 60px rgba(0,0,0,0.25); overflow: hidden; text-align: left; }
 
-    #apptHeader { padding: 16px 18px; background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; }
-    #apptHeader h3 { margin: 0; font-size: 18px; letter-spacing: .3px; }
+    #apptHeader { padding: 16px 18px; background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+    #apptHeader h3 { margin: 0; font-size: 18px; }
     #apptClose { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: 900; }
-
-    #apptProgressWrap{ position:absolute; left:0; right:0; bottom:0; height:6px; background: rgba(255,255,255,0.22); }
-    #apptProgressBar{ height:100%; width:0%; background: rgba(255,255,255,0.95); transition: width .18s ease-out; border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
-    #apptHeader .miniStatus{ font-weight: 900; font-size: 12px; opacity: .95; margin-left: 10px; }
-    #apptMiniStatus.ready { background: rgba(255,255,255,0.28); padding: 4px 10px; border-radius: 999px; margin-left: 10px; letter-spacing: .6px; }
-
-    #apptHeader.flash::after{
-      content:"";
-      position:absolute;
-      inset:-40px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0) 55%);
-      animation: headerFlash .35s ease-out;
-      pointer-events:none;
-    }
-    @keyframes headerFlash{
-      from { opacity: 0; transform: translateY(10px) scale(0.98); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
 
     .apptBody { padding: 16px 18px 18px 18px; }
     .apptGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -167,18 +142,6 @@
     .apptField textarea { resize: none; min-height: 78px; }
     .apptField input:focus, .apptField textarea:focus { border: 2px solid #25d366; background: #eefcf7; }
     .apptFull { grid-column: 1 / -1; }
-
-    /* note chips */
-    .noteChips{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
-    .noteChips button{
-      width:auto !important;
-      margin:0 !important;
-      padding:10px 12px !important;
-      font-size:14px !important;
-      border-radius:999px !important;
-      font-weight:900 !important;
-      background: linear-gradient(90deg,#25788f 0,#1ebea5 100%);
-    }
 
     /* ✅ BOTTONI PICCOLI 2x2 */
     .apptActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
@@ -201,16 +164,12 @@
     .btnGreen { background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); }
 
     @media (max-width: 520px) {
-      #quickApptBtn { font-size: 16px; }
       .apptGrid { grid-template-columns: 1fr; }
-      .apptActions { gap: 10px; }
-      .apptActions button{
-        font-size: 13px;
-        padding: 10px 10px;
-      }
+      .apptActions button{ font-size: 13px; padding: 10px 10px; }
       .apptActions button i{ font-size: 14px; }
     }
 
+    /* Toast */
     #toast {
       position: fixed;
       left: 50%;
@@ -223,21 +182,14 @@
       border-radius: 14px;
       font-weight: 900;
       font-size: 15px;
-      letter-spacing: .2px;
-      box-shadow: 0 14px 40px rgba(0,0,0,0.22);
       display: none;
       max-width: min(520px, calc(100vw - 24px));
-    }
-    #toast.show { display: block; animation: toastIn .22s ease-out; }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(10px) scale(.98); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
     }
   </style>
 </head>
 
 <body>
-  <!-- OVERLAY PASSWORD -->
+  <!-- PASSWORD -->
   <div id="passwordOverlay">
     <div id="passwordBox">
       <h2>Accesso riservato</h2>
@@ -247,7 +199,7 @@
     </div>
   </div>
 
-  <!-- CONTENUTO PRINCIPALE -->
+  <!-- MAIN -->
   <div class="container" id="mainContent" style="display:none;">
     <div class="logo">
       <img src="IMG_3780.jpeg" alt="Vorwerk Logo">
@@ -283,35 +235,31 @@
     <div id="appButton"></div>
   </div>
 
-  <!-- Bottone fisso -->
+  <!-- Bottone Appuntamento -->
   <button id="quickApptBtn" onclick="openApptModal()">📅 Programma appuntamento</button>
 
   <!-- Modal Appuntamento -->
   <div id="apptOverlay" onclick="overlayClose(event)">
     <div id="apptBox" onclick="event.stopPropagation()">
       <div id="apptHeader">
-        <h3>📅 Programma appuntamento <span class="miniStatus" id="apptMiniStatus">0%</span></h3>
+        <h3>📅 Programma appuntamento</h3>
         <button id="apptClose" onclick="closeApptModal()">✕</button>
-
-        <div id="apptProgressWrap">
-          <div id="apptProgressBar"></div>
-        </div>
       </div>
 
       <div class="apptBody">
         <div class="apptGrid">
           <div class="apptField">
             <label>Nome</label>
-            <input id="apptNome" placeholder="Es: Mario" autocomplete="given-name">
+            <input id="apptNome" placeholder="Es: Mario">
           </div>
           <div class="apptField">
             <label>Cognome</label>
-            <input id="apptCognome" placeholder="Es: Rossi" autocomplete="family-name">
+            <input id="apptCognome" placeholder="Es: Rossi">
           </div>
 
           <div class="apptField apptFull">
             <label>Telefono</label>
-            <input id="apptTelefono" inputmode="tel" placeholder="Es: 3331234567" autocomplete="tel">
+            <input id="apptTelefono" inputmode="tel" placeholder="Es: 3331234567">
           </div>
 
           <div class="apptField apptFull">
@@ -330,15 +278,7 @@
 
           <div class="apptField apptFull">
             <label>Note (opzionale)</label>
-            <textarea id="apptNote" placeholder="Es: citofono Rossi, 2° piano, preferisce pomeriggio..."></textarea>
-
-            <div class="noteChips">
-              <button type="button" onclick="addNoteChip('Citofono: ')">Citofono</button>
-              <button type="button" onclick="addNoteChip('Piano: ')">Piano</button>
-              <button type="button" onclick="addNoteChip('Preferisce: pomeriggio')">Pomeriggio</button>
-              <button type="button" onclick="addNoteChip('Preferisce: mattina')">Mattina</button>
-              <button type="button" onclick="addNoteChip('Lasciare telefono in ingresso')">Info</button>
-            </div>
+            <textarea id="apptNote" placeholder="Note..."></textarea>
           </div>
         </div>
 
@@ -381,35 +321,10 @@
     let toastTimer = null;
     function showToast(msg) {
       const t = document.getElementById("toast");
-      if (!t) return;
       t.textContent = msg;
-      t.classList.add("show");
       t.style.display = "block";
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        t.classList.remove("show");
-        t.style.display = "none";
-      }, 1700);
-    }
-
-    // NOTE CHIPS
-    function addNoteChip(text){
-      const el = document.getElementById("apptNote");
-      if (!el) return;
-      const cur = el.value.trim();
-      el.value = cur ? (cur + " • " + text) : text;
-      el.focus();
-      showToast("✍️ Nota aggiunta");
-    }
-
-    // HEADER FLASH
-    function flashHeader() {
-      const h = document.getElementById("apptHeader");
-      if (!h) return;
-      h.classList.remove("flash");
-      void h.offsetWidth;
-      h.classList.add("flash");
-      setTimeout(() => h.classList.remove("flash"), 420);
+      toastTimer = setTimeout(() => t.style.display = "none", 1700);
     }
 
     // CHECK MODEL
@@ -495,21 +410,12 @@
       document.getElementById("appButton").innerHTML = "";
     }
 
-    function scanOCR() {
-      showToast("📷 Scansione in test (presto disponibile)");
-    }
+    function scanOCR() { showToast("📷 Scansione in test (presto disponibile)"); }
 
-    // MODAL OPEN/CLOSE
-    function openApptModal() {
-      document.getElementById("apptOverlay").style.display = "flex";
-      setTimeout(() => document.getElementById("apptNome").focus(), 150);
-    }
-    function closeApptModal() {
-      document.getElementById("apptOverlay").style.display = "none";
-    }
-    function overlayClose(e) {
-      if (e.target && e.target.id === "apptOverlay") closeApptModal();
-    }
+    // MODAL
+    function openApptModal() { document.getElementById("apptOverlay").style.display = "flex"; }
+    function closeApptModal() { document.getElementById("apptOverlay").style.display = "none"; }
+    function overlayClose(e) { if (e.target && e.target.id === "apptOverlay") closeApptModal(); }
 
     function getApptData() {
       const nome = document.getElementById("apptNome").value.trim();
@@ -527,7 +433,7 @@
       return { nome, cognome, telefono, via, data, ora, note };
     }
 
-    // ✅ MODELLO+ANNATA dal seriale
+    // MODELLO+ANNATA
     function getModelAndYearFromSerial(serial) {
       const s = (serial || "").trim();
       const prefix = s.substring(0, 2);
@@ -597,17 +503,36 @@
       return p.replace(/\+/g, "");
     }
 
+    /* ✅ WHATSAPP: messaggio professionale "Gentile Cliente" */
     function sendWhatsAppOnly() {
       const a = getApptData();
       if (!a) return;
 
-      const msg = formatApptMessage(a);
       const num = normalizePhoneIT(a.telefono);
-
       if (!num) {
         showToast("⚠️ Numero non valido");
         return;
       }
+
+      let dataITA = "";
+      if (a.data) {
+        const [yyyy, mm, dd] = a.data.split("-");
+        if (yyyy && mm && dd) dataITA = `${dd}/${mm}/${yyyy}`;
+      }
+
+      const serial = (document.getElementById("serialInput").value || "").trim();
+      const info = getModelAndYearFromSerial(serial);
+      const modelloTxt = info ? `${info.modello} (${info.anno})` : "";
+
+      const msg =
+`Gentile Cliente,
+Le confermiamo l’appuntamento per la manutenzione Folletto.
+
+📅 Data: ${dataITA || a.data || "—"}
+🕒 Ora: ${a.ora || "—"}
+📍 Indirizzo: ${a.via}${modelloTxt ? `\n🧩 Modello: ${modelloTxt}` : ""}
+
+Per eventuali variazioni di orario, risponda a questo messaggio.`;
 
       const url = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
       window.open(url, "_blank");
