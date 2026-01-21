@@ -519,7 +519,7 @@
 
     /* ✅ WHATSAPP: messaggio professionale "Gentile Cliente" */
     function sendWhatsAppOnly() {
-      const a = getApptData();
+    const a = getApptData("Invio promemoria cliente su WhatsApp");
       if (!a) return;
 
       const num = normalizePhoneIT(a.telefono);
