@@ -1,250 +1,678 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <!-- Manifest con cache-bust -->
-    <link rel="manifest" href="manifest.json?v=2">
-    <title>Folletto Tool - Serial Check</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <link rel="manifest" href="manifest.json?v=2">
+  <title>Folletto Tool - Serial Check</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Anti-cache (utile su iOS PWA) -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+  <!-- Anti-cache (utile su iOS PWA) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
-    <!-- ✅ AUTO-FIX PRO: forza URL con ?v=2 + reload una volta in modalità app -->
-    <script>
-      (function () {
-        const VERSION = "2";
-        const url = new URL(window.location.href);
+  <!-- ✅ AUTO-FIX PRO: forza URL con ?v=2 + reload una volta in modalità app -->
+  <script>
+    (function () {
+      const VERSION = "2";
+      const url = new URL(window.location.href);
 
-        // Forza sempre ?v=2 (così la PWA non resta su cache vecchie / path strani)
-        if (url.searchParams.get("v") !== VERSION) {
-          url.searchParams.set("v", VERSION);
-          window.location.replace(url.toString());
-          return;
-        }
+      // Forza sempre ?v=2
+      if (url.searchParams.get("v") !== VERSION) {
+        url.searchParams.set("v", VERSION);
+        window.location.replace(url.toString());
+        return;
+      }
 
-        // Se siamo in modalità "app" (PWA standalone) facciamo un reload una volta sola
-        const isStandalone =
-          (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
-          window.navigator.standalone === true;
+      // Reload UNA volta in modalità app/standalone (iOS PWA fix)
+      const isStandalone =
+        (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+        window.navigator.standalone === true;
 
-        const reloadKey = "folletto_pwa_reload_v_" + VERSION;
-        if (isStandalone && !sessionStorage.getItem(reloadKey)) {
-          sessionStorage.setItem(reloadKey, "1");
-          window.location.reload();
-        }
-      })();
-    </script>
+      const reloadKey = "folletto_pwa_reload_v_" + VERSION;
+      if (isStandalone && !sessionStorage.getItem(reloadKey)) {
+        sessionStorage.setItem(reloadKey, "1");
+        window.location.reload();
+      }
+    })();
+  </script>
 
-    <!-- Font Awesome per le icone -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%); min-height: 100vh; text-align: center; margin: 0; padding: 0;}
-        .container { margin: 60px auto 0 auto; background: #fff; padding: 38px 28px 36px 28px; max-width: 430px; border-radius: 24px; box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05);}
-        .logo { margin-bottom: 18px;}
-        .logo img { width: 120px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d;}
-        #contatoreClienti { font-size: 18px; color: #138a4b; margin-bottom: 12px; font-weight: bold; letter-spacing: .5px;}
-        h1 { color: #25788f; margin-bottom: 12px; font-size: 32px; letter-spacing: 1.3px; font-weight: 700;}
-        h2 { font-size: 19px; color: #555; margin-top: 0; margin-bottom: 28px; letter-spacing: .8px; font-weight: 500;}
-        .input-group { position: relative; margin-bottom: 22px;}
-        .input-group i { position: absolute; top: 14px; left: 12px; color: #8bb0bb; font-size: 18px;}
-        input { padding: 12px 12px 12px 40px; font-size: 18px; border-radius: 8px; border: 1.7px solid #d7e7ed; background: #f5fafd; outline: none; width: 85%;}
-        input:focus { border: 2px solid #25d366; background: #eefcf7;}
-        button { background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 20px; padding: 13px 0; width: 90%; cursor: pointer; margin-top: 6px; margin-bottom: 10px;}
-        button:hover { background: linear-gradient(90deg,#1ebea5 0,#25d366 100%); transform: scale(1.045);}
-        #scaduta-message { display: none; margin: 16px auto 0 auto; max-width: 350px;}
-        .warning { color: #c91818; font-weight: bold; font-size: 17px; letter-spacing: .3px; background: #ffdada; border-radius: 6px; padding: 7px 0; box-shadow: 0 2px 16px #fbbbbb45;}
-        #output { margin-top: 28px; font-size: 21px;}
-        #modelImg { display:none; margin: 18px auto 0 auto; max-width: 230px; width: 100%; height: auto; border-radius: 16px; box-shadow: 0 2px 18px #43c47744; object-fit: contain; }
-        .container img.responsive { max-width: 100%; height: auto; display: block; margin: 10px auto; object-fit: contain; }
-        .ricevuta { background: linear-gradient(100deg, #f4f8fa 60%, #e4fbe9 100%); margin: 32px auto 0 auto; padding: 24px 16px 20px 16px; border-radius: 16px; border: 1.5px solid #c3ead6; max-width: 340px; font-size: 18px; box-shadow: 0 2px 14px #cde2e944; position: relative;}
-        .ricevuta:after { content: ""; position: absolute; bottom: 10px; right: 12px; width: 64px; height: 26px; background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/Vorwerk_Logo_2019.svg') no-repeat center; background-size: contain; opacity: 0.12;}
-        .ok-message { color: #0b942e; font-weight: bold; margin: 18px 0 8px 0; font-size: 19px;}
-        .note { color: #25788f; font-size: 14.7px; margin-top: 16px; font-style: italic;}
-        .promo-bonus { margin: 18px 0 10px 0; font-size: 19px; color: #1ebea5; font-weight: 700;}
-        .promo-bonus .tappeto { background: #fffd8e; color: #c91818; padding: 2px 7px; border-radius: 6px; font-weight: bold; text-decoration: underline;}
-        #ocr-preview { margin-top:10px; color:#444; font-size:16px;}
-        #appButton { margin-top: 20px;}
-        @media (max-width: 520px) {.container{margin:22px 0 0 0;padding:16px 5px;width:99vw;max-width:97vw;}h1{font-size:22px;}h2{font-size:15px;}input,button{font-size:16px;}.ricevuta{font-size:15px;}#scaduta-message{font-size:14px;}}
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #e9f2f7 0%, #e2e8ec 100%); min-height: 100vh; text-align: center; margin: 0; padding: 0;}
+    .container { margin: 60px auto 0 auto; background: #fff; padding: 38px 28px 36px 28px; max-width: 430px; border-radius: 24px; box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05);}
+    .logo { margin-bottom: 18px;}
+    .logo img { width: 120px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d;}
+    #contatoreClienti { font-size: 18px; color: #138a4b; margin-bottom: 12px; font-weight: bold; letter-spacing: .5px;}
+    h1 { color: #25788f; margin-bottom: 12px; font-size: 32px; letter-spacing: 1.3px; font-weight: 700;}
+    h2 { font-size: 19px; color: #555; margin-top: 0; margin-bottom: 28px; letter-spacing: .8px; font-weight: 500;}
+    .input-group { position: relative; margin-bottom: 22px;}
+    .input-group i { position: absolute; top: 14px; left: 12px; color: #8bb0bb; font-size: 18px;}
+    input { padding: 12px 12px 12px 40px; font-size: 18px; border-radius: 8px; border: 1.7px solid #d7e7ed; background: #f5fafd; outline: none; width: 85%;}
+    input:focus { border: 2px solid #25d366; background: #eefcf7;}
+    button { background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 20px; padding: 13px 0; width: 90%; cursor: pointer; margin-top: 6px; margin-bottom: 10px;}
+    button:hover { background: linear-gradient(90deg,#1ebea5 0,#25d366 100%); transform: scale(1.045);}
+    #scaduta-message { display: none; margin: 16px auto 0 auto; max-width: 350px;}
+    .warning { color: #c91818; font-weight: bold; font-size: 17px; letter-spacing: .3px; background: #ffdada; border-radius: 6px; padding: 7px 0; box-shadow: 0 2px 16px #fbbbbb45;}
+    #output { margin-top: 28px; font-size: 21px;}
+    #modelImg { display:none; margin: 18px auto 0 auto; max-width: 230px; width: 100%; height: auto; border-radius: 16px; box-shadow: 0 2px 18px #43c47744; object-fit: contain; }
+    .ricevuta { background: linear-gradient(100deg, #f4f8fa 60%, #e4fbe9 100%); margin: 32px auto 0 auto; padding: 24px 16px 20px 16px; border-radius: 16px; border: 1.5px solid #c3ead6; max-width: 340px; font-size: 18px; box-shadow: 0 2px 14px #cde2e944; position: relative;}
+    .ricevuta:after { content: ""; position: absolute; bottom: 10px; right: 12px; width: 64px; height: 26px; background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/Vorwerk_Logo_2019.svg') no-repeat center; background-size: contain; opacity: 0.12;}
+    .ok-message { color: #0b942e; font-weight: bold; margin: 18px 0 8px 0; font-size: 19px;}
+    .note { color: #25788f; font-size: 14.7px; margin-top: 16px; font-style: italic;}
+    .promo-bonus { margin: 18px 0 10px 0; font-size: 19px; color: #1ebea5; font-weight: 700;}
+    .promo-bonus .tappeto { background: #fffd8e; color: #c91818; padding: 2px 7px; border-radius: 6px; font-weight: bold; text-decoration: underline;}
+    #ocr-preview { margin-top:10px; color:#444; font-size:16px;}
+    #appButton { margin-top: 20px;}
+    @media (max-width: 520px) {.container{margin:22px 0 0 0;padding:16px 5px;width:99vw;max-width:97vw;}h1{font-size:22px;}h2{font-size:15px;}input,button{font-size:16px;}.ricevuta{font-size:15px;}#scaduta-message{font-size:14px;}}
 
-        #passwordOverlay {
-            position: fixed; inset: 0;
-            background: linear-gradient(160deg, #e8fdf3, #d1f5ea);
-            display: flex; align-items: center; justify-content: center; z-index: 9999;
-            padding: 20px;
-        }
-        #passwordBox {
-            background: #fff; padding: 32px 24px; border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15); max-width: 320px; width: 100%; text-align:center;
-        }
-        #passwordBox h2 { color:#138a4b; margin:0 0 16px 0; font-size:22px; }
-        #passwordInput {
-            width:100%; padding:12px; font-size:18px; border-radius:8px;
-            border:1.5px solid #bde4cf; outline:none; text-align:center;
-        }
-        #passwordInput:focus{ border-color:#25d366; }
-        #passwordError { color:#c91818; font-weight:700; margin-top:10px; display:none; }
-    </style>
+    /* PASSWORD OVERLAY */
+    #passwordOverlay { position: fixed; inset: 0; background: linear-gradient(160deg, #e8fdf3, #d1f5ea); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+    #passwordBox { background: #fff; padding: 32px 24px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); max-width: 320px; width: 100%; text-align:center; }
+    #passwordBox h2 { color:#138a4b; margin:0 0 16px 0; font-size:22px; }
+    #passwordInput { width:100%; padding:12px; font-size:18px; border-radius:8px; border:1.5px solid #bde4cf; outline:none; text-align:center; }
+    #passwordInput:focus{ border-color:#25d366; }
+    #passwordError { color:#c91818; font-weight:700; margin-top:10px; display:none; }
+
+    /* ====== BOTTONE APPUNTAMENTO ====== */
+    #quickApptBtn {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 16px;
+      width: min(560px, calc(100vw - 24px));
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      z-index: 9998;
+      font-weight: 800;
+      font-size: 18px;
+      color: #fff;
+      background: linear-gradient(90deg,#25788f 0,#1ebea5 100%);
+      box-shadow: 0 14px 34px rgba(37,120,143,0.25);
+      display:none;
+    }
+    #quickApptBtn:active { transform: translateX(-50%) scale(0.98); }
+
+    /* ====== MODAL APPUNTAMENTO ====== */
+    #apptOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 16px; }
+    #apptBox { width: min(520px, 100%); background: #fff; border-radius: 18px; box-shadow: 0 18px 60px rgba(0,0,0,0.25); overflow: hidden; text-align: left; }
+    #apptHeader { padding: 16px 18px; background: linear-gradient(90deg,#25d366 0,#1ebea5 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+    #apptHeader h3 { margin: 0; font-size: 18px; letter-spacing: .3px; }
+    #apptClose { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: 900; }
+
+    .apptBody { padding: 16px 18px 18px 18px; }
+    .apptGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .apptField { display:flex; flex-direction:column; gap:6px; }
+    .apptField label { font-size: 13px; color: #25788f; font-weight: 700; }
+    .apptField input, .apptField textarea {
+      width: 100%; box-sizing: border-box; padding: 12px; border-radius: 10px;
+      border: 1.6px solid #d7e7ed; background: #f5fafd; font-size: 16px; outline: none;
+    }
+    .apptField textarea { resize: none; min-height: 78px; }
+    .apptField input:focus, .apptField textarea:focus { border: 2px solid #25d366; background: #eefcf7; }
+    .apptFull { grid-column: 1 / -1; }
+
+    .apptActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .apptActions button { width: 100%; margin: 0; padding: 12px 12px; font-size: 16px; border-radius: 12px; }
+    .btnSecondary { background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
+    .btnDark { background: linear-gradient(90deg,#111 0,#444 100%); }
+
+    #apptReceipt { margin-top: 14px; background: #f4f8fa; border: 1.5px dashed #c3ead6; border-radius: 14px; padding: 12px; font-size: 14px; color: #333; display: none; }
+
+    /* ====== HISTORY LIST ====== */
+    #apptHistoryList{ display:flex; flex-direction:column; gap:10px; }
+    .apptCard{ background:#ffffff; border:1.5px solid #d7e7ed; border-radius:14px; padding:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .apptCardTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+    .apptCardTitle{ font-weight:900; color:#111; font-size:15px; }
+    .apptCardMeta{ margin-top:6px; font-size:13px; color:#333; line-height:1.35; }
+    .apptMiniBtns{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .apptMiniBtns button{ width:auto !important; padding:9px 10px !important; font-size:13px !important; border-radius:12px !important; margin:0 !important; }
+    .apptMiniBtns .miniGrey{ background:linear-gradient(90deg,#111 0,#444 100%); }
+    .apptMiniBtns .miniBlue{ background:linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
+    .apptMiniBtns .miniGreen{ background:linear-gradient(90deg,#25d366 0,#1ebea5 100%); }
+    .apptMiniBtns .miniRed{ background:linear-gradient(90deg,#c91818 0,#ff5a5a 100%); }
+
+    @media (max-width: 520px) {
+      #quickApptBtn { font-size: 16px; }
+      .apptGrid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
+
 <body>
-    <!-- OVERLAY PASSWORD -->
-    <div id="passwordOverlay">
-        <div id="passwordBox">
-            <h2>Accesso riservato</h2>
-            <input type="password" id="passwordInput" placeholder="Inserisci password">
-            <button onclick="checkPassword()">Entra</button>
-            <div id="passwordError">Password errata ⚠️</div>
-        </div>
+  <!-- OVERLAY PASSWORD -->
+  <div id="passwordOverlay">
+    <div id="passwordBox">
+      <h2>Accesso riservato</h2>
+      <input type="password" id="passwordInput" placeholder="Inserisci password">
+      <button onclick="checkPassword()">Entra</button>
+      <div id="passwordError">Password errata ⚠️</div>
+    </div>
+  </div>
+
+  <!-- CONTENUTO PRINCIPALE -->
+  <div class="container" id="mainContent" style="display:none;">
+    <div class="logo">
+      <img src="IMG_3780.jpeg" alt="Vorwerk Logo">
     </div>
 
-    <!-- CONTENUTO PRINCIPALE -->
-    <div class="container" id="mainContent" style="display:none;">
-        <div class="logo">
-            <img src="IMG_3780.jpeg" alt="Vorwerk Logo">
-        </div>
-        <div id="contatoreClienti">
-            <i class="fa fa-users"></i>
-            Oltre <span id="numeroClienti">3164</span> clienti soddisfatti hanno già prenotato l’assistenza!
-        </div>
-        <h1>Assistenza Cliente Folletto</h1>
-        <h2>Check Serial Number</h2>
-
-        <div class="input-group">
-            <i class="fa fa-user"></i>
-            <input type="text" id="nomeCliente" placeholder="Nome Cliente (opzionale)">
-        </div>
-        <div class="input-group">
-            <i class="fa fa-barcode"></i>
-            <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
-        </div>
-
-        <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
-        <button onclick="scanOCR()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
-
-        <div id="ocr-preview"></div>
-        <div id="scaduta-message"></div>
-        <div id="output"></div>
-
-        <img id="modelImg" src="" alt="Immagine modello">
-
-        <div class="ricevuta" id="ricevuta" style="display:none;"></div>
-        <div id="appButton"></div>
+    <div id="contatoreClienti">
+      <i class="fa fa-users"></i>
+      Oltre <span id="numeroClienti">3164</span> clienti soddisfatti hanno già prenotato l’assistenza!
     </div>
 
-    <script>
-    // PASSWORD ACCESS
+    <h1>Assistenza Cliente Folletto</h1>
+    <h2>Check Serial Number</h2>
+
+    <div class="input-group">
+      <i class="fa fa-user"></i>
+      <input type="text" id="nomeCliente" placeholder="Nome Cliente (opzionale)">
+    </div>
+    <div class="input-group">
+      <i class="fa fa-barcode"></i>
+      <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)">
+    </div>
+
+    <button onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
+    <button onclick="scanOCR()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
+
+    <div id="ocr-preview"></div>
+    <div id="scaduta-message"></div>
+    <div id="output"></div>
+
+    <img id="modelImg" src="" alt="Immagine modello">
+
+    <div class="ricevuta" id="ricevuta" style="display:none;"></div>
+    <div id="appButton"></div>
+  </div>
+
+  <!-- ✅ Bottone fisso -->
+  <button id="quickApptBtn" onclick="openApptModal()">📅 Programma appuntamento</button>
+
+  <!-- ✅ Modal Appuntamento -->
+  <div id="apptOverlay" onclick="overlayClose(event)">
+    <div id="apptBox" onclick="event.stopPropagation()">
+      <div id="apptHeader">
+        <h3>📅 Programma appuntamento (rapidissimo)</h3>
+        <button id="apptClose" onclick="closeApptModal()">✕</button>
+      </div>
+
+      <div class="apptBody">
+        <div class="apptGrid">
+          <div class="apptField">
+            <label>Nome</label>
+            <input id="apptNome" placeholder="Es: Mario" autocomplete="given-name">
+          </div>
+          <div class="apptField">
+            <label>Cognome</label>
+            <input id="apptCognome" placeholder="Es: Rossi" autocomplete="family-name">
+          </div>
+
+          <div class="apptField apptFull">
+            <label>Telefono</label>
+            <input id="apptTelefono" inputmode="tel" placeholder="Es: 3331234567" autocomplete="tel">
+          </div>
+
+          <div class="apptField apptFull">
+            <label>Via / Indirizzo</label>
+            <input id="apptVia" placeholder="Es: Via Garibaldi 12, Modena">
+          </div>
+
+          <div class="apptField">
+            <label>Data</label>
+            <input id="apptData" type="date">
+          </div>
+          <div class="apptField">
+            <label>Ora</label>
+            <input id="apptOra" type="time">
+          </div>
+
+          <div class="apptField apptFull">
+            <label>Note (opzionale)</label>
+            <textarea id="apptNote" placeholder="Es: citofono Rossi, 2° piano, preferisce pomeriggio..."></textarea>
+          </div>
+        </div>
+
+        <div class="apptActions" id="apptActions">
+          <button class="btnDark" id="copyBtn" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Copia</button>
+          <button onclick="saveAppointment()"><i class="fa fa-floppy-disk"></i> Salva</button>
+          <button class="btnSecondary" onclick="sendWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+          <button class="btnDark" onclick="downloadICS()"><i class="fa fa-calendar-days"></i> Calendario</button>
+          <button class="btnSecondary" onclick="clearApptFields()"><i class="fa fa-eraser"></i> Pulisci</button>
+        </div>
+
+        <div id="apptReceipt"></div>
+
+        <div id="apptHistory" style="margin-top:14px; display:none;">
+          <div style="font-weight:800;color:#25788f;margin-bottom:8px;">📌 Ultimi appuntamenti</div>
+          <div id="apptHistoryList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== PASSWORD =====
     const ACCESS_PASSWORD = "1232";
     function checkPassword() {
-        const userInput = document.getElementById("passwordInput").value.trim();
-        if (userInput === ACCESS_PASSWORD) {
-            document.getElementById("passwordOverlay").style.display = "none";
-            document.getElementById("mainContent").style.display = "block";
-        } else {
-            const err = document.getElementById("passwordError");
-            err.style.display = "block";
-            setTimeout(() => { err.style.display = "none"; }, 2000);
-        }
+      const userInput = document.getElementById("passwordInput").value.trim();
+      if (userInput === ACCESS_PASSWORD) {
+        document.getElementById("passwordOverlay").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        document.getElementById("quickApptBtn").style.display = "block";
+      } else {
+        const err = document.getElementById("passwordError");
+        err.style.display = "block";
+        setTimeout(() => { err.style.display = "none"; }, 2000);
+      }
     }
 
-    // CONTATORE CLIENTI
+    // ===== CONTATORE =====
     var n = localStorage.getItem('contatoreFolletto');
     n = n ? parseInt(n) : 3164;
     n++;
     document.getElementById('numeroClienti').textContent = n;
     localStorage.setItem('contatoreFolletto', n);
 
+    // ===== MODELLO & SERIALE =====
     function checkModel() {
-        const serial = document.getElementById("serialInput").value.trim();
-        const nome = document.getElementById("nomeCliente").value.trim();
-        const prefix = serial.substring(0, 2);
+      const serial = document.getElementById("serialInput").value.trim();
+      const nome = document.getElementById("nomeCliente").value.trim();
+      const prefix = serial.substring(0, 2);
 
-        let modello = "", anno = "", imgUrl = "", scaduta = true;
+      let modello = "", anno = "", imgUrl = "", scaduta = true;
 
-        if (["83","84","85","86","87","88","89","90","91","92","93","94","95","96"].includes(prefix)) {
-            modello = "VK 120-122"; anno = "1983-1996"; imgUrl = "IMG_3693.jpg";
-        } else if (["97","98","99"].includes(prefix)) {
-            modello = "VK 130"; anno = "1997-1999"; imgUrl = "IMG_3692.jpg";
-        } else if (["00","01","02"].includes(prefix)) {
-            modello = "VK 131"; anno = "2000-2002"; imgUrl = "IMG_3691.jpg";
-        } else if (["03","04","05","06","07"].includes(prefix)) {
-            modello = "VK 135"; anno = "2003-2007"; imgUrl = "IMG_3690.jpg";
-        } else if (["08"].includes(prefix)) {
-            modello = "VK 136"; anno = "2008"; imgUrl = "IMG_3689.jpg";
-        } else if (["09","10","11","12","13"].includes(prefix)) {
-            modello = "VK140"; anno = "2009-2013"; imgUrl = "IMG_3582.jpg";
-        } else if (prefix === "14") {
-            modello = "VK150"; anno = "2014"; imgUrl = "IMG_3584.jpg";
-        } else if (["15","16","17"].includes(prefix)) {
-            modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
-        } else if (["18","19","20","21"].includes(prefix)) {
-            // VK220S: usa la stessa foto del VK200 (così non resta vuoto)
-            modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg";
-        } else if (["22","23","24","25"].includes(prefix)) {
-            modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
+      if (["83","84","85","86","87","88","89","90","91","92","93","94","95","96"].includes(prefix)) {
+        modello = "VK 120-122"; anno = "1983-1996"; imgUrl = "IMG_3693.jpg";
+      } else if (["97","98","99"].includes(prefix)) {
+        modello = "VK 130"; anno = "1997-1999"; imgUrl = "IMG_3692.jpg";
+      } else if (["00","01","02"].includes(prefix)) {
+        modello = "VK 131"; anno = "2000-2002"; imgUrl = "IMG_3691.jpg";
+      } else if (["03","04","05","06","07"].includes(prefix)) {
+        modello = "VK 135"; anno = "2003-2007"; imgUrl = "IMG_3690.jpg";
+      } else if (["08"].includes(prefix)) {
+        modello = "VK 136"; anno = "2008"; imgUrl = "IMG_3689.jpg";
+      } else if (["09","10","11","12","13"].includes(prefix)) {
+        modello = "VK140"; anno = "2009-2013"; imgUrl = "IMG_3582.jpg";
+      } else if (prefix === "14") {
+        modello = "VK150"; anno = "2014"; imgUrl = "IMG_3584.jpg";
+      } else if (["15","16","17"].includes(prefix)) {
+        modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
+      } else if (["18","19","20","21"].includes(prefix)) {
+        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg"; // stessa foto VK200
+      } else if (["22","23","24","25"].includes(prefix)) {
+        modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
+      } else {
+        modello = "Modello non riconosciuto"; anno = ""; imgUrl = "";
+      }
+
+      // Testo intervento: VK7 diverso dagli altri
+      const isVK7 = ["22","23","24","25"].includes(prefix);
+      const interventoText = isVK7
+        ? "Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore"
+        : "Intervento di manutenzione gratuito disponibile al prodotto:<br>Ripristino potenza motore";
+
+      // Assistenza scaduta
+      const scadutaDiv = document.getElementById("scaduta-message");
+      if (modello !== "Modello non riconosciuto" && scaduta) {
+        scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
+        scadutaDiv.style.display = "block";
+      } else {
+        scadutaDiv.innerHTML = "";
+        scadutaDiv.style.display = "none";
+      }
+
+      // Output + immagine + ricevuta
+      let output = "";
+      const modelImg = document.getElementById("modelImg");
+
+      if (modello !== "Modello non riconosciuto") {
+        output = "<span class='ok-message'>" + interventoText + ".</span><br>";
+        output += "Modello: <b>" + modello + "</b><br>Anno di produzione: <b>" + anno + "</b>";
+
+        if (imgUrl) {
+          modelImg.src = imgUrl;
+          modelImg.style.display = "block";
         } else {
-            modello = "Modello non riconosciuto"; anno = ""; imgUrl = "";
+          modelImg.style.display = "none";
         }
 
-        // Testo intervento: VK7 diverso dagli altri
-        const isVK7 = ["22","23","24","25"].includes(prefix);
-        const interventoText = isVK7
-            ? "Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore"
-            : "Intervento di manutenzione gratuito disponibile al prodotto:<br>Ripristino potenza motore";
+        let ricevuta = "";
+        if (nome) ricevuta += "<b>Cliente:</b> " + nome + "<br>";
+        ricevuta += "<b>Serial:</b> " + serial + "<br>";
+        ricevuta += "<b>Modello:</b> " + modello + "<br>";
+        ricevuta += "<b>Anno:</b> " + anno + "<br>";
+        ricevuta += "<span style='color:#0b942e;font-weight:bold;'>" + interventoText + ".</span><br>";
+        ricevuta += "<div class='promo-bonus'>Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il <span class='tappeto'>lavaggio completo del tuo tappeto</span>!</div>";
+        ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
 
-        // Messaggio assistenza scaduta
-        const scadutaDiv = document.getElementById("scaduta-message");
-        if (modello !== "Modello non riconosciuto" && scaduta) {
-            scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
-            scadutaDiv.style.display = "block";
-        } else {
-            scadutaDiv.innerHTML = "";
-            scadutaDiv.style.display = "none";
-        }
+        document.getElementById("ricevuta").innerHTML = ricevuta;
+        document.getElementById("ricevuta").style.display = "block";
+      } else {
+        output = "<span style='color:#b02b2b'>Modello non riconosciuto!<br>Controlla il serial.</span>";
+        modelImg.style.display = "none";
+        document.getElementById("ricevuta").style.display = "none";
+        scadutaDiv.innerHTML = "";
+        scadutaDiv.style.display = "none";
+      }
 
-        // Output + immagine + ricevuta
-        let output = "";
-        const modelImg = document.getElementById("modelImg");
-
-        if (modello !== "Modello non riconosciuto") {
-            output = "<span class='ok-message'>" + interventoText + ".</span><br>";
-            output += "Modello: <b>" + modello + "</b><br>Anno di produzione: <b>" + anno + "</b>";
-
-            if (imgUrl) {
-                modelImg.src = imgUrl;
-                modelImg.style.display = "block";
-            } else {
-                modelImg.style.display = "none";
-            }
-
-            let ricevuta = "";
-            if (nome) ricevuta += "<b>Cliente:</b> " + nome + "<br>";
-            ricevuta += "<b>Serial:</b> " + serial + "<br>";
-            ricevuta += "<b>Modello:</b> " + modello + "<br>";
-            ricevuta += "<b>Anno:</b> " + anno + "<br>";
-            ricevuta += "<span style='color:#0b942e;font-weight:bold;'>" + interventoText + ".</span><br>";
-            ricevuta += "<div class='promo-bonus'>Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il <span class='tappeto'>lavaggio completo del tuo tappeto</span>!</div>";
-            ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
-
-            document.getElementById("ricevuta").innerHTML = ricevuta;
-            document.getElementById("ricevuta").style.display = "block";
-        } else {
-            output = "<span style='color:#b02b2b'>Modello non riconosciuto!<br>Controlla il serial.</span>";
-            modelImg.style.display = "none";
-            document.getElementById("ricevuta").style.display = "none";
-            scadutaDiv.innerHTML = "";
-            scadutaDiv.style.display = "none";
-        }
-
-        document.getElementById("output").innerHTML = output;
-        document.getElementById("appButton").innerHTML = "";
+      document.getElementById("output").innerHTML = output;
+      document.getElementById("appButton").innerHTML = "";
     }
 
     function scanOCR() {
-        alert("Funzione scansione seriale in fase di test. Sarà disponibile a breve!");
+      alert("Funzione scansione seriale in fase di test. Sarà disponibile a breve!");
     }
-    </script>
+
+    // ===== APPUNTAMENTI =====
+    const APPT_KEY = "folletto_appointments";
+
+    function openApptModal() {
+      // precompila da Nome Cliente (se presente)
+      const n = (document.getElementById("nomeCliente").value || "").trim();
+      if (n && !document.getElementById("apptNome").value.trim() && !document.getElementById("apptCognome").value.trim()) {
+        const parts = n.split(" ");
+        document.getElementById("apptNome").value = parts[0] || "";
+        document.getElementById("apptCognome").value = parts.slice(1).join(" ") || "";
+      }
+
+      // default: tra 2 ore
+      const now = new Date();
+      now.setHours(now.getHours() + 2);
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth()+1).padStart(2,'0');
+      const dd = String(now.getDate()).padStart(2,'0');
+      const hh = String(now.getHours()).padStart(2,'0');
+      const mi = String(now.getMinutes()).padStart(2,'0');
+
+      if (!document.getElementById("apptData").value) document.getElementById("apptData").value = `${yyyy}-${mm}-${dd}`;
+      if (!document.getElementById("apptOra").value) document.getElementById("apptOra").value = `${hh}:${mi}`;
+
+      document.getElementById("apptOverlay").style.display = "flex";
+      setTimeout(() => document.getElementById("apptNome").focus(), 150);
+      renderAppointmentHistory();
+    }
+
+    function closeApptModal() {
+      document.getElementById("apptOverlay").style.display = "none";
+    }
+
+    function overlayClose(e) {
+      if (e.target && e.target.id === "apptOverlay") closeApptModal();
+    }
+
+    function clearApptFields() {
+      ["apptNome","apptCognome","apptTelefono","apptVia","apptData","apptOra","apptNote"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
+      const r = document.getElementById("apptReceipt");
+      r.style.display = "none";
+      r.innerHTML = "";
+    }
+
+    function getApptData() {
+      const nome = document.getElementById("apptNome").value.trim();
+      const cognome = document.getElementById("apptCognome").value.trim();
+      const telefono = document.getElementById("apptTelefono").value.trim();
+      const via = document.getElementById("apptVia").value.trim();
+      const data = document.getElementById("apptData").value.trim();
+      const ora = document.getElementById("apptOra").value.trim();
+      const note = document.getElementById("apptNote").value.trim();
+
+      if (!nome || !cognome || !telefono || !via) {
+        alert("Compila almeno: Nome, Cognome, Telefono e Via ✅");
+        return null;
+      }
+      return { nome, cognome, telefono, via, data, ora, note };
+    }
+
+    function formatApptMessage(a) {
+      const when = (a.data ? a.data : "—") + (a.ora ? (" " + a.ora) : "");
+      const serial = (document.getElementById("serialInput").value || "").trim();
+      return [
+        "📅 *APPUNTAMENTO FOLLETTO*",
+        `👤 ${a.nome} ${a.cognome}`,
+        `📞 ${a.telefono}`,
+        `📍 ${a.via}`,
+        `🕒 ${when}`,
+        serial ? `🔢 Serial: ${serial}` : "",
+        a.note ? `📝 Note: ${a.note}` : "",
+      ].filter(Boolean).join("\n");
+    }
+
+    function readAppointments() {
+      try { return JSON.parse(localStorage.getItem(APPT_KEY) || "[]"); }
+      catch { return []; }
+    }
+    function writeAppointments(list) { localStorage.setItem(APPT_KEY, JSON.stringify(list)); }
+
+    function saveAppointment() {
+      const a = getApptData();
+      if (!a) return;
+
+      const appt = {
+        ...a,
+        createdAt: new Date().toISOString(),
+        serial: (document.getElementById("serialInput").value || "").trim()
+      };
+
+      const list = readAppointments();
+      list.unshift(appt);
+      writeAppointments(list);
+
+      const receipt = document.getElementById("apptReceipt");
+      receipt.style.display = "block";
+      receipt.innerHTML =
+        `<b>✅ Appuntamento salvato!</b><br>` +
+        `<b>Cliente:</b> ${escapeHtml(appt.nome)} ${escapeHtml(appt.cognome)}<br>` +
+        `<b>Tel:</b> ${escapeHtml(appt.telefono)}<br>` +
+        `<b>Indirizzo:</b> ${escapeHtml(appt.via)}<br>` +
+        `<b>Quando:</b> ${escapeHtml(appt.data || "—")} ${escapeHtml(appt.ora || "")}<br>` +
+        (appt.serial ? `<b>Serial:</b> ${escapeHtml(appt.serial)}<br>` : "") +
+        (appt.note ? `<b>Note:</b> ${escapeHtml(appt.note)}` : "");
+
+      if (navigator.vibrate) navigator.vibrate(40);
+      renderAppointmentHistory();
+    }
+
+    function sendWhatsApp() {
+      const a = getApptData();
+      if (!a) return;
+      const msg = formatApptMessage(a);
+      const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+      window.open(url, "_blank");
+    }
+
+    function normalizePhone(phone) { return (phone || "").replace(/[^\d+]/g, ""); }
+
+    function openWhatsAppToNumber(phone, message) {
+      const p = normalizePhone(phone);
+      const msg = encodeURIComponent(message);
+      const url = p ? `https://wa.me/${p}?text=${msg}` : `https://wa.me/?text=${msg}`;
+      window.open(url, "_blank");
+    }
+
+    function callNumber(phone) {
+      const p = normalizePhone(phone);
+      if (!p) return alert("Numero non valido.");
+      window.location.href = `tel:${p}`;
+    }
+
+    function downloadICS() {
+      const a = getApptData();
+      if (!a) return;
+
+      const dateStr = a.data || new Date().toISOString().slice(0,10);
+      const timeStr = a.ora || "10:00";
+
+      const startLocal = new Date(`${dateStr}T${timeStr}:00`);
+      const endLocal = new Date(startLocal.getTime() + 45 * 60 * 1000);
+
+      function toICS(dt) {
+        const y = dt.getUTCFullYear();
+        const m = String(dt.getUTCMonth()+1).padStart(2,'0');
+        const d = String(dt.getUTCDate()).padStart(2,'0');
+        const hh = String(dt.getUTCHours()).padStart(2,'0');
+        const mm = String(dt.getUTCMinutes()).padStart(2,'0');
+        const ss = String(dt.getUTCSeconds()).padStart(2,'0');
+        return `${y}${m}${d}T${hh}${mm}${ss}Z`;
+      }
+
+      const summary = `Appuntamento Folletto - ${a.nome} ${a.cognome}`;
+      const location = a.via;
+      const description = formatApptMessage(a).replace(/\n/g, "\\n");
+
+      const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Folletto Tool//IT
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:${Date.now()}@follettotool
+DTSTAMP:${toICS(new Date())}
+DTSTART:${toICS(startLocal)}
+DTEND:${toICS(endLocal)}
+SUMMARY:${summary}
+LOCATION:${location}
+DESCRIPTION:${description}
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `appuntamento_${a.nome}_${a.cognome}.ics`.replace(/\s+/g,"_");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+
+    // Clipboard
+    function copyAppointmentText() {
+      const a = getApptData();
+      if (!a) return;
+      const txt = formatApptMessage(a);
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => alert("✅ Copiato negli appunti!"))
+          .catch(() => fallbackCopy(txt));
+      } else fallbackCopy(txt);
+    }
+    function fallbackCopy(text) {
+      const t = document.createElement("textarea");
+      t.value = text;
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand("copy");
+      document.body.removeChild(t);
+      alert("✅ Copiato negli appunti!");
+    }
+
+    // History UI
+    function escapeHtml(str) {
+      return (str || "").replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    function fillApptFields(appt) {
+      document.getElementById("apptNome").value = appt.nome || "";
+      document.getElementById("apptCognome").value = appt.cognome || "";
+      document.getElementById("apptTelefono").value = appt.telefono || "";
+      document.getElementById("apptVia").value = appt.via || "";
+      document.getElementById("apptData").value = appt.data || "";
+      document.getElementById("apptOra").value = appt.ora || "";
+      document.getElementById("apptNote").value = appt.note || "";
+    }
+
+    function deleteAppointmentByIndex(idx) {
+      const list = readAppointments();
+      if (idx < 0 || idx >= list.length) return;
+      list.splice(idx, 1);
+      writeAppointments(list);
+      renderAppointmentHistory();
+    }
+
+    function useAppointment(idx) {
+      const list = readAppointments();
+      const a = list[idx];
+      if (!a) return;
+      fillApptFields(a);
+      const r = document.getElementById("apptReceipt");
+      r.style.display = "none";
+      r.innerHTML = "";
+      if (navigator.vibrate) navigator.vibrate(30);
+    }
+
+    function miniWhatsApp(idx) {
+      const list = readAppointments();
+      const a = list[idx];
+      if (!a) return;
+      openWhatsAppToNumber(a.telefono, formatApptMessage(a));
+    }
+
+    function miniCall(idx) {
+      const list = readAppointments();
+      const a = list[idx];
+      if (!a) return;
+      callNumber(a.telefono);
+    }
+
+    function renderAppointmentHistory() {
+      const list = readAppointments();
+      const wrap = document.getElementById("apptHistory");
+      const container = document.getElementById("apptHistoryList");
+      if (!wrap || !container) return;
+
+      if (!list.length) {
+        wrap.style.display = "none";
+        container.innerHTML = "";
+        return;
+      }
+
+      wrap.style.display = "block";
+      const last = list.slice(0, 10);
+
+      container.innerHTML = last.map((a, idx) => {
+        const when = (a.data ? a.data : "—") + (a.ora ? (" " + a.ora) : "");
+        const serial = a.serial ? `🔢 ${escapeHtml(a.serial)}` : "";
+        const note = a.note ? `📝 ${escapeHtml(a.note)}` : "";
+        return `
+          <div class="apptCard">
+            <div class="apptCardTop">
+              <div>
+                <div class="apptCardTitle">👤 ${escapeHtml(a.nome)} ${escapeHtml(a.cognome)}</div>
+                <div class="apptCardMeta">
+                  📞 ${escapeHtml(a.telefono)}<br>
+                  📍 ${escapeHtml(a.via)}<br>
+                  🕒 ${escapeHtml(when)}<br>
+                  ${serial ? serial + "<br>" : ""}
+                  ${note ? note : ""}
+                </div>
+              </div>
+            </div>
+
+            <div class="apptMiniBtns">
+              <button class="miniBlue" onclick="useAppointment(${idx})"><i class="fa fa-pen"></i> Usa</button>
+              <button class="miniGreen" onclick="miniWhatsApp(${idx})"><i class="fa-brands fa-whatsapp"></i></button>
+              <button class="miniGrey" onclick="miniCall(${idx})"><i class="fa fa-phone"></i></button>
+              <button class="miniRed" onclick="deleteAppointmentByIndex(${idx})"><i class="fa fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // ESC chiude modal
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeApptModal();
+    });
+  </script>
 </body>
 </html>
