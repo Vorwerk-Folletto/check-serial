@@ -66,15 +66,48 @@
     #appButton { margin-top: 20px;}
     @media (max-width: 520px) {.container{margin:22px 0 0 0;padding:16px 5px;width:99vw;max-width:97vw;}h1{font-size:22px;}h2{font-size:15px;}input,button{font-size:16px;}.ricevuta{font-size:15px;}#scaduta-message{font-size:14px;}}
 
-    /* PASSWORD OVERLAY */
-    #passwordOverlay { position: fixed; inset: 0; background: linear-gradient(160deg, #e8fdf3, #d1f5ea); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
-    #passwordBox { background: #fff; padding: 32px 24px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); max-width: 320px; width: 100%; text-align:center; }
+    /* =======================
+       PASSWORD OVERLAY (centrato perfetto)
+       ======================= */
+    #passwordOverlay{
+      position: fixed; inset: 0;
+      background: linear-gradient(160deg, #e8fdf3, #d1f5ea);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #passwordBox{
+      background: #fff;
+      padding: 32px 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+
+      width: min(360px, calc(100vw - 40px));
+      margin: 0 auto;
+      box-sizing: border-box;
+
+      text-align:center;
+    }
     #passwordBox h2 { color:#138a4b; margin:0 0 16px 0; font-size:22px; }
-    #passwordInput { width:100%; padding:12px; font-size:18px; border-radius:8px; border:1.5px solid #bde4cf; outline:none; text-align:center; }
+    #passwordInput {
+      width:100%;
+      padding:12px;
+      font-size:18px;
+      border-radius:8px;
+      border:1.5px solid #bde4cf;
+      outline:none;
+      text-align:center;
+      box-sizing: border-box;
+    }
     #passwordInput:focus{ border-color:#25d366; }
     #passwordError { color:#c91818; font-weight:700; margin-top:10px; display:none; }
 
-    /* ====== BOTTONE APPUNTAMENTO ====== */
+    /* =======================
+       BOTTONE APPUNTAMENTO
+       ======================= */
     #quickApptBtn {
       position: fixed;
       left: 50%;
@@ -95,7 +128,9 @@
     }
     #quickApptBtn:active { transform: translateX(-50%) scale(0.98); }
 
-    /* ====== MODAL APPUNTAMENTO ====== */
+    /* =======================
+       MODAL APPUNTAMENTO
+       ======================= */
     #apptOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 16px; }
     #apptBox { width: min(520px, 100%); background: #fff; border-radius: 18px; box-shadow: 0 18px 60px rgba(0,0,0,0.25); overflow: hidden; text-align: left; }
 
@@ -103,13 +138,11 @@
     #apptHeader h3 { margin: 0; font-size: 18px; letter-spacing: .3px; }
     #apptClose { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: 900; }
 
-    /* progress bar */
     #apptProgressWrap{ position:absolute; left:0; right:0; bottom:0; height:6px; background: rgba(255,255,255,0.22); }
     #apptProgressBar{ height:100%; width:0%; background: rgba(255,255,255,0.95); transition: width .18s ease-out; border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
     #apptHeader .miniStatus{ font-weight: 900; font-size: 12px; opacity: .95; margin-left: 10px; }
     #apptMiniStatus.ready { background: rgba(255,255,255,0.28); padding: 4px 10px; border-radius: 999px; margin-left: 10px; letter-spacing: .6px; }
 
-    /* header flash */
     #apptHeader.flash::after{
       content:"";
       position:absolute;
@@ -135,17 +168,33 @@
     .apptField input:focus, .apptField textarea:focus { border: 2px solid #25d366; background: #eefcf7; }
     .apptFull { grid-column: 1 / -1; }
 
+    /* note chips */
     .noteChips{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
     .noteChips button{
-      width:auto !important; margin:0 !important; padding:10px 12px !important;
-      font-size:14px !important; border-radius:999px !important; font-weight:900 !important;
+      width:auto !important;
+      margin:0 !important;
+      padding:10px 12px !important;
+      font-size:14px !important;
+      border-radius:999px !important;
+      font-weight:900 !important;
       background: linear-gradient(90deg,#25788f 0,#1ebea5 100%);
     }
-    .noteChips button:hover{ transform: scale(1.03); }
 
-    .apptActions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-    .apptActions button{ width: 100%; margin: 0; padding: 16px 14px; font-size: 18px; border-radius: 14px; font-weight: 900; }
-    .apptActions button i{ font-size: 20px; margin-right: 6px; }
+    /* ✅ BOTTONI PICCOLI 2x2 */
+    .apptActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    .apptActions button{
+      width: 100%;
+      margin: 0;
+      padding: 10px 10px;
+      font-size: 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .apptActions button i{
+      font-size: 15px;
+      margin-right: 6px;
+    }
 
     .btnDark { background: linear-gradient(90deg,#111 0,#444 100%); }
     .btnBlue { background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
@@ -154,7 +203,12 @@
     @media (max-width: 520px) {
       #quickApptBtn { font-size: 16px; }
       .apptGrid { grid-template-columns: 1fr; }
-      .apptActions button{ font-size: 17px; padding: 16px 12px; }
+      .apptActions { gap: 10px; }
+      .apptActions button{
+        font-size: 13px;
+        padding: 10px 10px;
+      }
+      .apptActions button i{ font-size: 14px; }
     }
 
     #toast {
@@ -229,10 +283,10 @@
     <div id="appButton"></div>
   </div>
 
-  <!-- ✅ Bottone fisso -->
+  <!-- Bottone fisso -->
   <button id="quickApptBtn" onclick="openApptModal()">📅 Programma appuntamento</button>
 
-  <!-- ✅ Modal Appuntamento -->
+  <!-- Modal Appuntamento -->
   <div id="apptOverlay" onclick="overlayClose(event)">
     <div id="apptBox" onclick="event.stopPropagation()">
       <div id="apptHeader">
@@ -289,7 +343,7 @@
         </div>
 
         <div class="apptActions">
-          <button class="btnDark" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Trascrivi informazioni su MYA</button>
+          <button class="btnDark" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Trascrivi info su MYA</button>
           <button class="btnBlue" onclick="sendWhatsAppOnly()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
           <button class="btnDark" onclick="downloadICSOnly()"><i class="fa fa-calendar-days"></i> Calendario</button>
           <button class="btnGreen" onclick="clearApptFields()"><i class="fa fa-eraser"></i> Pulisci</button>
@@ -301,7 +355,7 @@
   <div id="toast"></div>
 
   <script>
-    // ===== PASSWORD =====
+    // PASSWORD
     const ACCESS_PASSWORD = "1232";
     function checkPassword() {
       const userInput = document.getElementById("passwordInput").value.trim();
@@ -316,14 +370,14 @@
       }
     }
 
-    // ===== CONTATORE =====
+    // CONTATORE
     var n = localStorage.getItem('contatoreFolletto');
     n = n ? parseInt(n) : 3164;
     n++;
     document.getElementById('numeroClienti').textContent = n;
     localStorage.setItem('contatoreFolletto', n);
 
-    // ===== TOAST + HAPTIC =====
+    // TOAST
     let toastTimer = null;
     function showToast(msg) {
       const t = document.getElementById("toast");
@@ -337,21 +391,18 @@
         t.style.display = "none";
       }, 1700);
     }
-    function haptic(ms=25){ try{ if(navigator.vibrate) navigator.vibrate(ms);}catch(e){} }
 
-    // ===== NOTE CHIPS =====
+    // NOTE CHIPS
     function addNoteChip(text){
       const el = document.getElementById("apptNote");
       if (!el) return;
       const cur = el.value.trim();
       el.value = cur ? (cur + " • " + text) : text;
       el.focus();
-      haptic(20);
       showToast("✍️ Nota aggiunta");
-      flashHeader();
     }
 
-    // ===== HEADER FLASH =====
+    // HEADER FLASH
     function flashHeader() {
       const h = document.getElementById("apptHeader");
       if (!h) return;
@@ -361,7 +412,7 @@
       setTimeout(() => h.classList.remove("flash"), 420);
     }
 
-    // ===== MODELLO & SERIALE (pagina principale) =====
+    // CHECK MODEL
     function checkModel() {
       const serial = document.getElementById("serialInput").value.trim();
       const nome = document.getElementById("nomeCliente").value.trim();
@@ -386,7 +437,7 @@
       } else if (["15","16","17"].includes(prefix)) {
         modello = "VK 200"; anno = "2015-2017"; imgUrl = "IMG_3595.jpg";
       } else if (["18","19","20","21"].includes(prefix)) {
-        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg"; // stessa foto VK200
+        modello = "VK 220S"; anno = "2018-2021"; imgUrl = "IMG_3595.jpg"; // foto vk200
       } else if (["22","23","24","25"].includes(prefix)) {
         modello = "VK7S"; anno = "2022-2025"; imgUrl = "IMG_3598.jpg"; scaduta = false;
       } else {
@@ -446,41 +497,16 @@
 
     function scanOCR() {
       showToast("📷 Scansione in test (presto disponibile)");
-      haptic(20);
     }
 
-    // ===== MODAL =====
+    // MODAL OPEN/CLOSE
     function openApptModal() {
-      const n = (document.getElementById("nomeCliente").value || "").trim();
-      if (n && !document.getElementById("apptNome").value.trim() && !document.getElementById("apptCognome").value.trim()) {
-        const parts = n.split(" ");
-        document.getElementById("apptNome").value = parts[0] || "";
-        document.getElementById("apptCognome").value = parts.slice(1).join(" ") || "";
-      }
-
-      const now = new Date();
-      now.setHours(now.getHours() + 2);
-
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth()+1).padStart(2,'0');
-      const dd = String(now.getDate()).padStart(2,'0');
-      const hh = String(now.getHours()).padStart(2,'0');
-      const mi = String(now.getMinutes()).padStart(2,'0');
-
-      if (!document.getElementById("apptData").value) document.getElementById("apptData").value = `${yyyy}-${mm}-${dd}`;
-      if (!document.getElementById("apptOra").value) document.getElementById("apptOra").value = `${hh}:${mi}`;
-
       document.getElementById("apptOverlay").style.display = "flex";
       setTimeout(() => document.getElementById("apptNome").focus(), 150);
-
-      startApptBootProgress();
-      setTimeout(() => updateApptProgress(), 900);
     }
-
     function closeApptModal() {
       document.getElementById("apptOverlay").style.display = "none";
     }
-
     function overlayClose(e) {
       if (e.target && e.target.id === "apptOverlay") closeApptModal();
     }
@@ -496,16 +522,12 @@
 
       if (!nome || !cognome || !telefono || !via) {
         showToast("⚠️ Trascrivi info su MYA: Nome, Cognome, Telefono, Via");
-        haptic(40);
-        flashHeader();
         return null;
       }
       return { nome, cognome, telefono, via, data, ora, note };
     }
 
-    /* ===========================================================
-       ✅ AGGIUNTA RICHIESTA: modello + annata preso dal seriale
-       =========================================================== */
+    // ✅ MODELLO+ANNATA dal seriale
     function getModelAndYearFromSerial(serial) {
       const s = (serial || "").trim();
       const prefix = s.substring(0, 2);
@@ -528,28 +550,19 @@
       const when = (a.data ? a.data : "—") + (a.ora ? (" " + a.ora) : "");
       const serial = (document.getElementById("serialInput").value || "").trim();
 
-      // ✅ qui aggiungiamo SOLO modello + annata
       const info = getModelAndYearFromSerial(serial);
-      const modelLine = info ? `🧩 Modello: ${info.modello} (${info.anno})` : "";
+      const modelLine = info ? `Modello: ${info.modello} (${info.anno})` : "";
 
       return [
-        "📅 *APPUNTAMENTO FOLLETTO*",
-        `👤 ${a.nome} ${a.cognome}`,
-        `📞 ${a.telefono}`,
-        `📍 ${a.via}`,
-        `🕒 ${when}`,
-        serial ? `🔢 Serial: ${serial}` : "",
+        "APPUNTAMENTO FOLLETTO",
+        `${a.nome} ${a.cognome}`,
+        `Tel: ${a.telefono}`,
+        `Via: ${a.via}`,
+        `Quando: ${when}`,
+        serial ? `Serial: ${serial}` : "",
         modelLine,
-        a.note ? `📝 Note: ${a.note}` : "",
+        a.note ? `Note: ${a.note}` : ""
       ].filter(Boolean).join("\n");
-    }
-
-    function normalizePhoneIT(raw){
-      let p = (raw || "").trim().replace(/[^\d+]/g, "");
-      if (!p) return "";
-      if (p.startsWith("00")) p = "+" + p.slice(2);
-      if (!p.startsWith("+")) p = "+39" + p;
-      return p.replace(/\+/g, "");
     }
 
     function copyAppointmentText() {
@@ -559,7 +572,7 @@
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(txt)
-          .then(() => { showToast("✅ Copiato (formato MYA)"); haptic(20); flashHeader(); })
+          .then(() => showToast("✅ Copiato (MYA)"))
           .catch(() => fallbackCopy(txt));
       } else {
         fallbackCopy(txt);
@@ -573,9 +586,15 @@
       t.select();
       document.execCommand("copy");
       document.body.removeChild(t);
-      showToast("✅ Copiato (formato MYA)");
-      haptic(20);
-      flashHeader();
+      showToast("✅ Copiato (MYA)");
+    }
+
+    function normalizePhoneIT(raw){
+      let p = (raw || "").trim().replace(/[^\d+]/g, "");
+      if (!p) return "";
+      if (p.startsWith("00")) p = "+" + p.slice(2);
+      if (!p.startsWith("+")) p = "+39" + p;
+      return p.replace(/\+/g, "");
     }
 
     function sendWhatsAppOnly() {
@@ -587,16 +606,12 @@
 
       if (!num) {
         showToast("⚠️ Numero non valido");
-        haptic(40);
-        flashHeader();
         return;
       }
 
       const url = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
       window.open(url, "_blank");
       showToast("🟢 WhatsApp pronto");
-      haptic(25);
-      flashHeader();
     }
 
     function downloadICSOnly() {
@@ -650,8 +665,6 @@ END:VCALENDAR`;
       URL.revokeObjectURL(link.href);
 
       showToast("📅 Calendario pronto");
-      haptic(25);
-      flashHeader();
     }
 
     function clearApptFields() {
@@ -659,138 +672,8 @@ END:VCALENDAR`;
         const el = document.getElementById(id);
         if (el) el.value = "";
       });
-      resetApptProgressGaming();
       showToast("🧽 Pulito");
-      haptic(25);
-      flashHeader();
     }
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeApptModal();
-    });
-
-    // ====== PROGRESS "VIDEOGIOCO" ======
-    let __pCur = 0;
-    let __pTarget = 0;
-    let __pTimer = null;
-    let __pMode = "idle";
-
-    function __getRealTarget() {
-      const reqIds = ["apptNome","apptCognome","apptTelefono","apptVia"];
-      let filled = 0;
-      reqIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && el.value.trim()) filled++;
-      });
-      return Math.round((filled / reqIds.length) * 100);
-    }
-
-    function __setProgressUI(pct) {
-      const bar = document.getElementById("apptProgressBar");
-      const mini = document.getElementById("apptMiniStatus");
-      if (bar) bar.style.width = pct + "%";
-      if (mini && !mini.classList.contains("ready")) mini.textContent = pct + "%";
-    }
-
-    function __stopProgress() {
-      if (__pTimer) {
-        clearInterval(__pTimer);
-        __pTimer = null;
-      }
-      __pMode = "idle";
-    }
-
-    function __startTimerIfNeeded() {
-      if (__pTimer) return;
-
-      __pTimer = setInterval(() => {
-        if (__pMode === "boot") {
-          const diffTo100 = 100 - __pCur;
-          let step = 1;
-          if (diffTo100 > 60) step = 5;
-          else if (diffTo100 > 35) step = 4;
-          else if (diffTo100 > 18) step = 3;
-          else if (diffTo100 > 8) step = 2;
-
-          __pCur = Math.min(__pCur + step, 100);
-          __setProgressUI(__pCur);
-
-          if (__pCur >= 100) {
-            flashHeader();
-
-            const mini = document.getElementById("apptMiniStatus");
-            if (mini) {
-              mini.classList.add("ready");
-              mini.textContent = "✅ READY";
-              setTimeout(() => {
-                mini.classList.remove("ready");
-                mini.textContent = (__pTarget || 0) + "%";
-              }, 550);
-            }
-
-            __pMode = "target";
-            __pTarget = __getRealTarget();
-          }
-          return;
-        }
-
-        if (__pMode === "target") {
-          __pTarget = __getRealTarget();
-
-          if (__pCur === __pTarget) {
-            __stopProgress();
-            return;
-          }
-
-          const diff = Math.abs(__pTarget - __pCur);
-          let step = 1;
-          if (diff > 40) step = 4;
-          else if (diff > 20) step = 3;
-          else if (diff > 10) step = 2;
-
-          if (__pCur < __pTarget) __pCur = Math.min(__pCur + step, __pTarget);
-          else __pCur = Math.max(__pCur - step, __pTarget);
-
-          __setProgressUI(__pCur);
-          return;
-        }
-
-        __stopProgress();
-      }, 16);
-    }
-
-    function updateApptProgress() {
-      if (__pMode === "boot") return;
-      __pMode = "target";
-      __pTarget = __getRealTarget();
-      __startTimerIfNeeded();
-    }
-
-    function startApptBootProgress() {
-      __stopProgress();
-      __pCur = 0;
-      __pTarget = 0;
-      __setProgressUI(0);
-      __pMode = "boot";
-      __startTimerIfNeeded();
-    }
-
-    function resetApptProgressGaming() {
-      __stopProgress();
-      __pCur = 0;
-      __pTarget = 0;
-      __setProgressUI(0);
-    }
-
-    (function attachProgressGamingListeners(){
-      const ids = ["apptNome","apptCognome","apptTelefono","apptVia","apptData","apptOra","apptNote"];
-      ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.addEventListener("input", () => updateApptProgress());
-        el.addEventListener("change", () => updateApptProgress());
-      });
-    })();
   </script>
 </body>
 </html>
