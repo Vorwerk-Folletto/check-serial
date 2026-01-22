@@ -372,7 +372,7 @@
       renderLockInfo();
 
       // se già loggato nella sessione, salta il login e vai al menu
-      if (sessionStorage.getItem("auth_ok") === "1") {
+   if (localStorage.getItem("auth_ok") !== "1") window.location.replace("index.html?v=3");
         document.getElementById("passwordOverlay").style.display = "none";
         document.getElementById("menu").style.display = "block";
       }
