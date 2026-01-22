@@ -367,16 +367,13 @@
 
     // Enter per login
     document.addEventListener("DOMContentLoaded", () => {
-      const pwd = document.getElementById("passwordInput");
-      pwd.addEventListener("keydown", (e) => { if (e.key === "Enter") checkPassword(); });
-      renderLockInfo();
-
-      // se già loggato nella sessione, salta il login e vai al menu
-   if (localStorage.getItem("auth_ok") !== "1") window.location.replace("index.html?v=3");
-        document.getElementById("passwordOverlay").style.display = "none";
-        document.getElementById("menu").style.display = "block";
-      }
-    });
+  ...
+  // se già loggato nella sessione, salta il login e vai al menu
+if (localStorage.getItem("auth_ok") !== "1") window.location.replace("index.html?v=3");
+  document.getElementById("passwordOverlay").style.display = "none";
+  document.getElementById("menu").style.display = "block";
+  }
+});
   </script>
 </body>
 </html>
