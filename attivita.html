@@ -2,56 +2,488 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <link rel="manifest" href="manifest.json?v=3">
+  <title>Folletto Tool - Attività</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attività</title>
+
+  <!-- Anti-cache -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <!-- ✅ AUTO-FIX PRO: forza URL con ?v=3 + reload una volta in modalità app -->
+  <script>
+    (function () {
+      const VERSION = "3";
+      const url = new URL(window.location.href);
+
+      if (url.searchParams.get("v") !== VERSION) {
+        url.searchParams.set("v", VERSION);
+        window.location.replace(url.toString());
+        return;
+      }
+
+      const isStandalone =
+        (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+        window.navigator.standalone === true;
+
+      const reloadKey = "folletto_pwa_reload_v_" + VERSION;
+      if (isStandalone && !sessionStorage.getItem(reloadKey)) {
+        sessionStorage.setItem(reloadKey, "1");
+        window.location.reload();
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    :root{
+      --green:#22b573;
+      --green2:#1fa967;
+      --blue:#3a78b8;
+      --blue2:#2f6cab;
+      --bg:#f3f6f8;
+      --txt:#102a33;
+      --muted:#6a7e86;
+      --card:#ffffff;
+      --line:#e4ebef;
+    }
+    *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:#fff;
+      color:var(--txt);
     }
 
-    .box {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    /* Top header */
+    .topbar{
+      height:56px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 14px;
+      border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .topbar .left, .topbar .right{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:80px;
+    }
+    .topbar .title{
+      font-weight:900;
+      font-size:22px;
+      color:#2b88b9;
+      letter-spacing:.2px;
+    }
+    .iconBtn{
+      border:0;
+      background:transparent;
+      font-size:22px;
+      color:var(--green);
+      padding:8px;
+      border-radius:10px;
+      cursor:pointer;
+    }
+    .iconBtn:active{ transform:scale(.98); }
+
+    /* Date bar */
+    .datebar{
+      background:var(--blue);
+      color:#fff;
+      height:60px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      position:relative;
+    }
+    .datebar .arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      border:0;
+      background:transparent;
+      color:#fff;
+      font-size:20px;
+      padding:12px 14px;
+      cursor:pointer;
+    }
+    .datebar .arrow.left{ left:6px; }
+    .datebar .arrow.right{ right:6px; }
+    .datebar .dateText{
+      font-weight:800;
+      font-size:16px;
+      letter-spacing:.2px;
     }
 
-    .box h1 {
-      margin-bottom: 20px;
-      font-size: 22px;
+    /* Tabs */
+    .tabs{
+      display:flex;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+    .tab{
+      flex:1;
+      text-align:center;
+      padding:14px 10px;
+      font-weight:900;
+      color:#7b8d95;
+      position:relative;
+      cursor:pointer;
+    }
+    .tab.active{
+      color:#000;
+    }
+    .tab.active:after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height:3px;
+      background:#000;
     }
 
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #000;
-      color: #fff;
-      cursor: pointer;
+    /* Body */
+    .content{
+      padding:14px;
+      background:#fff;
+      min-height:calc(100vh - 56px - 60px - 49px - 76px);
     }
 
-    button:active {
-      transform: scale(0.97);
+    .rowTop{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .btnGreen{
+      border:0;
+      background:var(--green);
+      color:#fff;
+      font-weight:900;
+      padding:12px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      flex:1;
+      box-shadow:0 8px 18px rgba(34,181,115,.18);
+      text-align:left;
+    }
+    .btnSquare{
+      width:46px;
+      height:46px;
+      border-radius:10px;
+      border:1px solid #cfe7db;
+      background:#fff;
+      color:var(--green);
+      font-size:18px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .btnFilter{
+      border:1.5px solid var(--green);
+      background:#fff;
+      color:var(--green);
+      font-weight:900;
+      padding:12px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:110px;
+      justify-content:center;
+    }
+
+    .searchRow{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .searchBox{
+      flex:1;
+      background:#fff;
+      border:2px solid #bfe5d2;
+      border-radius:14px;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 10px 18px rgba(0,0,0,.04);
+    }
+    .searchBox i{ color:var(--green); }
+    .searchBox input{
+      border:0;
+      outline:none;
+      width:100%;
+      font-size:16px;
+      background:transparent;
+    }
+    .btnPlus{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      border:0;
+      background:var(--green);
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 20px rgba(34,181,115,.24);
+    }
+    .btnCollapse{
+      width:40px;
+      height:40px;
+      border-radius:10px;
+      border:0;
+      background:transparent;
+      color:var(--green);
+      font-size:22px;
+      cursor:pointer;
+    }
+
+    /* Bottom bar icons */
+    .bottomBar{
+      position:fixed;
+      left:0; right:0;
+      bottom:0;
+      height:76px;
+      background:var(--blue);
+      display:flex;
+      align-items:center;
+      justify-content:space-around;
+      color:#fff;
+      padding:10px 8px 6px;
+      z-index:50;
+    }
+    .bottomItem{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      opacity:.95;
+      font-weight:900;
+    }
+    .bottomItem i{
+      font-size:20px;
+    }
+
+    .statsRow{
+      position:fixed;
+      left:0; right:0;
+      bottom:76px;
+      background:#fff;
+      padding:10px 12px;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      border-top:1px solid var(--line);
+      z-index:49;
+    }
+    .statBox{
+      flex:1;
+      border:2px solid #5fbf93;
+      border-radius:12px;
+      padding:10px 8px;
+      text-align:center;
+      font-weight:900;
+      color:#2b7b59;
+      background:#fff;
+      min-width:0;
+    }
+
+    /* Simple drawer (placeholder) */
+    .drawerOverlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.25);
+      display:none;
+      z-index:100;
+    }
+    .drawer{
+      position:absolute;
+      top:0; left:0;
+      width:280px;
+      height:100%;
+      background:#fff;
+      padding:14px;
+      box-shadow:12px 0 40px rgba(0,0,0,.18);
+    }
+    .drawer h3{
+      margin:6px 0 12px;
+      font-size:18px;
+      font-weight:900;
+      color:#2b88b9;
+    }
+    .drawer .dBtn{
+      width:100%;
+      border:0;
+      background:#111;
+      color:#fff;
+      font-weight:900;
+      padding:12px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      margin-top:8px;
+    }
+
+    /* Tiny */
+    @media(max-width:420px){
+      .btnFilter{ min-width:96px; padding:12px 10px; }
+      .btnGreen{ font-size:15px; }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="box">
-    <h1>🚧 In lavorazione</h1>
-    <button onclick="history.back()">⬅ Torna indietro</button>
+  <!-- Drawer -->
+  <div class="drawerOverlay" id="drawerOverlay" onclick="closeDrawer(event)">
+    <div class="drawer" onclick="event.stopPropagation()">
+      <h3>Menu</h3>
+      <button class="dBtn" type="button" onclick="goHome()">← Menu</button>
+      <button class="dBtn" type="button" onclick="logout()">Disconnetti</button>
+    </div>
   </div>
 
+  <!-- Top -->
+  <div class="topbar">
+    <div class="left">
+      <button class="iconBtn" type="button" onclick="openDrawer()"><i class="fa fa-bars"></i></button>
+    </div>
+
+    <div class="title">Attività</div>
+
+    <div class="right">
+      <button class="iconBtn" type="button" onclick="openReport()" title="Report">
+        <i class="fa-regular fa-file-lines"></i>
+      </button>
+      <button class="iconBtn" type="button" onclick="openInfo()" title="Info">
+        <i class="fa fa-circle-info"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Date bar -->
+  <div class="datebar">
+    <button class="arrow left" type="button" onclick="shiftDay(-1)"><i class="fa fa-chevron-left"></i></button>
+    <div class="dateText" id="dateText">Ven 23 Gennaio 2026</div>
+    <button class="arrow right" type="button" onclick="shiftDay(1)"><i class="fa fa-chevron-right"></i></button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" id="tabAtt" onclick="setTab('att')">Le mie Attività</div>
+    <div class="tab" id="tabApp" onclick="setTab('app')">Appuntamenti</div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="rowTop">
+      <button class="btnGreen" type="button" onclick="addNewStreet()">Aggiungi nuova via</button>
+      <button class="btnSquare" type="button" onclick="duplicateDay()" title="Duplica"><i class="fa-regular fa-clone"></i></button>
+      <button class="btnFilter" type="button" onclick="openFilters()"><i class="fa fa-sliders"></i> Filtri</button>
+    </div>
+
+    <div class="searchRow">
+      <div class="searchBox">
+        <i class="fa fa-magnifying-glass"></i>
+        <input id="streetInput" placeholder="Aggiungi nuova via" autocomplete="off">
+      </div>
+      <button class="btnPlus" type="button" onclick="quickAddStreet()">+</button>
+      <button class="btnCollapse" type="button" onclick="collapseTop()" title="Comprimi"><i class="fa fa-angle-up"></i></button>
+    </div>
+
+    <!-- Qui poi ci mettiamo lista vie / porte / ecc -->
+    <div id="listArea" style="margin-top:14px;"></div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="statsRow">
+    <div class="statBox" id="statDemo">Demo: 0</div>
+    <div class="statBox" id="statOrdini">Ordini: 0</div>
+    <div class="statBox" id="statApp">Apparecchi: 0,00</div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottomBar">
+    <div class="bottomItem"><i class="fa-regular fa-hand-pointer"></i> <span id="c1">0</span></div>
+    <div class="bottomItem"><i class="fa-regular fa-bell"></i> <span id="c2">0</span></div>
+    <div class="bottomItem"><i class="fa-solid fa-diagram-project"></i> <span id="c3">0</span></div>
+    <div class="bottomItem"><i class="fa-solid fa-house"></i> <span id="c4">0</span></div>
+    <div class="bottomItem"><i class="fa-regular fa-square-check"></i> <span id="c5">0</span></div>
+    <div class="bottomItem"><i class="fa-solid fa-people-group"></i> <span id="c6">0</span></div>
+  </div>
+
+  <script>
+    // ✅ Gate login: se non sei loggato, fuori
+    if (localStorage.getItem("auth_ok") !== "1") {
+      window.location.replace("index.html?v=3");
+    }
+
+    function openDrawer(){ document.getElementById("drawerOverlay").style.display = "block"; }
+    function closeDrawer(){ document.getElementById("drawerOverlay").style.display = "none"; }
+
+    function goHome(){ window.location.href = "index.html?v=3"; }
+    function logout(){
+      localStorage.removeItem("auth_ok");
+      window.location.href = "index.html?v=3";
+    }
+
+    // Tabs
+    function setTab(which){
+      const a = document.getElementById("tabAtt");
+      const p = document.getElementById("tabApp");
+      if(which === "att"){
+        a.classList.add("active"); p.classList.remove("active");
+      }else{
+        p.classList.add("active"); a.classList.remove("active");
+      }
+    }
+
+    // Date navigation (base)
+    const mesi = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+    const giorni = ["Dom","Lun","Mar","Mer","Gio","Ven","Sab"];
+
+    let current = new Date();
+    function renderDate(){
+      const d = current.getDate();
+      const m = mesi[current.getMonth()];
+      const y = current.getFullYear();
+      const g = giorni[current.getDay()];
+      document.getElementById("dateText").textContent = `${g} ${String(d).padStart(2,"0")} ${m} ${y}`;
+    }
+    function shiftDay(n){
+      current.setDate(current.getDate() + n);
+      renderDate();
+    }
+    renderDate();
+
+    // Bottoni (placeholder: poi ci mettiamo la logica vera)
+    function addNewStreet(){
+      document.getElementById("streetInput").focus();
+    }
+    function quickAddStreet(){
+      const v = document.getElementById("streetInput").value.trim();
+      if(!v) return;
+      const box = document.createElement("div");
+      box.style.padding="12px 14px";
+      box.style.border="1px solid #e4ebef";
+      box.style.borderRadius="12px";
+      box.style.marginTop="10px";
+      box.style.fontWeight="900";
+      box.textContent = "📍 " + v;
+      document.getElementById("listArea").prepend(box);
+      document.getElementById("streetInput").value = "";
+    }
+    function duplicateDay(){ alert("Duplica: lo attiviamo dopo (quando c’è la lista vie)."); }
+    function openFilters(){ alert("Filtri: lo attiviamo dopo (quando abbiamo gli stati/leggenda)."); }
+    function collapseTop(){ alert("Ok: qui possiamo far collassare la barra inserimento quando vuoi."); }
+
+    function openReport(){ alert("Report: lo attiviamo dopo."); }
+    function openInfo(){ alert("Info: lo attiviamo dopo."); }
+  </script>
 </body>
 </html>
