@@ -396,16 +396,14 @@
       }
     }
 
-    function goSerial(){ window.location.href = "serial.html?v=3"; }
-    function goAttivita(){ window.location.href = "attivita.html?v=3"; }
+function goSerial(){ window.location.href = "./serial.html?v=4"; }
+function goAttivita(){ window.location.href = "./attivita.html?v=4"; }
 
-    function logout(){
-      // se vuoi “esci ma non dimenticare”, togli solo AUTH_KEY e lascia REMEMBER_KEY
-      localStorage.removeItem(AUTH_KEY);
-      localStorage.removeItem(REMEMBER_KEY);
-      window.location.href = "index.html?v=3";
-    }
-
+function logout(){
+  localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem(REMEMBER_KEY);
+  window.location.href = "./index.html?v=4";
+}
     // Enter per login + auto-login se "ricorda password"
     document.addEventListener("DOMContentLoaded", () => {
       const pwd = document.getElementById("passwordInput");
