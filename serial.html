@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="manifest.json?v=3">
-  <title>Folletto Tool</title>
+  <title>Folletto Tool - Serial Check</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Anti-cache (utile su iOS PWA) -->
@@ -35,6 +35,15 @@
     })();
   </script>
 
+  <!-- ✅ GUARD: se non sei loggato da index.html, fuori -->
+  <script>
+    (function(){
+      if (localStorage.getItem("auth_ok") !== "1") {
+        window.location.replace("index.html?v=3");
+      }
+    })();
+  </script>
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -49,6 +58,8 @@
       --txt:#102a33;
       --muted:#6a7e86;
       --danger:#c91818;
+      --warnbg:#ffdada;
+      --ok:#0b942e;
     }
     *{ -webkit-tap-highlight-color: transparent; }
     body {
@@ -61,319 +72,749 @@
       color: var(--txt);
     }
 
-    /* PASSWORD OVERLAY (uguale) */
-    #passwordOverlay{
-      position: fixed; inset: 0;
-      background: linear-gradient(160deg, #e8fdf3, #d1f5ea);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    #passwordBox{
-      background: #fff;
-      padding: 28px 22px;
-      border-radius: 18px;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.16);
-      width: min(380px, calc(100vw - 40px));
-      margin: 0 auto;
-      box-sizing: border-box;
-      text-align:center;
-    }
-    #passwordBox h2 { color:#138a4b; margin:0 0 14px 0; font-size:22px; font-weight:900; }
-    .pwdRow{
-      display:flex; gap:10px; align-items:center; justify-content:center;
-      margin: 10px 0 8px 0;
-    }
-    #passwordInput{
-      width:100%;
-      padding:12px;
-      font-size:18px;
-      border-radius:10px;
-      border:1.5px solid #bde4cf;
-      outline:none;
-      text-align:center;
-      box-sizing: border-box;
-    }
-    #togglePwd{
-      width: 54px; min-width:54px;
-      padding: 12px 0;
-      border-radius: 10px;
-      background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%);
-      box-shadow: 0 14px 28px rgba(37,120,143,.12);
-      font-weight:900;
-      color:#fff;
-      border:0;
-      cursor:pointer;
-    }
-    .btnMain{
-      background: linear-gradient(90deg,var(--g1) 0,var(--g2) 100%);
-      color: #fff; border: none; border-radius: 10px;
-      font-weight: 900; font-size: 20px; padding: 13px 0;
-      width: 100%; cursor: pointer; margin-top: 10px;
-      box-shadow: 0 14px 28px rgba(37,211,102,.14);
-    }
-    #passwordError { color:#c91818; font-weight:900; margin-top:10px; display:none; }
-    #lockInfo { color:#6a7e86; font-size: 13px; margin-top: 10px; }
-
-    /* MENU SCELTA */
-    .wrap{
-      padding: 26px 14px 28px 14px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .topLogo{
-      margin: 18px auto 8px auto;
-      width: 132px;
-      border-radius: 14px;
-      background:#fff;
-      padding: 12px 10px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.07);
-      display:flex; align-items:center; justify-content:center;
-    }
-    .topLogo img{ width: 110px; height:auto; }
-
-    .title{
-      margin: 14px 0 8px 0;
-      font-size: 26px;
-      font-weight: 900;
-      color: var(--b1);
-      letter-spacing: .6px;
-    }
-    .subtitle{
-      margin: 0 0 18px 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      align-items: stretch;
-      margin-top: 14px;
-    }
-    .cardBtn{
-      border: 0;
-      border-radius: 18px;
-      padding: 18px 16px;
-      cursor:pointer;
-      text-align:left;
-      background: #fff;
-      box-shadow: 0 18px 60px rgba(0,0,0,0.08);
-      transition: transform .10s ease, box-shadow .12s ease;
-      position: relative;
-      overflow:hidden;
-      min-height: 152px;
-    }
-    .cardBtn:active{ transform: scale(.99); }
-    .cardBtn:before{
-      content:"";
-      position:absolute;
-      inset:-40px -60px auto -60px;
-      height:120px;
-      background: radial-gradient(circle at 30% 50%, rgba(37,211,102,.20), transparent 60%),
-                  radial-gradient(circle at 70% 50%, rgba(30,190,165,.16), transparent 60%);
-      filter: blur(2px);
-      pointer-events:none;
-    }
-    .cardIco{
-      width: 46px; height:46px;
-      border-radius: 14px;
-      display:flex; align-items:center; justify-content:center;
-      color:#fff;
-      font-size: 20px;
-      font-weight:900;
-      box-shadow: 0 12px 24px rgba(0,0,0,.10);
-      position: relative;
-      z-index: 1;
-    }
-    .icoGreen{ background: linear-gradient(90deg,var(--g1),var(--g2)); }
-    .icoBlue{ background: linear-gradient(90deg,#25788f,#3e9ab0); }
-    .cardTitle{
-      margin: 12px 0 6px 0;
-      font-size: 18px;
-      font-weight: 1000;
-      color: var(--txt);
-      position: relative; z-index: 1;
-    }
-    .cardDesc{
-      margin: 0;
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.35;
-      position: relative; z-index: 1;
-    }
-    .miniRow{
-      margin-top: 14px;
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 9997;
+      background: rgba(233,242,247,.92);
+      backdrop-filter: blur(10px);
+      padding: 10px 10px;
       display:flex;
-      gap: 10px;
+      gap:10px;
       justify-content:center;
-      flex-wrap: wrap;
+      align-items:center;
+      border-bottom: 1px solid rgba(16,42,51,.08);
     }
-    .miniBtn{
+    .topBtn{
       border:0;
-      padding: 10px 14px;
       border-radius: 12px;
+      padding: 10px 12px;
       font-weight: 900;
       cursor:pointer;
-      background: rgba(255,255,255,.9);
+      background: rgba(255,255,255,.95);
       box-shadow: 0 10px 28px rgba(0,0,0,.06);
       color: var(--b1);
+      display:flex;
+      gap:8px;
+      align-items:center;
     }
-    .miniBtnDanger{
+    .topBtnDanger{
       color:#fff;
       background: linear-gradient(90deg,#111,#444);
     }
 
-    @media(max-width:560px){
-      .grid{ grid-template-columns: 1fr; }
-      .cardBtn{ min-height: 132px; }
+    .container {
+      margin: 18px auto 0 auto;
+      background: var(--card);
+      padding: 38px 28px 36px 28px;
+      max-width: 430px;
+      border-radius: 24px;
+      box-shadow: 0 12px 48px rgba(80,180,120,0.12), 0 2px 12px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
     }
+    .container:before{
+      content:"";
+      position:absolute;
+      inset:-40px -80px auto -80px;
+      height:120px;
+      background: radial-gradient(circle at 30% 50%, rgba(37,211,102,.22), transparent 60%),
+                  radial-gradient(circle at 70% 50%, rgba(30,190,165,.18), transparent 60%);
+      filter: blur(2px);
+      pointer-events:none;
+    }
+    .logo { margin-bottom: 18px; position: relative; z-index: 1; }
+    .logo img {
+      width: 120px; margin-bottom: 10px; border-radius: 12px;
+      box-shadow: 0 4px 32px #25d36633, 0 2px 4px #0000000d;
+    }
+    #contatoreClienti{
+      position: relative; z-index:1;
+      font-size: 18px; color: #138a4b; margin-bottom: 12px;
+      font-weight: bold; letter-spacing: .5px;
+    }
+    h1{
+      position: relative; z-index:1;
+      color: var(--b1); margin-bottom: 12px; font-size: 32px;
+      letter-spacing: 1.3px; font-weight: 800;
+    }
+    h2{
+      position: relative; z-index:1;
+      font-size: 19px; color: #555;
+      margin-top: 0; margin-bottom: 28px; letter-spacing: .8px; font-weight: 500;
+    }
+    .input-group{ position: relative; margin-bottom: 18px; z-index:1; }
+    .input-group i{ position: absolute; top: 14px; left: 12px; color: #8bb0bb; font-size: 18px; }
+    input{
+      padding: 12px 12px 12px 40px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1.7px solid #d7e7ed;
+      background: #f5fafd;
+      outline: none;
+      width: 85%;
+      transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    input:focus{
+      border: 2px solid var(--g1);
+      background: #eefcf7;
+      box-shadow: 0 10px 26px rgba(37,211,102,.12);
+      transform: translateY(-1px);
+    }
+    .hint{
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: -8px;
+      margin-bottom: 10px;
+      z-index:1;
+      position: relative;
+    }
+    button{
+      background: linear-gradient(90deg,var(--g1) 0,var(--g2) 100%);
+      color: #fff; border: none; border-radius: 10px;
+      font-weight: 900; font-size: 20px; padding: 13px 0;
+      width: 90%; cursor: pointer; margin-top: 6px; margin-bottom: 10px;
+      transition: transform .10s ease, filter .10s ease, box-shadow .15s ease;
+      box-shadow: 0 14px 28px rgba(37,211,102,.14);
+    }
+    button:hover{ filter: brightness(1.02); transform: translateY(-1px) scale(1.01); }
+    button:active{ transform: translateY(0px) scale(.99); }
+    .btnSecondary{
+      background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%);
+      box-shadow: 0 14px 28px rgba(37,120,143,.14);
+    }
+    #scaduta-message{ display:none; margin: 16px auto 0 auto; max-width: 350px; z-index:1; position:relative;}
+    .warning{
+      color: var(--danger); font-weight: 900; font-size: 16px;
+      letter-spacing: .3px; background: var(--warnbg);
+      border-radius: 10px; padding: 10px 10px;
+      box-shadow: 0 2px 16px #fbbbbb45;
+    }
+    #output{ margin-top: 20px; font-size: 20px; z-index:1; position:relative;}
+    #modelImg{
+      display:none; margin: 18px auto 0 auto;
+      max-width: 230px; width: 100%; height: auto;
+      border-radius: 16px; box-shadow: 0 2px 18px #43c47744;
+      object-fit: contain;
+      z-index:1; position:relative;
+    }
+    .ricevuta{
+      background: linear-gradient(100deg, #f4f8fa 60%, #e4fbe9 100%);
+      margin: 26px auto 0 auto;
+      padding: 22px 16px 18px 16px;
+      border-radius: 16px;
+      border: 1.5px solid #c3ead6;
+      max-width: 340px; font-size: 18px;
+      box-shadow: 0 2px 14px #cde2e944;
+      position: relative;
+      z-index: 1;
+    }
+    .ricevuta:after{
+      content:"";
+      position:absolute; bottom:10px; right:12px;
+      width:64px; height:26px;
+      background:url('https://upload.wikimedia.org/wikipedia/commons/4/44/Vorwerk_Logo_2019.svg') no-repeat center;
+      background-size:contain; opacity:.12;
+    }
+    .ok-message{ color: var(--ok); font-weight: 900; margin: 14px 0 8px 0; font-size: 18px; }
+    .note{ color: var(--b1); font-size: 14.7px; margin-top: 14px; font-style: italic;}
+    .promo-bonus{ margin: 14px 0 10px 0; font-size: 18px; color: var(--g2); font-weight: 900;}
+    .promo-bonus .tappeto{
+      background:#fffd8e; color: var(--danger); padding: 2px 7px;
+      border-radius: 6px; font-weight: 900; text-decoration: underline;
+    }
+
+    @media (max-width: 520px) {
+      .container{ margin:12px 0 0 0; padding:16px 10px; width:99vw; max-width:97vw; }
+      h1{ font-size:22px; }
+      h2{ font-size:15px; }
+      input,button{ font-size:16px; }
+      .ricevuta{ font-size:15px; }
+    }
+
+    /* Bottone fisso appuntamento */
+    #quickApptBtn{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 16px;
+      width: min(560px, calc(100vw - 24px));
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      z-index: 9998;
+      font-weight: 900;
+      font-size: 18px;
+      color: #fff;
+      background: linear-gradient(90deg,#25788f 0,#1ebea5 100%);
+      box-shadow: 0 14px 34px rgba(37,120,143,0.25);
+      display:block;
+    }
+
+    /* Modal appuntamento */
+    #apptOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 16px; }
+    #apptBox { width: min(520px, 100%); background: #fff; border-radius: 18px; box-shadow: 0 18px 60px rgba(0,0,0,0.25); overflow: hidden; text-align: left; }
+
+    #apptHeader { padding: 16px 18px; background: linear-gradient(90deg,var(--g1) 0,var(--g2) 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+    #apptHeader h3 { margin: 0; font-size: 18px; }
+    #apptClose { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: 900; }
+
+    .apptBody { padding: 16px 18px 18px 18px; }
+    .apptGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .apptField { display:flex; flex-direction:column; gap:6px; }
+    .apptField label { font-size: 13px; color: var(--b1); font-weight: 900; }
+    .apptField input, .apptField textarea {
+      width: 100%; box-sizing: border-box; padding: 13px; border-radius: 12px;
+      border: 1.6px solid #d7e7ed; background: #f5fafd; font-size: 17px; outline: none;
+    }
+    .apptField textarea { resize: none; min-height: 78px; }
+    .apptField input:focus, .apptField textarea:focus { border: 2px solid var(--g1); background: #eefcf7; }
+    .apptFull { grid-column: 1 / -1; }
+
+    .apptActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    .apptActions button{
+      width: 100%;
+      margin: 0;
+      padding: 11px 10px;
+      font-size: 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      line-height: 1.1;
+      box-shadow: none;
+    }
+    .apptActions button i{ font-size: 15px; margin-right: 6px; }
+
+    .btnDark { background: linear-gradient(90deg,#111 0,#444 100%); }
+    .btnBlue { background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%); }
+    .btnGreen { background: linear-gradient(90deg,var(--g1) 0,var(--g2) 100%); }
+
+    @media (max-width: 520px) {
+      .apptGrid { grid-template-columns: 1fr; }
+      .apptActions button{ font-size: 13px; padding: 10px 10px; }
+      .apptActions button i{ font-size: 14px; }
+    }
+
+    /* Toast */
+    #toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 92px;
+      z-index: 20000;
+      background: rgba(20, 20, 20, 0.92);
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 15px;
+      display: none;
+      max-width: min(520px, calc(100vw - 24px));
+    }
+
+    /* Overlay loading WhatsApp */
+    #busyOverlay{
+      position: fixed; inset:0;
+      background: rgba(0,0,0,.38);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 30000;
+      padding: 18px;
+    }
+    #busyBox{
+      width: min(420px, calc(100vw - 36px));
+      background:#fff;
+      border-radius: 18px;
+      padding: 18px 16px;
+      text-align:center;
+      box-shadow: 0 20px 70px rgba(0,0,0,.28);
+    }
+    #busyTitle{ font-weight: 900; color: var(--b1); font-size: 18px; margin-bottom: 8px; }
+    #busySub{ color: #4e636b; font-size: 14px; line-height: 1.35; }
+    .spinner{
+      width: 42px; height: 42px; margin: 12px auto 10px auto;
+      border-radius: 50%;
+      border: 4px solid #d7e7ed;
+      border-top-color: var(--g1);
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
   </style>
 </head>
 
 <body>
 
-  <!-- PASSWORD -->
-  <div id="passwordOverlay">
-    <div id="passwordBox">
-      <h2>Accesso riservato</h2>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <button class="topBtn" type="button" onclick="goMenu()"><i class="fa fa-arrow-left"></i> Menu</button>
+    <button class="topBtn topBtnDanger" type="button" onclick="logout()"><i class="fa fa-right-from-bracket"></i> Esci</button>
+  </div>
 
-      <div class="pwdRow">
-        <input type="password" id="passwordInput" placeholder="Inserisci password" autocomplete="off">
-        <button id="togglePwd" type="button" onclick="togglePassword()"><i class="fa fa-eye"></i></button>
+  <!-- MAIN -->
+  <div class="container" id="mainContent">
+    <div class="logo">
+      <img src="IMG_3780.jpeg" alt="Vorwerk Logo">
+    </div>
+
+    <div id="contatoreClienti">
+      <i class="fa fa-users"></i>
+      Oltre <span id="numeroClienti">3164</span> clienti soddisfatti hanno già prenotato l’assistenza!
+    </div>
+
+    <h1>Assistenza Cliente Folletto</h1>
+    <h2>Check Serial Number</h2>
+
+    <div class="input-group">
+      <i class="fa fa-user"></i>
+      <input type="text" id="nomeCliente" placeholder="Nome Cliente (opzionale)" autocomplete="off">
+    </div>
+
+    <div class="input-group">
+      <i class="fa fa-barcode"></i>
+      <input type="text" id="serialInput" placeholder="Serial Number Folletto (es: 09xxxx...)" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="hint">Tip: incolla pure con spazi/trattini, lo sistema lui.</div>
+
+    <button type="button" onclick="checkModel()"><i class="fa fa-search"></i> Controlla Modello</button>
+    <button type="button" class="btnSecondary" onclick="scanOCR()" id="scanBtn"><i class="fa fa-camera"></i> Scansiona Serial Number</button>
+
+    <div id="ocr-preview"></div>
+    <div id="scaduta-message"></div>
+    <div id="output"></div>
+
+    <img id="modelImg" src="" alt="Immagine modello">
+
+    <div class="ricevuta" id="ricevuta" style="display:none;"></div>
+    <div id="appButton"></div>
+  </div>
+
+  <!-- Bottone Appuntamento -->
+  <button id="quickApptBtn" type="button" onclick="openApptModal()">📅 Programma appuntamento</button>
+
+  <!-- Modal Appuntamento -->
+  <div id="apptOverlay" onclick="overlayClose(event)">
+    <div id="apptBox" onclick="event.stopPropagation()">
+      <div id="apptHeader">
+        <h3>📅 Programma appuntamento</h3>
+        <button id="apptClose" type="button" onclick="closeApptModal()">✕</button>
       </div>
 
-      <button class="btnMain" type="button" onclick="checkPassword()">Entra</button>
+      <div class="apptBody">
+        <div class="apptGrid">
+          <div class="apptField">
+            <label>Nome</label>
+            <input id="apptNome" placeholder="Es: Mario" autocomplete="off">
+          </div>
+          <div class="apptField">
+            <label>Cognome</label>
+            <input id="apptCognome" placeholder="Es: Rossi" autocomplete="off">
+          </div>
 
-      <div id="passwordError">Password errata ⚠️</div>
-      <div id="lockInfo"></div>
+          <div class="apptField apptFull">
+            <label>Telefono</label>
+            <input id="apptTelefono" inputmode="tel" placeholder="Es: 3331234567" autocomplete="off">
+          </div>
+
+          <div class="apptField apptFull">
+            <label>Via / Indirizzo</label>
+            <input id="apptVia" placeholder="Es: Via Garibaldi 12, Modena" autocomplete="off">
+          </div>
+
+          <div class="apptField">
+            <label>Data</label>
+            <input id="apptData" type="date">
+          </div>
+          <div class="apptField">
+            <label>Ora</label>
+            <input id="apptOra" type="time">
+          </div>
+
+          <div class="apptField apptFull">
+            <label>Note (opzionale)</label>
+            <textarea id="apptNote" placeholder="Note..."></textarea>
+          </div>
+        </div>
+
+        <div class="apptActions">
+          <button class="btnDark" type="button" onclick="copyAppointmentText()"><i class="fa fa-copy"></i> Trascrivi info su MYA</button>
+          <button class="btnBlue" type="button" onclick="sendWhatsAppOnly()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+          <button class="btnDark" type="button" onclick="downloadICSOnly()"><i class="fa fa-calendar-days"></i> Calendario</button>
+          <button class="btnGreen" type="button" onclick="clearApptFields()"><i class="fa fa-eraser"></i> Pulisci</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- MENU SCELTA -->
-  <div class="wrap" id="menu" style="display:none;">
-    <div class="topLogo">
-      <img src="IMG_3780.jpeg" alt="Vorwerk">
-    </div>
-
-    <div class="title">Folletto Tool</div>
-    <div class="subtitle">
-      Scegli cosa aprire. <b>Serial Check</b> per i modelli, <b>Attività</b> per segnare campanelli/assenti e tenere tutto in agenda.
-    </div>
-
-    <div class="grid">
-      <button class="cardBtn" type="button" onclick="goSerial()">
-        <div class="cardIco icoGreen"><i class="fa fa-qrcode"></i></div>
-        <div class="cardTitle">Serial Check</div>
-        <p class="cardDesc">Rileva modello/anno dal seriale e fai effetto “wow” col cliente.</p>
-      </button>
-
-      <button class="cardBtn" type="button" onclick="goAttivita()">
-        <div class="cardIco icoBlue"><i class="fa fa-list-check"></i></div>
-        <div class="cardTitle">Attività</div>
-        <p class="cardDesc">Registro vie, esiti citofono, assenti che NON spariscono. Tutto salvato.</p>
-      </button>
-    </div>
-
-    <div class="miniRow">
-      <button class="miniBtn" type="button" onclick="goSerial()">Apri Serial Check</button>
-      <button class="miniBtn" type="button" onclick="goAttivita()">Apri Attività</button>
-      <button class="miniBtn miniBtnDanger" type="button" onclick="logout()">Esci</button>
+  <!-- Busy Overlay -->
+  <div id="busyOverlay">
+    <div id="busyBox">
+      <div class="spinner"></div>
+      <div id="busyTitle">Apro WhatsApp…</div>
+      <div id="busySub">Se il testo non viene incollato in automatico, è già copiato: incolla e invia ✅</div>
     </div>
   </div>
+
+  <div id="toast"></div>
 
   <script>
-    const ACCESS_PASSWORD = "1232";
+    /* ====== NAV ====== */
+    function goMenu(){ window.location.href = "index.html?v=3"; }
+    function logout(){
+      localStorage.removeItem("auth_ok");
+      window.location.href = "index.html?v=3";
+    }
 
-    /* ====== LOCK LOGIN (UGUALE) ====== */
-    const LOCK_KEY = "folletto_lock_until";
-    const TRY_KEY  = "folletto_tries";
-    const MAX_TRIES = 5;
-    const LOCK_MS = 60 * 1000;
-
+    /* ====== MINI UTIL ====== */
     function haptic(type = "light") {
       try { if (navigator.vibrate) navigator.vibrate(type === "heavy" ? 40 : 18); } catch(e){}
     }
 
-    function togglePassword(){
-      const inp = document.getElementById("passwordInput");
-      inp.type = (inp.type === "password") ? "text" : "password";
-      haptic();
-      inp.focus();
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.style.display = "none", 1700);
     }
 
-    function isLocked(){
-      const until = parseInt(localStorage.getItem(LOCK_KEY) || "0");
-      const now = Date.now();
-      return now < until ? until : 0;
+    function showBusy(on=true){
+      const b = document.getElementById("busyOverlay");
+      b.style.display = on ? "flex" : "none";
     }
 
-    function renderLockInfo(){
-      const info = document.getElementById("lockInfo");
-      const until = isLocked();
-      if (!until) { info.textContent = ""; return; }
-      const sec = Math.ceil((until - Date.now())/1000);
-      info.textContent = `Troppi tentativi. Riprova tra ${sec}s`;
-      setTimeout(renderLockInfo, 350);
+    /* ====== CONTATORE CLIENTI (1x al giorno) ====== */
+    (function(){
+      const today = new Date().toISOString().slice(0,10);
+      const lastDay = localStorage.getItem("folletto_counter_day");
+      let n = parseInt(localStorage.getItem("contatoreFolletto") || "3164");
+
+      if (lastDay !== today) {
+        const inc = Math.floor(Math.random()*4);
+        n += inc;
+        localStorage.setItem("folletto_counter_day", today);
+        localStorage.setItem("contatoreFolletto", String(n));
+      }
+      document.getElementById("numeroClienti").textContent = n;
+    })();
+
+    /* ====== FIX iOS/PWA: ritorno da WhatsApp = reload anti-bianco ====== */
+    let comingBackFromWhatsApp = false;
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && comingBackFromWhatsApp) {
+        comingBackFromWhatsApp = false;
+        setTimeout(() => window.location.reload(), 120);
+      }
+    });
+
+    /* ====== SERIAL SMART ====== */
+    function sanitizeSerial(s){
+      return (s || "")
+        .toString()
+        .trim()
+        .replace(/\s+/g,"")
+        .replace(/[-_]/g,"")
+        .replace(/[^\d]/g,"");
     }
 
-    function checkPassword() {
-      const lockUntil = isLocked();
-      if (lockUntil) { haptic("heavy"); renderLockInfo(); return; }
+    const serialInputEl = document.getElementById("serialInput");
+    serialInputEl.addEventListener("input", () => {
+      const cleaned = sanitizeSerial(serialInputEl.value);
+      serialInputEl.value = cleaned;
+    });
+    serialInputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkModel();
+    });
 
-      const userInput = document.getElementById("passwordInput").value.trim();
-      if (userInput === ACCESS_PASSWORD) {
-        localStorage.setItem(TRY_KEY, "0");
+    /* ====== CHECK MODEL ====== */
+    function getModelAndYearFromSerial(serial) {
+      const s = sanitizeSerial(serial);
+      const prefix = s.substring(0, 2);
 
-        // ✅ SESSIONE OK
-        localStorage.setItem("auth_ok", "1");
+      if (["83","84","85","86","87","88","89","90","91","92","93","94","95","96"].includes(prefix)) return { modello: "VK 120-122", anno: "1983-1996", img:"IMG_3693.jpg", scaduta:true };
+      if (["97","98","99"].includes(prefix)) return { modello: "VK 130", anno: "1997-1999", img:"IMG_3692.jpg", scaduta:true };
+      if (["00","01","02"].includes(prefix)) return { modello: "VK 131", anno: "2000-2002", img:"IMG_3691.jpg", scaduta:true };
+      if (["03","04","05","06","07"].includes(prefix)) return { modello: "VK 135", anno: "2003-2007", img:"IMG_3690.jpg", scaduta:true };
+      if (["08"].includes(prefix)) return { modello: "VK 136", anno: "2008", img:"IMG_3689.jpg", scaduta:true };
+      if (["09","10","11","12","13"].includes(prefix)) return { modello: "VK140", anno: "2009-2013", img:"IMG_3582.jpg", scaduta:true };
+      if (["14"].includes(prefix)) return { modello: "VK150", anno: "2014", img:"IMG_3584.jpg", scaduta:true };
+      if (["15","16","17"].includes(prefix)) return { modello: "VK 200", anno: "2015-2017", img:"IMG_3595.jpg", scaduta:true };
+      if (["18","19","20","21"].includes(prefix)) return { modello: "VK 220S", anno: "2018-2021", img:"IMG_3595.jpg", scaduta:true };
+      if (["22","23","24","25"].includes(prefix)) return { modello: "VK7S", anno: "2022-2025", img:"IMG_3598.jpg", scaduta:false };
+      return null;
+    }
 
-        document.getElementById("passwordOverlay").style.display = "none";
-        document.getElementById("menu").style.display = "block";
-        haptic();
-      } else {
-        const err = document.getElementById("passwordError");
-        err.style.display = "block";
+    function checkModel() {
+      const serialRaw = document.getElementById("serialInput").value;
+      const serial = sanitizeSerial(serialRaw);
+      const nome = document.getElementById("nomeCliente").value.trim();
+
+      const out = document.getElementById("output");
+      const scadutaDiv = document.getElementById("scaduta-message");
+      const modelImg = document.getElementById("modelImg");
+      const ricevutaEl = document.getElementById("ricevuta");
+
+      if (!serial || serial.length < 2) {
         haptic("heavy");
+        showToast("⚠️ Inserisci un serial valido");
+        out.innerHTML = "<span style='color:#b02b2b;font-weight:900'>Inserisci un Serial Number.</span>";
+        modelImg.style.display="none";
+        ricevutaEl.style.display="none";
+        scadutaDiv.style.display="none";
+        return;
+      }
 
-        let tries = parseInt(localStorage.getItem(TRY_KEY) || "0");
-        tries++;
-        localStorage.setItem(TRY_KEY, String(tries));
+      const info = getModelAndYearFromSerial(serial);
+      if (!info) {
+        haptic("heavy");
+        out.innerHTML = "<span style='color:#b02b2b;font-weight:900'>Modello non riconosciuto!<br>Controlla il serial.</span>";
+        modelImg.style.display="none";
+        ricevutaEl.style.display="none";
+        scadutaDiv.style.display="none";
+        return;
+      }
 
-        if (tries >= MAX_TRIES) {
-          localStorage.setItem(LOCK_KEY, String(Date.now() + LOCK_MS));
-          renderLockInfo();
-        }
+      haptic();
+      const isVK7 = ["22","23","24","25"].includes(serial.substring(0,2));
+      const interventoText = isVK7
+        ? "Intervento di manutenzione gratuito disponibile al prodotto:<br>Check batterie e recupero potenza motore"
+        : "Intervento di manutenzione gratuito disponibile al prodotto:<br>Ripristino potenza motore";
 
-        setTimeout(() => { err.style.display = "none"; }, 2000);
+      if (info.scaduta) {
+        scadutaDiv.innerHTML = "<div class='warning'>⚠️ Assistenza scaduta! Richiesto intervento urgente.</div>";
+        scadutaDiv.style.display = "block";
+      } else {
+        scadutaDiv.innerHTML = "";
+        scadutaDiv.style.display = "none";
+      }
+
+      out.innerHTML =
+        "<span class='ok-message'>" + interventoText + ".</span><br>" +
+        "Modello: <b>" + info.modello + "</b><br>" +
+        "Anno di produzione: <b>" + info.anno + "</b>";
+
+      if (info.img) {
+        modelImg.src = info.img;
+        modelImg.style.display = "block";
+      } else {
+        modelImg.style.display = "none";
+      }
+
+      let ricevuta = "";
+      if (nome) ricevuta += "<b>Cliente:</b> " + nome + "<br>";
+      ricevuta += "<b>Serial:</b> " + serial + "<br>";
+      ricevuta += "<b>Modello:</b> " + info.modello + "<br>";
+      ricevuta += "<b>Anno:</b> " + info.anno + "<br>";
+      ricevuta += "<span style='color:#0b942e;font-weight:900;'>" + interventoText + ".</span><br>";
+      ricevuta += "<div class='promo-bonus'>Prenota <u>ORA</u> la manutenzione e ricevi in omaggio il <span class='tappeto'>lavaggio completo del tuo tappeto</span>!</div>";
+      ricevuta += "<div class='note'>Servizio valido solo per prodotti originali Vorwerk Folletto.</div>";
+
+      ricevutaEl.innerHTML = ricevuta;
+      ricevutaEl.style.display = "block";
+
+      showToast("✅ Modello rilevato");
+    }
+
+    function scanOCR() { showToast("📷 Scansione in test (presto disponibile)"); }
+
+    /* ====== MODAL ====== */
+    function openApptModal() { document.getElementById("apptOverlay").style.display = "flex"; haptic(); }
+    function closeApptModal() { document.getElementById("apptOverlay").style.display = "none"; }
+    function overlayClose(e) { if (e.target && e.target.id === "apptOverlay") closeApptModal(); }
+
+    function getApptData(actionLabel = "Trascrivi info su MYA") {
+      const nome = document.getElementById("apptNome").value.trim();
+      const cognome = document.getElementById("apptCognome").value.trim();
+      const telefono = document.getElementById("apptTelefono").value.trim();
+      const via = document.getElementById("apptVia").value.trim();
+      const data = document.getElementById("apptData").value.trim();
+      const ora = document.getElementById("apptOra").value.trim();
+      const note = document.getElementById("apptNote").value.trim();
+
+      if (!nome || !cognome || !telefono || !via) {
+        haptic("heavy");
+        showToast(`⚠️ ${actionLabel}: Nome, Cognome, Telefono, Via`);
+        return null;
+      }
+      return { nome, cognome, telefono, via, data, ora, note };
+    }
+
+    function formatDateITA(iso){
+      if (!iso) return "";
+      const [yyyy, mm, dd] = iso.split("-");
+      if (!yyyy || !mm || !dd) return iso;
+      return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function formatApptMessage(a) {
+      const when = (a.data ? formatDateITA(a.data) : "—") + (a.ora ? (" " + a.ora) : "");
+      const serial = sanitizeSerial(document.getElementById("serialInput").value || "");
+      const info = getModelAndYearFromSerial(serial);
+      const modelLine = info ? `Modello: ${info.modello} (${info.anno})` : "";
+
+      return [
+        "APPUNTAMENTO FOLLETTO",
+        `${a.nome} ${a.cognome}`,
+        `Tel: ${a.telefono}`,
+        `Via: ${a.via}`,
+        `Quando: ${when}`,
+        serial ? `Serial: ${serial}` : "",
+        modelLine,
+        a.note ? `Note: ${a.note}` : ""
+      ].filter(Boolean).join("\n");
+    }
+
+    function fallbackCopy(text) {
+      const t = document.createElement("textarea");
+      t.value = text;
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand("copy");
+      document.body.removeChild(t);
+      showToast("✅ Copiato");
+    }
+
+    function copyAppointmentText() {
+      const a = getApptData("Trascrivi info su MYA");
+      if (!a) return;
+      const txt = formatApptMessage(a);
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt)
+          .then(() => { haptic(); showToast("✅ Copiato (MYA)"); })
+          .catch(() => fallbackCopy(txt));
+      } else {
+        fallbackCopy(txt);
       }
     }
 
-    function goSerial(){
-      window.location.href = "serial.html?v=3";
-    }
-    function goAttivita(){
-      window.location.href = "attivita.html?v=3";
-    }
-    function logout(){
-      sessionStorage.removeItem("auth_ok");
-      window.location.href = "index.html?v=3";
+    function normalizePhoneIT(raw){
+      let p = (raw || "").trim().replace(/[^\d+]/g, "");
+      if (!p) return "";
+      if (p.startsWith("00")) p = "+" + p.slice(2);
+      if (!p.startsWith("+")) p = "+39" + p;
+      return p.replace(/\+/g, "");
     }
 
-    // Enter per login
+    async function copyToClipboardSmart(text){
+      try{
+        if (navigator.clipboard && navigator.clipboard.writeText){
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      }catch(e){}
+      try{ fallbackCopy(text); return true; }catch(e){}
+      return false;
+    }
+
+    async function sendWhatsAppOnly() {
+      const a = getApptData("Invio promemoria cliente su WhatsApp");
+      if (!a) return;
+
+      const num = normalizePhoneIT(a.telefono);
+      if (!num) { haptic("heavy"); showToast("⚠️ Numero non valido"); return; }
+
+      const serial = sanitizeSerial(document.getElementById("serialInput").value || "");
+      const info = getModelAndYearFromSerial(serial);
+      const modelloTxt = info ? `${info.modello} (${info.anno})` : "";
+
+      const msg = `Gentile Cliente,
+Le confermiamo l’appuntamento per la manutenzione Folletto.
+
+📅 Data: ${a.data ? formatDateITA(a.data) : "—"}
+🕒 Ora: ${a.ora || "—"}
+📍 Indirizzo: ${a.via}${modelloTxt ? `\n🧩 Modello: ${modelloTxt}` : ""}${serial ? `\n🔢 Serial: ${serial}` : ""}${a.note ? `\n📝 Note: ${a.note}` : ""}
+
+Cordiali saluti.`;
+
+      await copyToClipboardSmart(msg);
+
+      const urlApp = "whatsapp://send?phone=" + num + "&text=" + encodeURIComponent(msg);
+      const urlWeb = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
+
+      showBusy(true);
+      showToast("🟢 WhatsApp pronto");
+      haptic();
+
+      comingBackFromWhatsApp = true;
+
+      window.location.href = urlApp;
+
+      setTimeout(() => {
+        showBusy(false);
+        window.open(urlWeb, "_blank");
+      }, 750);
+    }
+
+    function downloadICSOnly() {
+      const a = getApptData("Calendario");
+      if (!a) return;
+
+      const dateStr = a.data || new Date().toISOString().slice(0,10);
+      const timeStr = a.ora || "10:00";
+
+      const startLocal = new Date(`${dateStr}T${timeStr}:00`);
+      const endLocal = new Date(startLocal.getTime() + 45 * 60 * 1000);
+
+      function toICS(dt) {
+        const y = dt.getUTCFullYear();
+        const m = String(dt.getUTCMonth()+1).padStart(2,'0');
+        const d = String(dt.getUTCDate()).padStart(2,'0');
+        const hh = String(dt.getUTCHours()).padStart(2,'0');
+        const mm = String(dt.getUTCMinutes()).padStart(2,'0');
+        const ss = String(dt.getUTCSeconds()).padStart(2,'0');
+        return `${y}${m}${d}T${hh}${mm}${ss}Z`;
+      }
+
+      const summary = `Appuntamento Folletto - ${a.nome} ${a.cognome}`;
+      const location = a.via;
+      const description = formatApptMessage(a).replace(/\n/g, "\\n");
+
+      const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Folletto Tool//IT
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:${Date.now()}@follettotool
+DTSTAMP:${toICS(new Date())}
+DTSTART:${toICS(startLocal)}
+DTEND:${toICS(endLocal)}
+SUMMARY:${summary}
+LOCATION:${location}
+DESCRIPTION:${description}
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `appuntamento_${a.nome}_${a.cognome}.ics`.replace(/\s+/g,"_");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+
+      haptic();
+      showToast("📅 Calendario pronto");
+    }
+
+    function clearApptFields() {
+      ["apptNome","apptCognome","apptTelefono","apptVia","apptData","apptOra","apptNote"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      haptic();
+      showToast("🧽 Pulito");
+    }
+
+    // focus comodo
     document.addEventListener("DOMContentLoaded", () => {
-  ...
-  // se già loggato nella sessione, salta il login e vai al menu
-if (localStorage.getItem("auth_ok") !== "1") window.location.replace("index.html?v=3");
-  document.getElementById("passwordOverlay").style.display = "none";
-  document.getElementById("menu").style.display = "block";
-  }
-});
+      try { document.getElementById("serialInput").focus(); } catch(e){}
+    });
   </script>
 </body>
 </html>
