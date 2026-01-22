@@ -331,7 +331,7 @@
         localStorage.setItem(TRY_KEY, "0");
 
         // ✅ SESSIONE OK
-        sessionStorage.setItem("auth_ok", "1");
+        localStorage.setItem("auth_ok", "1");
 
         document.getElementById("passwordOverlay").style.display = "none";
         document.getElementById("menu").style.display = "block";
@@ -361,7 +361,7 @@
       window.location.href = "attivita.html?v=3";
     }
     function logout(){
-      sessionStorage.removeItem("auth_ok");
+    localStorage.removeItem("auth_ok");
       window.location.href = "index.html?v=3";
     }
 
@@ -372,7 +372,7 @@
       renderLockInfo();
 
       // se già loggato nella sessione, salta il login e vai al menu
-      if (sessionStorage.getItem("auth_ok") === "1") {
+      if (localStorage.getItem("auth_ok") === "1") {
         document.getElementById("passwordOverlay").style.display = "none";
         document.getElementById("menu").style.display = "block";
       }
