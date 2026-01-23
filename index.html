@@ -256,6 +256,124 @@
       .grid{ grid-template-columns: 1fr; }
       .cardBtn{ min-height: 132px; }
     }
+
+    /* =========================
+       ✅ TRUSTPILOT SECTION
+       ========================= */
+    .trustWrap{
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.06);
+      text-align: left;
+      position: relative;
+      overflow:hidden;
+    }
+    .trustWrap:before{
+      content:"";
+      position:absolute;
+      inset:-50px -60px auto -60px;
+      height:130px;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(37,211,102,.18), transparent 60%),
+        radial-gradient(circle at 70% 50%, rgba(37,120,143,.14), transparent 60%);
+      filter: blur(2px);
+      pointer-events:none;
+    }
+    .trustTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .trustTitle{
+      font-weight: 1000;
+      font-size: 14px;
+      color: var(--txt);
+      margin: 0;
+    }
+    .trustBrand{
+      font-weight: 1000;
+      font-size: 13px;
+      color: #0b6b3a;
+      background: rgba(37,211,102,.10);
+      border: 1px solid rgba(37,211,102,.18);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .trustStars{
+      margin-top: 8px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .trustStars .stars{
+      font-weight: 1000;
+      letter-spacing: 2px;
+      font-size: 16px;
+      color: #0b6b3a;
+    }
+    .trustStars .score{
+      font-weight: 1000;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .trustSub{
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+      position: relative;
+      z-index: 1;
+    }
+    .trustBtn{
+      margin-top: 10px;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 10px 28px rgba(0,0,0,.06);
+      color: var(--b1);
+      font-weight: 1000;
+      text-decoration: none;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .trustBtn:active{ transform: scale(.99); }
+    .trustReview{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      position: relative;
+      z-index: 1;
+    }
+    .trustReviewName{
+      font-weight: 1000;
+      font-size: 13px;
+      color: var(--txt);
+      margin-bottom: 6px;
+    }
+    .trustReviewText{
+      margin:0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
   </style>
 </head>
 
@@ -314,6 +432,40 @@
       <button class="miniBtn" type="button" onclick="goAttivita()">Apri Attività</button>
       <button class="miniBtn miniBtnDanger" type="button" onclick="logout()">Disconnetti</button>
     </div>
+
+    <!-- ✅ TRUSTPILOT STYLE + LINK UFFICIALE -->
+    <div class="trustWrap">
+      <div class="trustTop">
+        <div class="trustTitle">⭐ Recensioni clienti</div>
+        <div class="trustBrand">Trustpilot</div>
+      </div>
+
+      <div class="trustStars">
+        <div class="stars">★★★★★</div>
+        <div class="score">Ottimo • 4,8/5</div>
+      </div>
+
+      <div class="trustSub">
+        Vedi tutte le recensioni ufficiali su Trustpilot (pagina Vorwerk Italia).
+      </div>
+
+      <a class="trustBtn"
+         href="https://it.trustpilot.com/review/vorwerk.com/it/it"
+         target="_blank"
+         rel="noopener">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        Apri recensioni su Trustpilot
+      </a>
+
+      <div class="trustReview">
+        <div class="trustReviewName">Parere cliente</div>
+        <p class="trustReviewText">
+          “Assistenza rapida e prodotto davvero efficace. La sanificazione si vede subito: casa e materassi
+          cambiano proprio.”
+        </p>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -396,14 +548,15 @@
       }
     }
 
-function goSerial(){ window.location.href = "./serial.html?v=4"; }
-function goAttivita(){ window.location.href = "./attivita.html?v=4"; }
+    function goSerial(){ window.location.href = "./serial.html?v=4"; }
+    function goAttivita(){ window.location.href = "./attivita.html?v=4"; }
 
-function logout(){
-  localStorage.removeItem(AUTH_KEY);
-  localStorage.removeItem(REMEMBER_KEY);
-  window.location.href = "./index.html?v=4";
-}
+    function logout(){
+      localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(REMEMBER_KEY);
+      window.location.href = "./index.html?v=4";
+    }
+
     // Enter per login + auto-login se "ricorda password"
     document.addEventListener("DOMContentLoaded", () => {
       const pwd = document.getElementById("passwordInput");
