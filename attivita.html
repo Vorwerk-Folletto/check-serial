@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attività</title>
 
+  <!-- Font Awesome (per icona nel bottone Trustpilot) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -147,6 +150,124 @@
     .waBtn:active{
       transform: scale(0.97);
     }
+
+    /* =========================
+       ✅ TRUSTPILOT SECTION (UGUALE AL MENU)
+       ========================= */
+    .trustWrap{
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.06);
+      text-align: left;
+      position: relative;
+      overflow:hidden;
+    }
+    .trustWrap:before{
+      content:"";
+      position:absolute;
+      inset:-50px -60px auto -60px;
+      height:130px;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(37,211,102,.18), transparent 60%),
+        radial-gradient(circle at 70% 50%, rgba(37,120,143,.14), transparent 60%);
+      filter: blur(2px);
+      pointer-events:none;
+    }
+    .trustTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .trustTitle{
+      font-weight: 1000;
+      font-size: 14px;
+      color: #102a33;
+      margin: 0;
+    }
+    .trustBrand{
+      font-weight: 1000;
+      font-size: 13px;
+      color: #0b6b3a;
+      background: rgba(37,211,102,.10);
+      border: 1px solid rgba(37,211,102,.18);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .trustStars{
+      margin-top: 8px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .trustStars .stars{
+      font-weight: 1000;
+      letter-spacing: 2px;
+      font-size: 16px;
+      color: #0b6b3a;
+    }
+    .trustStars .score{
+      font-weight: 1000;
+      font-size: 13px;
+      color: #6a7e86;
+    }
+    .trustSub{
+      margin-top: 6px;
+      font-size: 12px;
+      color: #6a7e86;
+      line-height: 1.35;
+      position: relative;
+      z-index: 1;
+    }
+    .trustBtn{
+      margin-top: 10px;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 10px 28px rgba(0,0,0,.06);
+      color: #25788f;
+      font-weight: 1000;
+      text-decoration: none;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .trustBtn:active{ transform: scale(.99); }
+    .trustReview{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      position: relative;
+      z-index: 1;
+    }
+    .trustReviewName{
+      font-weight: 1000;
+      font-size: 13px;
+      color: #102a33;
+      margin-bottom: 6px;
+    }
+    .trustReviewText{
+      margin:0;
+      font-size: 13px;
+      color: #6a7e86;
+      line-height: 1.35;
+    }
   </style>
 </head>
 
@@ -171,7 +292,6 @@
         Inserisci solo numeri (senza spazi). Il +39 lo metto io automaticamente.
       </div>
     </div>
-
 
     <!-- ===== VIDEO 1 ===== -->
     <div class="videoSection">
@@ -200,7 +320,6 @@
       <button class="waBtn" onclick="sendWhatsApp(1)">📲 WhatsApp</button>
     </div>
 
-
     <!-- ===== VIDEO 2 ===== -->
     <div class="videoSection">
       <div class="videoCard">
@@ -227,7 +346,6 @@
 
       <button class="waBtn" onclick="sendWhatsApp(2)">📲 WhatsApp</button>
     </div>
-
 
     <!-- ===== VIDEO 3 ===== -->
     <div class="videoSection">
@@ -256,7 +374,6 @@
       <button class="waBtn" onclick="sendWhatsApp(3)">📲 WhatsApp</button>
     </div>
 
-
     <!-- ===== VIDEO 4 ===== -->
     <div class="videoSection">
       <div class="videoCard">
@@ -284,6 +401,38 @@
       <button class="waBtn" onclick="sendWhatsApp(4)">📲 WhatsApp</button>
     </div>
 
+    <!-- ✅ TRUSTPILOT STYLE (SOTTO I VIDEO) -->
+    <div class="trustWrap">
+      <div class="trustTop">
+        <div class="trustTitle">⭐ Recensioni clienti</div>
+        <div class="trustBrand">Trustpilot</div>
+      </div>
+
+      <div class="trustStars">
+        <div class="stars">★★★★★</div>
+        <div class="score">Ottimo • 4,8/5</div>
+      </div>
+
+      <div class="trustSub">
+        Vedi tutte le recensioni ufficiali su Trustpilot (pagina Vorwerk Italia).
+      </div>
+
+      <a class="trustBtn"
+         href="https://it.trustpilot.com/review/vorwerk.com/it/it"
+         target="_blank"
+         rel="noopener">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        Apri recensioni su Trustpilot
+      </a>
+
+      <div class="trustReview">
+        <div class="trustReviewName">Parere cliente</div>
+        <p class="trustReviewText">
+          “Assistenza rapida e prodotto davvero efficace. La sanificazione si vede subito: casa e materassi
+          cambiano proprio.”
+        </p>
+      </div>
+    </div>
 
     <!-- Pulsante indietro -->
     <button onclick="history.back()">⬅ Torna indietro</button>
