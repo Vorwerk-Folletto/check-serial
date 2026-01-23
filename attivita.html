@@ -168,7 +168,7 @@
         autocomplete="tel"
       />
       <div class="numHint">
-        Inserisci il mumero del coiente che vuole  visualizzare video su whatsapp.
+        Inserisci solo numeri (senza spazi). Il +39 lo metto io automaticamente.
       </div>
     </div>
 
@@ -257,6 +257,34 @@
     </div>
 
 
+    <!-- ===== VIDEO 4 ===== -->
+    <div class="videoSection">
+      <div class="videoCard">
+        <div class="videoCardHeader">🎥 Video 4 – Battitappeto</div>
+
+        <div class="videoFrame">
+          <iframe
+            src="https://www.youtube.com/embed/gT3KJU7iDfg"
+            title="Video 4 - Multifunzione battitappeto"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <a class="videoBtn"
+           href="https://youtu.be/gT3KJU7iDfg?si=ziuq47-Yoez_0EaR"
+           target="_blank"
+           rel="noopener">
+          Apri su YouTube
+        </a>
+      </div>
+
+      <div class="hint">Multifunzione battitappeto</div>
+
+      <button class="waBtn" onclick="sendWhatsApp(4)">📲 WhatsApp</button>
+    </div>
+
+
     <!-- Pulsante indietro -->
     <button onclick="history.back()">⬅ Torna indietro</button>
 
@@ -275,23 +303,22 @@
       3: {
         msg: "Salve! Le mando il video riguardante la sanificazione del pavimento del nostro sistema",
         link: "https://youtu.be/09IhWsCBvuU?si=PAKwCmfhpyrlcv9G"
+      },
+      4: {
+        msg: "Salve! Le mando il video riguardante la multifunzione battitappeto del nostro sistema",
+        link: "https://youtu.be/gT3KJU7iDfg?si=ziuq47-Yoez_0EaR"
       }
     };
 
     function normalizeItalianNumber(raw){
-      // prende solo cifre
       let n = (raw || "").replace(/\D/g, "");
 
-      // se mettono 0039 davanti, lo tolgo e gestisco io il +39
       if (n.startsWith("0039")) n = n.slice(4);
-
-      // se mettono già 39 davanti (senza +), tolgo e gestisco io il +39
       if (n.startsWith("39") && n.length > 10) n = n.slice(2);
 
-      // numero italiano tipico: 9-10 cifre (cellulari 10, alcuni 9)
       if (n.length < 9 || n.length > 10) return null;
 
-      return "39" + n; // aggiungo prefisso Italia
+      return "39" + n;
     }
 
     function sendWhatsApp(videoId){
@@ -307,7 +334,6 @@
       const text = `${WA_DATA[videoId].msg}\n${WA_DATA[videoId].link}`;
       const url = `https://wa.me/${normalized}?text=${encodeURIComponent(text)}`;
 
-      // apre WhatsApp direttamente sulla chat del numero
       window.open(url, "_blank");
     }
   </script>
