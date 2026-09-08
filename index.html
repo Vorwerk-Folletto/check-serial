@@ -5,28 +5,23 @@
   <link rel="manifest" href="manifest.json?v=3">
   <title>Folletto Tool</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <!-- Anti-cache (utile su iOS PWA) -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-
-  <!-- ✅ AUTO-FIX PRO: forza URL con ?v=3 + reload una volta in modalità app -->
+  <!-- AUTO-FIX PRO -->
   <script>
     (function () {
       const VERSION = "4";
       const url = new URL(window.location.href);
-
       if (url.searchParams.get("v") !== VERSION) {
         url.searchParams.set("v", VERSION);
         window.location.replace(url.toString());
         return;
       }
-
       const isStandalone =
         (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
         window.navigator.standalone === true;
-
       const reloadKey = "folletto_pwa_reload_v_" + VERSION;
       if (isStandalone && !sessionStorage.getItem(reloadKey)) {
         sessionStorage.setItem(reloadKey, "1");
@@ -34,10 +29,11 @@
       }
     })();
   </script>
-
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
   <style>
     :root{
       --g1:#25d366;
@@ -50,7 +46,9 @@
       --muted:#6a7e86;
       --danger:#c91818;
     }
-    *{ -webkit-tap-highlight-color: transparent; }
+    *{
+      -webkit-tap-highlight-color: transparent;
+    }
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
@@ -60,10 +58,12 @@
       padding: 0;
       color: var(--txt);
     }
-
-    /* PASSWORD OVERLAY */
+    /* =========================
+       PASSWORD OVERLAY
+       ========================= */
     #passwordOverlay{
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background: linear-gradient(160deg, #e8fdf3, #d1f5ea);
       display: flex;
       align-items: center;
@@ -82,10 +82,17 @@
       box-sizing: border-box;
       text-align:center;
     }
-    #passwordBox h2 { color:#138a4b; margin:0 0 14px 0; font-size:22px; font-weight:900; }
-
+    #passwordBox h2 {
+      color:#138a4b;
+      margin:0 0 14px 0;
+      font-size:22px;
+      font-weight:900;
+    }
     .pwdRow{
-      display:flex; gap:10px; align-items:center; justify-content:center;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
       margin: 10px 0 8px 0;
     }
     #passwordInput{
@@ -99,7 +106,8 @@
       box-sizing: border-box;
     }
     #togglePwd{
-      width: 54px; min-width:54px;
+      width: 54px;
+      min-width:54px;
       padding: 12px 0;
       border-radius: 10px;
       background: linear-gradient(90deg,#25788f 0,#3e9ab0 100%);
@@ -109,16 +117,19 @@
       border:0;
       cursor:pointer;
     }
-
     .btnMain{
       background: linear-gradient(90deg,var(--g1) 0,var(--g2) 100%);
-      color: #fff; border: none; border-radius: 10px;
-      font-weight: 900; font-size: 20px; padding: 13px 0;
-      width: 100%; cursor: pointer; margin-top: 10px;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-weight: 900;
+      font-size: 20px;
+      padding: 13px 0;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 10px;
       box-shadow: 0 14px 28px rgba(37,211,102,.14);
     }
-
-    /* ✅ Ricorda password (stile coerente) */
     .rememberRow{
       margin-top: 12px;
       display:flex;
@@ -136,12 +147,23 @@
       accent-color: var(--g1);
       cursor:pointer;
     }
-    .rememberRow label{ cursor:pointer; }
-
-    #passwordError { color:#c91818; font-weight:900; margin-top:10px; display:none; }
-    #lockInfo { color:#6a7e86; font-size: 13px; margin-top: 10px; }
-
-    /* MENU SCELTA */
+    .rememberRow label{
+      cursor:pointer;
+    }
+    #passwordError {
+      color:#c91818;
+      font-weight:900;
+      margin-top:10px;
+      display:none;
+    }
+    #lockInfo {
+      color:#6a7e86;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    /* =========================
+       MENU
+       ========================= */
     .wrap{
       padding: 26px 14px 28px 14px;
       max-width: 720px;
@@ -154,10 +176,14 @@
       background:#fff;
       padding: 12px 10px;
       box-shadow: 0 12px 40px rgba(0,0,0,.07);
-      display:flex; align-items:center; justify-content:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
-    .topLogo img{ width: 110px; height:auto; }
-
+    .topLogo img{
+      width: 110px;
+      height:auto;
+    }
     .title{
       margin: 14px 0 8px 0;
       font-size: 26px;
@@ -171,7 +197,6 @@
       font-size: 14px;
       line-height: 1.35;
     }
-
     .grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -192,21 +217,27 @@
       overflow:hidden;
       min-height: 152px;
     }
-    .cardBtn:active{ transform: scale(.99); }
+    .cardBtn:active{
+      transform: scale(.99);
+    }
     .cardBtn:before{
       content:"";
       position:absolute;
       inset:-40px -60px auto -60px;
       height:120px;
-      background: radial-gradient(circle at 30% 50%, rgba(37,211,102,.20), transparent 60%),
-                  radial-gradient(circle at 70% 50%, rgba(30,190,165,.16), transparent 60%);
+      background:
+        radial-gradient(circle at 30% 50%, rgba(37,211,102,.20), transparent 60%),
+        radial-gradient(circle at 70% 50%, rgba(30,190,165,.16), transparent 60%);
       filter: blur(2px);
       pointer-events:none;
     }
     .cardIco{
-      width: 46px; height:46px;
+      width: 46px;
+      height:46px;
       border-radius: 14px;
-      display:flex; align-items:center; justify-content:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       color:#fff;
       font-size: 20px;
       font-weight:900;
@@ -214,21 +245,30 @@
       position: relative;
       z-index: 1;
     }
-    .icoGreen{ background: linear-gradient(90deg,var(--g1),var(--g2)); }
-    .icoBlue{ background: linear-gradient(90deg,#25788f,#3e9ab0); }
+    .icoGreen{
+      background: linear-gradient(90deg,var(--g1),var(--g2));
+    }
+    .icoBlue{
+      background: linear-gradient(90deg,#25788f,#3e9ab0);
+    }
+    .icoRecycle{
+      background: linear-gradient(90deg,#159447,#28c76f);
+    }
     .cardTitle{
       margin: 12px 0 6px 0;
       font-size: 18px;
       font-weight: 1000;
       color: var(--txt);
-      position: relative; z-index: 1;
+      position: relative;
+      z-index: 1;
     }
     .cardDesc{
       margin: 0;
       font-size: 13px;
       color: var(--muted);
       line-height: 1.35;
-      position: relative; z-index: 1;
+      position: relative;
+      z-index: 1;
     }
     .miniRow{
       margin-top: 14px;
@@ -251,14 +291,16 @@
       color:#fff;
       background: linear-gradient(90deg,#111,#444);
     }
-
     @media(max-width:560px){
-      .grid{ grid-template-columns: 1fr; }
-      .cardBtn{ min-height: 132px; }
+      .grid{
+        grid-template-columns: 1fr;
+      }
+      .cardBtn{
+        min-height: 132px;
+      }
     }
-
     /* =========================
-       ✅ TRUSTPILOT SECTION
+       TRUSTPILOT
        ========================= */
     .trustWrap{
       margin-top: 18px;
@@ -352,7 +394,9 @@
       justify-content: center;
       box-sizing: border-box;
     }
-    .trustBtn:active{ transform: scale(.99); }
+    .trustBtn:active{
+      transform: scale(.99);
+    }
     .trustReview{
       margin-top: 12px;
       padding: 12px;
@@ -376,198 +420,363 @@
     }
   </style>
 </head>
-
 <body>
-
   <!-- PASSWORD -->
   <div id="passwordOverlay">
     <div id="passwordBox">
       <h2>Accesso riservato</h2>
-
       <div class="pwdRow">
-        <input type="password" id="passwordInput" placeholder="Inserisci password" autocomplete="off">
-        <button id="togglePwd" type="button" onclick="togglePassword()"><i class="fa fa-eye"></i></button>
+        <input
+          type="password"
+          id="passwordInput"
+          placeholder="Inserisci password"
+          autocomplete="off"
+        >
+        <button
+          id="togglePwd"
+          type="button"
+          onclick="togglePassword()"
+        >
+          <i class="fa fa-eye"></i>
+        </button>
       </div>
-
-      <button class="btnMain" type="button" onclick="checkPassword()">Entra</button>
-
-      <!-- ✅ Ricorda password -->
+      <button
+        class="btnMain"
+        type="button"
+        onclick="checkPassword()"
+      >
+        Entra
+      </button>
       <div class="rememberRow">
         <input type="checkbox" id="rememberMe">
         <label for="rememberMe">Ricorda password</label>
       </div>
-
-      <div id="passwordError">Password errata ⚠️</div>
+      <div id="passwordError">
+        Password errata ⚠️
+      </div>
       <div id="lockInfo"></div>
     </div>
   </div>
-
-  <!-- MENU SCELTA -->
+  <!-- MENU PRINCIPALE -->
   <div class="wrap" id="menu" style="display:none;">
     <div class="topLogo">
       <img src="IMG_3780.jpeg" alt="Vorwerk">
     </div>
-
-    <div class="title">Folletto Tool</div>
+    <div class="title">
+      Folletto Tool
+    </div>
     <div class="subtitle">
-      Scegli cosa aprire. <b>Serial Check</b> per i modelli, <b>Attività</b> per segnare campanelli/assenti e tenere tutto in agenda.
+      Scegli cosa aprire.
+      <b>Serial Check</b> per i modelli,
+      <b>Permuta disponibile</b> per la presentazione VK7
+      e <b>Rottamazione</b> per il nuovo servizio dedicato.
     </div>
-
     <div class="grid">
-      <button class="cardBtn" type="button" onclick="goSerial()">
-        <div class="cardIco icoGreen"><i class="fa fa-qrcode"></i></div>
-        <div class="cardTitle">Serial Check</div>
-        <p class="cardDesc">  Registrazione serial number per rifornitura materiali di consumo.</p>
+      <!-- SERIAL CHECK -->
+      <button
+        class="cardBtn"
+        type="button"
+        onclick="goSerial()"
+      >
+        <div class="cardIco icoGreen">
+          <i class="fa fa-qrcode"></i>
+        </div>
+        <div class="cardTitle">
+          Serial Check
+        </div>
+        <p class="cardDesc">
+          Registrazione serial number per rifornitura materiali di consumo.
+        </p>
       </button>
-
-      <button class="cardBtn" type="button" onclick="goAttivita()">
-        <div class="cardIco icoBlue"><i class="fa fa-list-check"></i></div>
-        <div class="cardTitle">Permuta disponibile</div>
-        <p class="cardDesc">Presentazione sistema Vk7</p>
+      <!-- PERMUTA DISPONIBILE -->
+      <button
+        class="cardBtn"
+        type="button"
+        onclick="goAttivita()"
+      >
+        <div class="cardIco icoBlue">
+          <i class="fa fa-list-check"></i>
+        </div>
+        <div class="cardTitle">
+          Permuta disponibile
+        </div>
+        <p class="cardDesc">
+          Presentazione sistema VK7
+        </p>
+      </button>
+      <!-- ROTTAMAZIONE -->
+      <button
+        class="cardBtn"
+        type="button"
+        onclick="rottamazioneNonDisponibile()"
+      >
+        <div class="cardIco icoRecycle">
+          <i class="fa-solid fa-recycle"></i>
+        </div>
+        <div class="cardTitle">
+          Rottamazione
+        </div>
+        <p class="cardDesc">
+          Servizio rottamazione Folletto.
+        </p>
       </button>
     </div>
-
     <div class="miniRow">
-      <button class="miniBtn" type="button" onclick="goSerial()">Apri Serial Check</button>
-      <button class="miniBtn" type="button" onclick="goAttivita()">Apri Attività</button>
-      <button class="miniBtn miniBtnDanger" type="button" onclick="logout()">Disconnetti</button>
+      <button
+        class="miniBtn"
+        type="button"
+        onclick="goSerial()"
+      >
+        Apri Serial Check
+      </button>
+      <button
+        class="miniBtn"
+        type="button"
+        onclick="goAttivita()"
+      >
+        Apri Attività
+      </button>
+      <button
+        class="miniBtn miniBtnDanger"
+        type="button"
+        onclick="logout()"
+      >
+        Disconnetti
+      </button>
     </div>
-
-    <!-- ✅ TRUSTPILOT STYLE + LINK UFFICIALE -->
+    <!-- TRUSTPILOT -->
     <div class="trustWrap">
       <div class="trustTop">
-        <div class="trustTitle">⭐ Recensioni clienti</div>
-        <div class="trustBrand">Trustpilot</div>
+        <div class="trustTitle">
+          ⭐ Recensioni clienti
+        </div>
+        <div class="trustBrand">
+          Trustpilot
+        </div>
       </div>
-
       <div class="trustStars">
-        <div class="stars">★★★★★</div>
-        <div class="score">Ottimo • 4,8/5</div>
+        <div class="stars">
+          ★★★★★
+        </div>
+        <div class="score">
+          Ottimo • 4,8/5
+        </div>
       </div>
-
       <div class="trustSub">
-        Vedi tutte le recensioni ufficiali su Trustpilot (pagina Vorwerk Italia).
+        Vedi tutte le recensioni ufficiali su Trustpilot
+        (pagina Vorwerk Italia).
       </div>
-
-      <a class="trustBtn"
-         href="https://it.trustpilot.com/review/vorwerk.com/it/it"
-         target="_blank"
-         rel="noopener">
+      <a
+        class="trustBtn"
+        href="https://it.trustpilot.com/review/vorwerk.com/it/it"
+        target="_blank"
+        rel="noopener"
+      >
         <i class="fa-solid fa-arrow-up-right-from-square"></i>
         Apri recensioni su Trustpilot
       </a>
-
       <div class="trustReview">
-        <div class="trustReviewName">Parere cliente</div>
+        <div class="trustReviewName">
+          Parere cliente
+        </div>
         <p class="trustReviewText">
-          “Assistenza rapida e prodotto davvero efficace. La sanificazione si vede subito: casa e materassi
+          “Assistenza rapida e prodotto davvero efficace.
+          La sanificazione si vede subito: casa e materassi
           cambiano proprio.”
         </p>
       </div>
     </div>
-
   </div>
-
   <script>
     const ACCESS_PASSWORD = "1232";
-
-    // ✅ auth + remember
     const AUTH_KEY = "auth_ok";
     const REMEMBER_KEY = "folletto_remember";
-
-    /* ====== LOCK LOGIN ====== */
+    /* =========================
+       LOCK LOGIN
+       ========================= */
     const LOCK_KEY = "folletto_lock_until";
     const TRY_KEY  = "folletto_tries";
     const MAX_TRIES = 5;
     const LOCK_MS = 60 * 1000;
-
     function haptic(type = "light") {
-      try { if (navigator.vibrate) navigator.vibrate(type === "heavy" ? 40 : 18); } catch(e){}
+      try {
+        if (navigator.vibrate) {
+          navigator.vibrate(
+            type === "heavy" ? 40 : 18
+          );
+        }
+      } catch(e){}
     }
-
     function togglePassword(){
-      const inp = document.getElementById("passwordInput");
-      inp.type = (inp.type === "password") ? "text" : "password";
+      const inp =
+        document.getElementById("passwordInput");
+      inp.type =
+        (inp.type === "password")
+          ? "text"
+          : "password";
       haptic();
       inp.focus();
     }
-
     function isLocked(){
-      const until = parseInt(localStorage.getItem(LOCK_KEY) || "0");
+      const until =
+        parseInt(
+          localStorage.getItem(LOCK_KEY) || "0"
+        );
       const now = Date.now();
-      return now < until ? until : 0;
+      return now < until
+        ? until
+        : 0;
     }
-
     function renderLockInfo(){
-      const info = document.getElementById("lockInfo");
-      const until = isLocked();
-      if (!until) { info.textContent = ""; return; }
-      const sec = Math.ceil((until - Date.now())/1000);
-      info.textContent = `Troppi tentativi. Riprova tra ${sec}s`;
-      setTimeout(renderLockInfo, 350);
+      const info =
+        document.getElementById("lockInfo");
+      const until =
+        isLocked();
+      if (!until) {
+        info.textContent = "";
+        return;
+      }
+      const sec =
+        Math.ceil(
+          (until - Date.now()) / 1000
+        );
+      info.textContent =
+        `Troppi tentativi. Riprova tra ${sec}s`;
+      setTimeout(
+        renderLockInfo,
+        350
+      );
     }
-
     function showMenu(){
-      document.getElementById("passwordOverlay").style.display = "none";
-      document.getElementById("menu").style.display = "block";
+      document
+        .getElementById("passwordOverlay")
+        .style.display = "none";
+      document
+        .getElementById("menu")
+        .style.display = "block";
     }
-
     function checkPassword() {
-      const lockUntil = isLocked();
-      if (lockUntil) { haptic("heavy"); renderLockInfo(); return; }
-
-      const userInput = document.getElementById("passwordInput").value.trim();
+      const lockUntil =
+        isLocked();
+      if (lockUntil) {
+        haptic("heavy");
+        renderLockInfo();
+        return;
+      }
+      const userInput =
+        document
+          .getElementById("passwordInput")
+          .value
+          .trim();
       if (userInput === ACCESS_PASSWORD) {
-        localStorage.setItem(TRY_KEY, "0");
-
-        // ✅ SESSIONE OK
-        localStorage.setItem(AUTH_KEY, "1");
-
-        // ✅ Ricorda password (persistente)
-        const remember = document.getElementById("rememberMe").checked;
-        if (remember) localStorage.setItem(REMEMBER_KEY, "1");
-        else localStorage.removeItem(REMEMBER_KEY);
-
+        localStorage.setItem(
+          TRY_KEY,
+          "0"
+        );
+        localStorage.setItem(
+          AUTH_KEY,
+          "1"
+        );
+        const remember =
+          document
+            .getElementById("rememberMe")
+            .checked;
+        if (remember) {
+          localStorage.setItem(
+            REMEMBER_KEY,
+            "1"
+          );
+        } else {
+          localStorage.removeItem(
+            REMEMBER_KEY
+          );
+        }
         showMenu();
         haptic();
       } else {
-        const err = document.getElementById("passwordError");
-        err.style.display = "block";
+        const err =
+          document.getElementById(
+            "passwordError"
+          );
+        err.style.display =
+          "block";
         haptic("heavy");
-
-        let tries = parseInt(localStorage.getItem(TRY_KEY) || "0");
+        let tries =
+          parseInt(
+            localStorage.getItem(TRY_KEY) || "0"
+          );
         tries++;
-        localStorage.setItem(TRY_KEY, String(tries));
-
+        localStorage.setItem(
+          TRY_KEY,
+          String(tries)
+        );
         if (tries >= MAX_TRIES) {
-          localStorage.setItem(LOCK_KEY, String(Date.now() + LOCK_MS));
+          localStorage.setItem(
+            LOCK_KEY,
+            String(
+              Date.now() + LOCK_MS
+            )
+          );
           renderLockInfo();
         }
-
-        setTimeout(() => { err.style.display = "none"; }, 2000);
+        setTimeout(() => {
+          err.style.display =
+            "none";
+        }, 2000);
       }
     }
-
-    function goSerial(){ window.location.href = "./serial.html?v=4"; }
-    function goAttivita(){ window.location.href = "./attivita.html?v=4"; }
-
+    /* =========================
+       PAGINE
+       ========================= */
+    function goSerial(){
+      window.location.href =
+        "./serial.html?v=4";
+    }
+    function goAttivita(){
+      window.location.href =
+        "./attivita.html?v=4";
+    }
+    /* Per ora non apre nulla */
+    function rottamazioneNonDisponibile(){
+      haptic();
+    }
     function logout(){
-      localStorage.removeItem(AUTH_KEY);
-      localStorage.removeItem(REMEMBER_KEY);
-      window.location.href = "./index.html?v=4";
+      localStorage.removeItem(
+        AUTH_KEY
+      );
+      localStorage.removeItem(
+        REMEMBER_KEY
+      );
+      window.location.href =
+        "./index.html?v=4";
     }
-
-    // Enter per login + auto-login se "ricorda password"
-    document.addEventListener("DOMContentLoaded", () => {
-      const pwd = document.getElementById("passwordInput");
-      pwd.addEventListener("keydown", (e) => { if (e.key === "Enter") checkPassword(); });
-      renderLockInfo();
-
-      // ✅ se ricordato: salta login e vai al menu
-      if (localStorage.getItem(AUTH_KEY) === "1" && localStorage.getItem(REMEMBER_KEY) === "1") {
-        showMenu();
+    /* =========================
+       AVVIO
+       ========================= */
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        const pwd =
+          document.getElementById(
+            "passwordInput"
+          );
+        pwd.addEventListener(
+          "keydown",
+          (e) => {
+            if (e.key === "Enter") {
+              checkPassword();
+            }
+          }
+        );
+        renderLockInfo();
+        if (
+          localStorage.getItem(AUTH_KEY) === "1" &&
+          localStorage.getItem(REMEMBER_KEY) === "1"
+        ) {
+          showMenu();
+        }
       }
-    });
+    );
   </script>
 </body>
 </html>
