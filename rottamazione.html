@@ -12,9 +12,9 @@
   content="width=device-width, initial-scale=1.0"
 >
 
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <link
   rel="stylesheet"
@@ -40,7 +40,11 @@
 body{
   margin:0;
   min-height:100vh;
-  font-family:'Segoe UI',Arial,sans-serif;
+
+  font-family:
+  'Segoe UI',
+  Arial,
+  sans-serif;
 
   background:
   linear-gradient(
@@ -90,6 +94,7 @@ body{
   color:var(--blue);
 
   font-size:18px;
+
   cursor:pointer;
 }
 
@@ -110,7 +115,7 @@ body{
 
 
 /* =========================
-   CONTENUTO
+   PAGINA
    ========================= */
 
 .wrap{
@@ -121,7 +126,7 @@ body{
 
 
 /* =========================
-   TESTATA VERDE
+   TESTATA
    ========================= */
 
 .hero{
@@ -130,7 +135,6 @@ body{
   border-radius:22px;
 
   color:#fff;
-  text-align:left;
 
   background:
   linear-gradient(
@@ -148,13 +152,18 @@ body{
 
 .hero h1{
   margin:0 0 7px;
+
   font-size:27px;
+  font-weight:900;
 }
 
 .hero p{
   margin:0;
+
   line-height:1.4;
+
   font-size:14px;
+
   opacity:.94;
 }
 
@@ -194,6 +203,7 @@ body{
   font-size:16px;
 
   color:var(--txt);
+
   background:transparent;
 }
 
@@ -218,9 +228,11 @@ body{
 
 .modelCard{
   position:relative;
+
   overflow:hidden;
 
   border:0;
+
   padding:0;
 
   background:#fff;
@@ -232,11 +244,12 @@ body{
   rgba(0,0,0,.08);
 
   cursor:pointer;
+
   text-align:left;
 
   transition:
-  transform .1s ease,
-  box-shadow .1s ease;
+  transform .12s ease,
+  box-shadow .12s ease;
 }
 
 .modelCard:active{
@@ -246,11 +259,11 @@ body{
 .modelCard.selected{
   outline:
   4px solid
-  rgba(37,211,102,.38);
+  rgba(37,211,102,.40);
 
   box-shadow:
   0 18px 50px
-  rgba(37,211,102,.18);
+  rgba(37,211,102,.20);
 }
 
 
@@ -259,14 +272,16 @@ body{
    ========================= */
 
 .photo{
-  height:235px;
+  height:250px;
 
-  background:#f6f8f8;
+  background:#fff;
 
   position:relative;
+
   overflow:hidden;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 }
@@ -277,14 +292,14 @@ body{
 
   object-fit:contain;
 
-  padding:10px;
+  padding:12px;
 
   display:block;
 }
 
 
 /* =========================
-   ROTTAMAZIONE
+   ETICHETTA ROTTAMAZIONE
    ========================= */
 
 .ribbon{
@@ -293,14 +308,15 @@ body{
   left:10px;
   top:10px;
 
-  z-index:4;
+  z-index:5;
 
   background:
-  rgba(215,38,56,.94);
+  rgba(215,38,56,.95);
 
   color:#fff;
 
   font-weight:900;
+
   font-size:12px;
 
   letter-spacing:.8px;
@@ -314,12 +330,18 @@ body{
   rgba(215,38,56,.22);
 }
 
+
+/* =========================
+   TESTO SCHEDA
+   ========================= */
+
 .cardBody{
   padding:13px 14px 15px;
 }
 
 .modelName{
-  font-size:19px;
+  font-size:21px;
+
   font-weight:900;
 
   margin:0 0 4px;
@@ -327,6 +349,7 @@ body{
 
 .modelDesc{
   font-size:12px;
+
   color:var(--muted);
 
   margin:0;
@@ -338,12 +361,15 @@ body{
   margin-top:11px;
 
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
 
   color:#138a4b;
 
   font-size:13px;
+
   font-weight:900;
 }
 
@@ -356,6 +382,7 @@ body{
   display:none;
 
   position:sticky;
+
   bottom:12px;
 
   margin-top:18px;
@@ -385,13 +412,16 @@ body{
 }
 
 .selectedModel{
-  font-size:21px;
+  font-size:22px;
+
   font-weight:900;
-  margin-top:2px;
+
+  margin-top:3px;
 }
 
 .actions{
   display:flex;
+
   gap:9px;
 
   margin-top:11px;
@@ -401,11 +431,13 @@ body{
   flex:1;
 
   border:0;
+
   border-radius:12px;
 
-  padding:12px 9px;
+  padding:13px 9px;
 
   font-weight:900;
+
   cursor:pointer;
 
   font-size:14px;
@@ -424,6 +456,7 @@ body{
 
 .actionLight{
   background:#fff;
+
   color:#102a33;
 }
 
@@ -434,16 +467,20 @@ body{
 
 .confirmOverlay{
   position:fixed;
+
   inset:0;
 
   background:
-  rgba(5,20,25,.72);
+  rgba(5,20,25,.76);
 
-  backdrop-filter:blur(7px);
-  -webkit-backdrop-filter:blur(7px);
+  backdrop-filter:blur(8px);
+
+  -webkit-backdrop-filter:blur(8px);
 
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
   padding:24px;
@@ -451,6 +488,7 @@ body{
   z-index:9999;
 
   opacity:0;
+
   visibility:hidden;
 
   transition:
@@ -464,26 +502,27 @@ body{
 }
 
 .confirmBox{
-  width:min(420px,100%);
+  width:min(430px,100%);
 
   background:#fff;
 
-  border-radius:28px;
+  border-radius:30px;
 
-  padding:34px 24px 28px;
+  padding:
+  36px 24px 30px;
 
   text-align:center;
 
   box-shadow:
   0 30px 90px
-  rgba(0,0,0,.35);
+  rgba(0,0,0,.38);
 
   transform:
   scale(.82)
-  translateY(20px);
+  translateY(25px);
 
   transition:
-  transform .32s
+  transform .34s
   cubic-bezier(.2,.9,.3,1.2);
 }
 
@@ -494,15 +533,19 @@ body{
 }
 
 .confirmIcon{
-  width:86px;
-  height:86px;
+  width:92px;
 
-  margin:0 auto 20px;
+  height:92px;
+
+  margin:
+  0 auto 21px;
 
   border-radius:50%;
 
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
   background:
@@ -514,7 +557,7 @@ body{
 
   color:#fff;
 
-  font-size:42px;
+  font-size:45px;
 
   box-shadow:
   0 14px 35px
@@ -522,7 +565,8 @@ body{
 }
 
 .confirmTitle{
-  font-size:24px;
+  font-size:25px;
+
   line-height:1.15;
 
   font-weight:900;
@@ -535,9 +579,9 @@ body{
 }
 
 .confirmModel{
-  margin-top:14px;
+  margin-top:15px;
 
-  font-size:20px;
+  font-size:23px;
 
   font-weight:900;
 
@@ -545,13 +589,13 @@ body{
 }
 
 .confirmText{
-  margin-top:8px;
+  margin-top:9px;
 
   font-size:14px;
 
   color:#6a7e86;
 
-  line-height:1.4;
+  line-height:1.45;
 }
 
 .confirmStatus{
@@ -561,9 +605,9 @@ body{
 
   gap:7px;
 
-  margin-top:20px;
+  margin-top:21px;
 
-  padding:8px 14px;
+  padding:9px 15px;
 
   border-radius:999px;
 
@@ -575,7 +619,7 @@ body{
 
   font-weight:900;
 
-  letter-spacing:.3px;
+  letter-spacing:.4px;
 }
 
 
@@ -590,7 +634,7 @@ body{
   }
 
   .photo{
-    height:270px;
+    height:290px;
   }
 
   .confirmTitle{
@@ -616,7 +660,6 @@ body{
   <button
     class="back"
     onclick="goHome()"
-    aria-label="Indietro"
   >
 
     <i class="fa-solid fa-chevron-left"></i>
@@ -658,8 +701,9 @@ body{
   </h1>
 
   <p>
-    Individua il modello che ha il cliente
-    e tocca la relativa scheda.
+    Individua il Folletto del cliente,
+    seleziona il modello corretto
+    e inserisci la scontistica rottamazione.
   </p>
 
 </section>
@@ -677,7 +721,7 @@ body{
   <input
     id="modelSearch"
     type="search"
-    placeholder="Cerca modello, es. VK150"
+    placeholder="Cerca modello, es. VK135"
     autocomplete="off"
   >
 
@@ -689,13 +733,12 @@ body{
      MODELLI
      ========================= -->
 
-<div
-  class="grid"
-  id="modelGrid"
->
+<div class="grid" id="modelGrid">
 
 
-<!-- VK7 -->
+<!-- =========================
+     VK7 / VK7S
+     ========================= -->
 
 <button
   class="modelCard"
@@ -716,6 +759,7 @@ body{
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
@@ -723,12 +767,12 @@ body{
     </div>
 
     <p class="modelDesc">
-      Generazione senza filo
+      Folletto senza filo
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -740,7 +784,9 @@ body{
 
 
 
-<!-- VK220S -->
+<!-- =========================
+     VK220S
+     ========================= -->
 
 <button
   class="modelCard"
@@ -761,6 +807,7 @@ body{
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
@@ -768,12 +815,12 @@ body{
     </div>
 
     <p class="modelDesc">
-      Serie VK220S
+      Folletto VK220S
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -785,7 +832,9 @@ body{
 
 
 
-<!-- VK200 -->
+<!-- =========================
+     VK200
+     ========================= -->
 
 <button
   class="modelCard"
@@ -806,6 +855,7 @@ body{
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
@@ -813,12 +863,12 @@ body{
     </div>
 
     <p class="modelDesc">
-      Serie VK200
+      Folletto VK200
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -830,7 +880,9 @@ body{
 
 
 
-<!-- VK150 -->
+<!-- =========================
+     VK150
+     ========================= -->
 
 <button
   class="modelCard"
@@ -851,6 +903,7 @@ body{
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
@@ -858,12 +911,12 @@ body{
     </div>
 
     <p class="modelDesc">
-      Serie VK150
+      Folletto VK150
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -875,7 +928,9 @@ body{
 
 
 
-<!-- VK140 -->
+<!-- =========================
+     VK140
+     ========================= -->
 
 <button
   class="modelCard"
@@ -896,6 +951,7 @@ body{
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
@@ -903,12 +959,12 @@ body{
     </div>
 
     <p class="modelDesc">
-      Serie VK140
+      Folletto VK140
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -920,12 +976,14 @@ body{
 
 
 
-<!-- VK135 / VK136 -->
+<!-- =========================
+     VK136
+     ========================= -->
 
 <button
   class="modelCard"
-  data-model="VK135 / VK136"
-  data-search="vk135 vk136 135 136"
+  data-model="VK136"
+  data-search="vk136 136"
 >
 
   <div class="photo">
@@ -935,25 +993,26 @@ body{
     </span>
 
     <img
-      src="https://i.ebayimg.com/images/g/6DYAAOSwlThdAAkt/s-l1200.jpg"
-      alt="Folletto VK135 VK136"
+      src="https://i.ebayimg.com/images/g/HUAAAOSwGHFhVMir/s-l1200.jpg"
+      alt="Folletto VK136"
     >
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
-      VK135 / VK136
+      VK136
     </div>
 
     <p class="modelDesc">
-      Serie VK135 e VK136
+      Folletto VK136
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -965,12 +1024,14 @@ body{
 
 
 
-<!-- VK130 / VK131 -->
+<!-- =========================
+     VK135
+     ========================= -->
 
 <button
   class="modelCard"
-  data-model="VK130 / VK131"
-  data-search="vk130 vk131 130 131"
+  data-model="VK135"
+  data-search="vk135 135"
 >
 
   <div class="photo">
@@ -980,25 +1041,26 @@ body{
     </span>
 
     <img
-      src="https://i.ebayimg.com/images/g/6DYAAOSwlThdAAkt/s-l1200.jpg"
-      alt="Folletto VK130 VK131"
+      src="https://www.mclgroupricambi.it/wp-content/uploads/2023/03/vk-135-rigenerato.jpg"
+      alt="Folletto VK135"
     >
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
-      VK130 / VK131
+      VK135
     </div>
 
     <p class="modelDesc">
-      Serie VK130 e VK131
+      Folletto VK135
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -1010,12 +1072,14 @@ body{
 
 
 
-<!-- VK120 / VK121 / VK122 -->
+<!-- =========================
+     VK131
+     ========================= -->
 
 <button
   class="modelCard"
-  data-model="VK120 / VK121 / VK122"
-  data-search="vk120 vk121 vk122 120 121 122"
+  data-model="VK131"
+  data-search="vk131 131"
 >
 
   <div class="photo">
@@ -1025,25 +1089,218 @@ body{
     </span>
 
     <img
-      src="https://i.ebayimg.com/images/g/6DYAAOSwlThdAAkt/s-l1200.jpg"
-      alt="Folletto VK120 VK121 VK122"
+      src="https://accessorifolletto.com/cdn/shop/collections/VK130.jpg?v=1714654019"
+      alt="Folletto VK131"
     >
 
   </div>
 
+
   <div class="cardBody">
 
     <div class="modelName">
-      VK120 / VK121 / VK122
+      VK131
     </div>
 
     <p class="modelDesc">
-      Generazioni precedenti
+      Folletto VK131
     </p>
 
     <div class="selectLine">
 
-      <span>Seleziona</span>
+      <span>Seleziona modello</span>
+
+      <i class="fa-solid fa-chevron-right"></i>
+
+    </div>
+
+  </div>
+
+</button>
+
+
+
+<!-- =========================
+     VK130
+     ========================= -->
+
+<button
+  class="modelCard"
+  data-model="VK130"
+  data-search="vk130 130"
+>
+
+  <div class="photo">
+
+    <span class="ribbon">
+      ROTTAMAZIONE
+    </span>
+
+    <img
+      src="https://italricambi.org/wp-content/uploads/2020/01/Folletto-vk130.jpg"
+      alt="Folletto VK130"
+    >
+
+  </div>
+
+
+  <div class="cardBody">
+
+    <div class="modelName">
+      VK130
+    </div>
+
+    <p class="modelDesc">
+      Folletto VK130
+    </p>
+
+    <div class="selectLine">
+
+      <span>Seleziona modello</span>
+
+      <i class="fa-solid fa-chevron-right"></i>
+
+    </div>
+
+  </div>
+
+</button>
+
+
+
+<!-- =========================
+     VK122
+     ========================= -->
+
+<button
+  class="modelCard"
+  data-model="VK122"
+  data-search="vk122 122"
+>
+
+  <div class="photo">
+
+    <span class="ribbon">
+      ROTTAMAZIONE
+    </span>
+
+    <img
+      src="https://www.vorwerk.com/language-master/en/c/dam-home/service/manual_faq/vk-upright-vacuum-cleaner/kobold_vk122_manual_faq.jpg.imgRendition/original/lg.jpg"
+      alt="Folletto VK122"
+    >
+
+  </div>
+
+
+  <div class="cardBody">
+
+    <div class="modelName">
+      VK122
+    </div>
+
+    <p class="modelDesc">
+      Folletto VK122
+    </p>
+
+    <div class="selectLine">
+
+      <span>Seleziona modello</span>
+
+      <i class="fa-solid fa-chevron-right"></i>
+
+    </div>
+
+  </div>
+
+</button>
+
+
+
+<!-- =========================
+     VK121
+     ========================= -->
+
+<button
+  class="modelCard"
+  data-model="VK121"
+  data-search="vk121 121"
+>
+
+  <div class="photo">
+
+    <span class="ribbon">
+      ROTTAMAZIONE
+    </span>
+
+    <img
+      src="https://cipensamanolo.it/cdn/shop/files/PhotoRoom-20240107-190419.png?v=1704650684&width=1946"
+      alt="Folletto VK121"
+    >
+
+  </div>
+
+
+  <div class="cardBody">
+
+    <div class="modelName">
+      VK121
+    </div>
+
+    <p class="modelDesc">
+      Folletto VK121
+    </p>
+
+    <div class="selectLine">
+
+      <span>Seleziona modello</span>
+
+      <i class="fa-solid fa-chevron-right"></i>
+
+    </div>
+
+  </div>
+
+</button>
+
+
+
+<!-- =========================
+     VK120
+     ========================= -->
+
+<button
+  class="modelCard"
+  data-model="VK120"
+  data-search="vk120 120"
+>
+
+  <div class="photo">
+
+    <span class="ribbon">
+      ROTTAMAZIONE
+    </span>
+
+    <img
+      src="https://www.ricambipiacentini.it/pub/media/catalog/category/VK120_1.jpg"
+      alt="Folletto VK120"
+    >
+
+  </div>
+
+
+  <div class="cardBody">
+
+    <div class="modelName">
+      VK120
+    </div>
+
+    <p class="modelDesc">
+      Folletto VK120
+    </p>
+
+    <div class="selectLine">
+
+      <span>Seleziona modello</span>
 
       <i class="fa-solid fa-chevron-right"></i>
 
@@ -1059,7 +1316,7 @@ body{
 
 
 <!-- =========================
-     MODELLO SELEZIONATO
+     PANNELLO MODELLO SCELTO
      ========================= -->
 
 <div
@@ -1068,9 +1325,7 @@ body{
 >
 
   <div class="selectedLabel">
-
     MODELLO SELEZIONATO PER ROTTAMAZIONE
-
   </div>
 
 
@@ -1078,9 +1333,7 @@ body{
     class="selectedModel"
     id="selectedModel"
   >
-
     —
-
   </div>
 
 
@@ -1117,7 +1370,7 @@ body{
 
 
 <!-- =========================
-     CONFERMA GRANDE
+     CONFERMA PROFESSIONALE
      ========================= -->
 
 <div
@@ -1154,7 +1407,7 @@ body{
 
     <div class="confirmText">
 
-      Il modello è stato selezionato correttamente
+      Il modello è stato acquisito correttamente
       per la procedura di rottamazione.
 
     </div>
@@ -1212,9 +1465,7 @@ function haptic(
 
   try{
 
-    if(
-      navigator.vibrate
-    ){
+    if(navigator.vibrate){
 
       navigator.vibrate(
         type === "heavy"
@@ -1230,7 +1481,7 @@ function haptic(
 
 
 /* =========================
-   TORNA ALLA HOME
+   HOME
    ========================= */
 
 function goHome(){
@@ -1242,7 +1493,7 @@ function goHome(){
 
 
 /* =========================
-   SELEZIONE MODELLO
+   SELEZIONA MODELLO
    ========================= */
 
 function selectModel(card){
@@ -1297,7 +1548,7 @@ function selectModel(card){
 
 
 /* =========================
-   ANNULLA
+   ANNULLA SELEZIONE
    ========================= */
 
 function clearSelection(){
@@ -1338,14 +1589,12 @@ function clearSelection(){
 
 
 /* =========================
-   CONFERMA ROTTAMAZIONE
+   INSERISCI ROTTAMAZIONE
    ========================= */
 
 function confirmSelection(){
 
-  if(
-    !selectedModel
-  ){
+  if(!selectedModel){
 
     return;
 
@@ -1378,9 +1627,7 @@ function confirmSelection(){
   );
 
 
-  haptic(
-    "heavy"
-  );
+  haptic("heavy");
 
 
   setTimeout(
@@ -1400,7 +1647,7 @@ function confirmSelection(){
 
 
 /* =========================
-   CLICK MODELLI
+   CLICK SCHEDE
    ========================= */
 
 document
@@ -1412,8 +1659,13 @@ document
 
     card.addEventListener(
       "click",
-      () =>
-      selectModel(card)
+
+      () => {
+
+        selectModel(card);
+
+      }
+
     );
 
   }
@@ -1421,7 +1673,7 @@ document
 
 
 /* =========================
-   RICERCA MODELLO
+   RICERCA
    ========================= */
 
 document
@@ -1470,7 +1722,7 @@ document
 
 
 /* =========================
-   RIPRISTINA SELEZIONE
+   RIPRISTINA MODELLO
    ========================= */
 
 const previous =
