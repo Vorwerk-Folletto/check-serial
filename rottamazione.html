@@ -12,14 +12,26 @@
   content="width=device-width, initial-scale=1.0"
 >
 
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+<meta
+  http-equiv="Cache-Control"
+  content="no-cache, no-store, must-revalidate"
+>
+
+<meta
+  http-equiv="Pragma"
+  content="no-cache"
+>
+
+<meta
+  http-equiv="Expires"
+  content="0"
+>
 
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 >
+
 
 <style>
 
@@ -32,29 +44,35 @@
   --red:#d72638;
 }
 
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
+
 body{
+
   margin:0;
+
   min-height:100vh;
 
   font-family:
-  'Segoe UI',
-  Arial,
-  sans-serif;
+    'Segoe UI',
+    Arial,
+    sans-serif;
 
   background:
-  linear-gradient(
-    135deg,
-    #eef7f9,
-    #e2e8ec
-  );
+    linear-gradient(
+      135deg,
+      #eef7f9,
+      #e2e8ec
+    );
 
   color:var(--txt);
+
 }
+
 
 
 /* =========================
@@ -62,74 +80,111 @@ body{
    ========================= */
 
 .topbar{
+
   position:sticky;
+
   top:0;
+
   z-index:100;
 
   display:flex;
+
   align-items:center;
+
   gap:12px;
 
   padding:14px;
 
   background:
-  rgba(255,255,255,.94);
+    rgba(255,255,255,.94);
 
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:
+    blur(14px);
+
+  -webkit-backdrop-filter:
+    blur(14px);
 
   box-shadow:
-  0 5px 25px
-  rgba(0,0,0,.07);
+    0 5px 25px
+    rgba(0,0,0,.07);
+
 }
 
+
 .back{
+
   width:44px;
+
   height:44px;
 
   border:0;
+
   border-radius:13px;
 
   background:#eef5f7;
+
   color:var(--blue);
 
   font-size:18px;
 
   cursor:pointer;
+
 }
+
 
 .topText{
+
   text-align:left;
+
 }
+
 
 .topTitle{
+
   font-weight:900;
+
   font-size:19px;
+
 }
 
+
 .topSub{
+
   font-size:12px;
+
   color:var(--muted);
+
   margin-top:2px;
+
 }
+
 
 
 /* =========================
-   PAGINA
+   CONTENUTO
    ========================= */
 
 .wrap{
+
   width:min(920px,100%);
+
   margin:0 auto;
-  padding:20px 14px 36px;
+
+  padding:
+    20px
+    14px
+    36px;
+
 }
 
 
+
 /* =========================
-   TESTATA
+   HERO
    ========================= */
 
 .hero{
+
   padding:22px;
 
   border-radius:22px;
@@ -137,27 +192,37 @@ body{
   color:#fff;
 
   background:
-  linear-gradient(
-    120deg,
-    #119447,
-    #25b864
-  );
+    linear-gradient(
+      120deg,
+      #119447,
+      #25b864
+    );
 
   box-shadow:
-  0 18px 50px
-  rgba(17,148,71,.20);
+    0 18px 50px
+    rgba(17,148,71,.20);
 
   margin-bottom:18px;
+
 }
+
 
 .hero h1{
-  margin:0 0 7px;
+
+  margin:
+    0
+    0
+    7px;
 
   font-size:27px;
+
   font-weight:900;
+
 }
 
+
 .hero p{
+
   margin:0;
 
   line-height:1.4;
@@ -165,7 +230,9 @@ body{
   font-size:14px;
 
   opacity:.94;
+
 }
+
 
 
 /* =========================
@@ -173,29 +240,41 @@ body{
    ========================= */
 
 .searchBox{
+
   display:flex;
+
   align-items:center;
+
   gap:10px;
 
   background:#fff;
 
   border-radius:15px;
 
-  padding:11px 14px;
+  padding:
+    11px
+    14px;
 
   box-shadow:
-  0 10px 30px
-  rgba(0,0,0,.06);
+    0 10px 30px
+    rgba(0,0,0,.06);
 
   margin-bottom:17px;
+
 }
+
 
 .searchBox i{
+
   color:var(--blue);
+
 }
 
+
 .searchBox input{
+
   border:0;
+
   outline:0;
 
   width:100%;
@@ -205,7 +284,9 @@ body{
   color:var(--txt);
 
   background:transparent;
+
 }
+
 
 
 /* =========================
@@ -213,13 +294,19 @@ body{
    ========================= */
 
 .grid{
+
   display:grid;
 
   grid-template-columns:
-  repeat(2,minmax(0,1fr));
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
 
   gap:14px;
+
 }
+
 
 
 /* =========================
@@ -227,6 +314,7 @@ body{
    ========================= */
 
 .modelCard{
+
   position:relative;
 
   overflow:hidden;
@@ -240,31 +328,40 @@ body{
   border-radius:20px;
 
   box-shadow:
-  0 16px 45px
-  rgba(0,0,0,.08);
+    0 16px 45px
+    rgba(0,0,0,.08);
 
   cursor:pointer;
 
   text-align:left;
 
   transition:
-  transform .12s ease,
-  box-shadow .12s ease;
+    transform .12s ease,
+    box-shadow .12s ease;
+
 }
+
 
 .modelCard:active{
-  transform:scale(.985);
+
+  transform:
+    scale(.985);
+
 }
+
 
 .modelCard.selected{
+
   outline:
-  4px solid
-  rgba(37,211,102,.40);
+    4px solid
+    rgba(37,211,102,.40);
 
   box-shadow:
-  0 18px 50px
-  rgba(37,211,102,.20);
+    0 18px 50px
+    rgba(37,211,102,.20);
+
 }
+
 
 
 /* =========================
@@ -272,6 +369,7 @@ body{
    ========================= */
 
 .photo{
+
   height:250px;
 
   background:#fff;
@@ -283,11 +381,16 @@ body{
   display:flex;
 
   align-items:center;
+
   justify-content:center;
+
 }
 
+
 .photo img{
+
   width:100%;
+
   height:100%;
 
   object-fit:contain;
@@ -295,23 +398,27 @@ body{
   padding:12px;
 
   display:block;
+
 }
 
 
+
 /* =========================
-   ETICHETTA ROTTAMAZIONE
+   RIBBON
    ========================= */
 
 .ribbon{
+
   position:absolute;
 
   left:10px;
+
   top:10px;
 
   z-index:5;
 
   background:
-  rgba(215,38,56,.95);
+    rgba(215,38,56,.95);
 
   color:#fff;
 
@@ -321,33 +428,50 @@ body{
 
   letter-spacing:.8px;
 
-  padding:8px 11px;
+  padding:
+    8px
+    11px;
 
   border-radius:999px;
 
   box-shadow:
-  0 7px 22px
-  rgba(215,38,56,.22);
+    0 7px 22px
+    rgba(215,38,56,.22);
+
 }
+
 
 
 /* =========================
-   TESTO SCHEDA
+   CONTENUTO CARD
    ========================= */
 
 .cardBody{
-  padding:13px 14px 15px;
+
+  padding:
+    13px
+    14px
+    15px;
+
 }
 
+
 .modelName{
+
   font-size:21px;
 
   font-weight:900;
 
-  margin:0 0 4px;
+  margin:
+    0
+    0
+    4px;
+
 }
 
+
 .modelDesc{
+
   font-size:12px;
 
   color:var(--muted);
@@ -355,30 +479,37 @@ body{
   margin:0;
 
   line-height:1.35;
+
 }
 
+
 .selectLine{
+
   margin-top:11px;
 
   display:flex;
 
   align-items:center;
 
-  justify-content:space-between;
+  justify-content:
+    space-between;
 
   color:#138a4b;
 
   font-size:13px;
 
   font-weight:900;
+
 }
 
 
+
 /* =========================
-   MODELLO SELEZIONATO
+   PANNELLO SELEZIONE
    ========================= */
 
 .selectedPanel{
+
   display:none;
 
   position:sticky;
@@ -396,86 +527,115 @@ body{
   color:#fff;
 
   box-shadow:
-  0 18px 55px
-  rgba(0,0,0,.24);
+    0 18px 55px
+    rgba(0,0,0,.24);
 
   z-index:80;
+
 }
+
 
 .selectedPanel.show{
+
   display:block;
+
 }
+
 
 .selectedLabel{
+
   font-size:12px;
+
   opacity:.72;
+
 }
 
+
 .selectedModel{
+
   font-size:22px;
 
   font-weight:900;
 
   margin-top:3px;
+
 }
 
+
 .actions{
+
   display:flex;
 
   gap:9px;
 
   margin-top:11px;
+
 }
 
+
 .actionBtn{
+
   flex:1;
 
   border:0;
 
   border-radius:12px;
 
-  padding:13px 9px;
+  padding:
+    13px
+    9px;
 
   font-weight:900;
 
   cursor:pointer;
 
   font-size:14px;
+
 }
+
 
 .actionPrimary{
+
   background:
-  linear-gradient(
-    90deg,
-    var(--green),
-    var(--green2)
-  );
+    linear-gradient(
+      90deg,
+      var(--green),
+      var(--green2)
+    );
 
   color:#fff;
+
 }
 
+
 .actionLight{
+
   background:#fff;
 
   color:#102a33;
+
 }
 
 
+
 /* =========================
-   CONFERMA GRANDE
+   CONFERMA PREMIUM
    ========================= */
 
 .confirmOverlay{
+
   position:fixed;
 
   inset:0;
 
   background:
-  rgba(5,20,25,.76);
+    rgba(5,20,25,.80);
 
-  backdrop-filter:blur(8px);
+  backdrop-filter:
+    blur(10px);
 
-  -webkit-backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:
+    blur(10px);
 
   display:flex;
 
@@ -483,7 +643,7 @@ body{
 
   justify-content:center;
 
-  padding:24px;
+  padding:22px;
 
   z-index:9999;
 
@@ -492,53 +652,139 @@ body{
   visibility:hidden;
 
   transition:
-  opacity .25s ease,
-  visibility .25s ease;
+    opacity .28s ease,
+    visibility .28s ease;
+
 }
+
 
 .confirmOverlay.show{
+
   opacity:1;
+
   visibility:visible;
+
 }
 
+
 .confirmBox{
-  width:min(430px,100%);
+
+  position:relative;
+
+  width:
+    min(
+      430px,
+      100%
+    );
 
   background:#fff;
 
   border-radius:30px;
 
   padding:
-  36px 24px 30px;
+    42px
+    25px
+    31px;
 
   text-align:center;
 
   box-shadow:
-  0 30px 90px
-  rgba(0,0,0,.38);
+    0 35px 100px
+    rgba(0,0,0,.42);
 
   transform:
-  scale(.82)
-  translateY(25px);
+    scale(.78)
+    translateY(30px);
+
+  opacity:0;
 
   transition:
-  transform .34s
-  cubic-bezier(.2,.9,.3,1.2);
+    transform .45s
+    cubic-bezier(.16,1,.3,1),
+    opacity .3s ease;
+
 }
 
-.confirmOverlay.show .confirmBox{
+
+.confirmOverlay.show
+.confirmBox{
+
   transform:
-  scale(1)
-  translateY(0);
+    scale(1)
+    translateY(0);
+
+  opacity:1;
+
 }
+
+
+
+/* =========================
+   X CHIUSURA
+   ========================= */
+
+.confirmClose{
+
+  position:absolute;
+
+  right:16px;
+
+  top:16px;
+
+  width:42px;
+
+  height:42px;
+
+  border:0;
+
+  border-radius:50%;
+
+  background:#f0f4f5;
+
+  color:#536970;
+
+  font-size:18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  cursor:pointer;
+
+  transition:
+    transform .15s ease,
+    background .15s ease;
+
+}
+
+
+.confirmClose:active{
+
+  transform:
+    scale(.90);
+
+  background:#e1e8ea;
+
+}
+
+
+
+/* =========================
+   CERCHIO VERDE
+   ========================= */
 
 .confirmIcon{
-  width:92px;
 
-  height:92px;
+  width:100px;
+
+  height:100px;
 
   margin:
-  0 auto 21px;
+    5px
+    auto
+    23px;
 
   border-radius:50%;
 
@@ -549,25 +795,159 @@ body{
   justify-content:center;
 
   background:
-  linear-gradient(
-    135deg,
-    #25d366,
-    #159447
-  );
+    linear-gradient(
+      135deg,
+      #2cdb72,
+      #119447
+    );
 
   color:#fff;
 
-  font-size:45px;
+  font-size:48px;
 
   box-shadow:
-  0 14px 35px
-  rgba(37,211,102,.35);
+    0 15px 40px
+    rgba(37,211,102,.38);
+
+  transform:
+    scale(0);
+
+  opacity:0;
+
 }
 
+
+.confirmOverlay.show
+.confirmIcon{
+
+  animation:
+    successPop
+    .65s
+    .18s
+    cubic-bezier(.16,1,.3,1)
+    forwards;
+
+}
+
+
+@keyframes successPop{
+
+  0%{
+
+    transform:
+      scale(0);
+
+    opacity:0;
+
+  }
+
+
+  60%{
+
+    transform:
+      scale(1.12);
+
+    opacity:1;
+
+  }
+
+
+  80%{
+
+    transform:
+      scale(.96);
+
+  }
+
+
+  100%{
+
+    transform:
+      scale(1);
+
+    opacity:1;
+
+  }
+
+}
+
+
+
+/* =========================
+   SPUNTA
+   ========================= */
+
+.confirmIcon i{
+
+  transform:
+    scale(0)
+    rotate(-25deg);
+
+  opacity:0;
+
+}
+
+
+.confirmOverlay.show
+.confirmIcon i{
+
+  animation:
+    checkPop
+    .45s
+    .55s
+    cubic-bezier(.16,1,.3,1)
+    forwards;
+
+}
+
+
+@keyframes checkPop{
+
+  0%{
+
+    transform:
+      scale(0)
+      rotate(-25deg);
+
+    opacity:0;
+
+  }
+
+
+  70%{
+
+    transform:
+      scale(1.20)
+      rotate(5deg);
+
+    opacity:1;
+
+  }
+
+
+  100%{
+
+    transform:
+      scale(1)
+      rotate(0deg);
+
+    opacity:1;
+
+  }
+
+}
+
+
+
+/* =========================
+   TITOLO CONFERMA
+   ========================= */
+
 .confirmTitle{
+
   font-size:25px;
 
-  line-height:1.15;
+  line-height:1.16;
 
   font-weight:900;
 
@@ -576,38 +956,118 @@ body{
   text-transform:uppercase;
 
   letter-spacing:.3px;
+
+  opacity:0;
+
+  transform:
+    translateY(15px);
+
 }
 
-.confirmModel{
-  margin-top:15px;
 
-  font-size:23px;
+.confirmOverlay.show
+.confirmTitle{
+
+  animation:
+    textEnter
+    .45s
+    .55s
+    ease
+    forwards;
+
+}
+
+
+
+/* =========================
+   MODELLO CONFERMA
+   ========================= */
+
+.confirmModel{
+
+  margin-top:16px;
+
+  font-size:30px;
 
   font-weight:900;
 
   color:#159447;
+
+  opacity:0;
+
+  transform:
+    translateY(15px);
+
 }
 
+
+.confirmOverlay.show
+.confirmModel{
+
+  animation:
+    textEnter
+    .45s
+    .68s
+    ease
+    forwards;
+
+}
+
+
+
+/* =========================
+   TESTO CONFERMA
+   ========================= */
+
 .confirmText{
-  margin-top:9px;
+
+  margin-top:10px;
 
   font-size:14px;
 
   color:#6a7e86;
 
-  line-height:1.45;
+  line-height:1.5;
+
+  opacity:0;
+
+  transform:
+    translateY(15px);
+
 }
 
+
+.confirmOverlay.show
+.confirmText{
+
+  animation:
+    textEnter
+    .45s
+    .78s
+    ease
+    forwards;
+
+}
+
+
+
+/* =========================
+   STATO CONFERMA
+   ========================= */
+
 .confirmStatus{
+
   display:inline-flex;
 
   align-items:center;
 
   gap:7px;
 
-  margin-top:21px;
+  margin-top:22px;
 
-  padding:9px 15px;
+  padding:
+    10px
+    16px;
 
   border-radius:999px;
 
@@ -620,7 +1080,51 @@ body{
   font-weight:900;
 
   letter-spacing:.4px;
+
+  opacity:0;
+
+  transform:
+    translateY(15px);
+
 }
+
+
+.confirmOverlay.show
+.confirmStatus{
+
+  animation:
+    textEnter
+    .45s
+    .88s
+    ease
+    forwards;
+
+}
+
+
+@keyframes textEnter{
+
+  from{
+
+    opacity:0;
+
+    transform:
+      translateY(15px);
+
+  }
+
+
+  to{
+
+    opacity:1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
 
 
 /* =========================
@@ -630,15 +1134,31 @@ body{
 @media(max-width:620px){
 
   .grid{
-    grid-template-columns:1fr;
+
+    grid-template-columns:
+      1fr;
+
   }
+
 
   .photo{
+
     height:290px;
+
   }
 
+
   .confirmTitle{
+
     font-size:22px;
+
+  }
+
+
+  .confirmModel{
+
+    font-size:29px;
+
   }
 
 }
@@ -651,33 +1171,46 @@ body{
 <body>
 
 
+
 <!-- =========================
      BARRA SUPERIORE
      ========================= -->
 
 <div class="topbar">
 
+
   <button
     class="back"
     onclick="goHome()"
+    aria-label="Indietro"
   >
 
-    <i class="fa-solid fa-chevron-left"></i>
+    <i
+      class="fa-solid fa-chevron-left"
+    ></i>
 
   </button>
 
 
   <div class="topText">
 
+
     <div class="topTitle">
+
       Rottamazione
+
     </div>
+
 
     <div class="topSub">
+
       Seleziona il modello del cliente
+
     </div>
 
+
   </div>
+
 
 </div>
 
@@ -686,25 +1219,33 @@ body{
 <main class="wrap">
 
 
+
 <!-- =========================
      TESTATA
      ========================= -->
 
 <section class="hero">
 
+
   <h1>
 
-    <i class="fa-solid fa-recycle"></i>
+    <i
+      class="fa-solid fa-recycle"
+    ></i>
 
     Rottamazione Folletto
 
   </h1>
 
+
   <p>
+
     Individua il Folletto del cliente,
     seleziona il modello corretto
     e inserisci la scontistica rottamazione.
+
   </p>
+
 
 </section>
 
@@ -716,7 +1257,11 @@ body{
 
 <div class="searchBox">
 
-  <i class="fa-solid fa-magnifying-glass"></i>
+
+  <i
+    class="fa-solid fa-magnifying-glass"
+  ></i>
+
 
   <input
     id="modelSearch"
@@ -725,15 +1270,20 @@ body{
     autocomplete="off"
   >
 
+
 </div>
 
 
 
 <!-- =========================
-     MODELLI
+     GRIGLIA MODELLI
      ========================= -->
 
-<div class="grid" id="modelGrid">
+<div
+  class="grid"
+  id="modelGrid"
+>
+
 
 
 <!-- =========================
@@ -746,39 +1296,63 @@ body{
   data-search="vk7 vk7s"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://accessorifolletto.com/cdn/shop/collections/Folletto-VK7_1200x1200.jpg"
       alt="Folletto VK7"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK7 / VK7S
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto senza filo
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -794,39 +1368,63 @@ body{
   data-search="vk220 vk220s 220"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://www.giordanoshop.com/cdn/shop/files/189322-2_4c5e11f9-18f0-445c-93c9-cd7a8c15534e_600x.jpg?v=1744183311"
       alt="Folletto VK220S"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK220S
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK220S
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -842,39 +1440,63 @@ body{
   data-search="vk200 200"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://i.ebayimg.com/images/g/2vwAAOSwXnJkDzjy/s-l1600.jpg"
       alt="Folletto VK200"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK200
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK200
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -890,39 +1512,63 @@ body{
   data-search="vk150 150"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://btest.ru/images/Fotki/Pulesos/Vorwerk/Vorwerk_Kobold_VK150_Staubsauger.jpg"
       alt="Folletto VK150"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK150
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK150
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -938,39 +1584,63 @@ body{
   data-search="vk140 140"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://ddmricambi.it/cdn/shop/collections/FOLLETTO-VK-140.jpg?v=1703243820&width=900"
       alt="Folletto VK140"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK140
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK140
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -986,39 +1656,63 @@ body{
   data-search="vk136 136"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://i.ebayimg.com/images/g/HUAAAOSwGHFhVMir/s-l1200.jpg"
       alt="Folletto VK136"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK136
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK136
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -1034,39 +1728,63 @@ body{
   data-search="vk135 135"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://www.mclgroupricambi.it/wp-content/uploads/2023/03/vk-135-rigenerato.jpg"
       alt="Folletto VK135"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK135
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK135
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -1082,39 +1800,63 @@ body{
   data-search="vk131 131"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://accessorifolletto.com/cdn/shop/collections/VK130.jpg?v=1714654019"
       alt="Folletto VK131"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK131
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK131
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -1130,39 +1872,63 @@ body{
   data-search="vk130 130"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://italricambi.org/wp-content/uploads/2020/01/Folletto-vk130.jpg"
       alt="Folletto VK130"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK130
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK130
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -1178,39 +1944,63 @@ body{
   data-search="vk122 122"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://www.vorwerk.com/language-master/en/c/dam-home/service/manual_faq/vk-upright-vacuum-cleaner/kobold_vk122_manual_faq.jpg.imgRendition/original/lg.jpg"
       alt="Folletto VK122"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK122
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK122
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -1226,39 +2016,63 @@ body{
   data-search="vk121 121"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://cipensamanolo.it/cdn/shop/files/PhotoRoom-20240107-190419.png?v=1704650684&width=1946"
       alt="Folletto VK121"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK121
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK121
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
+
 
 </button>
 
@@ -1274,41 +2088,66 @@ body{
   data-search="vk120 120"
 >
 
+
   <div class="photo">
 
+
     <span class="ribbon">
+
       ROTTAMAZIONE
+
     </span>
+
 
     <img
       src="https://www.ricambipiacentini.it/pub/media/catalog/category/VK120_1.jpg"
       alt="Folletto VK120"
     >
 
+
   </div>
 
 
   <div class="cardBody">
 
+
     <div class="modelName">
+
       VK120
+
     </div>
 
+
     <p class="modelDesc">
+
       Folletto VK120
+
     </p>
+
 
     <div class="selectLine">
 
-      <span>Seleziona modello</span>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <span>
+
+        Seleziona modello
+
+      </span>
+
+
+      <i
+        class="fa-solid fa-chevron-right"
+      ></i>
+
 
     </div>
 
+
   </div>
 
+
 </button>
+
 
 
 </div>
@@ -1316,7 +2155,7 @@ body{
 
 
 <!-- =========================
-     PANNELLO MODELLO SCELTO
+     MODELLO SELEZIONATO
      ========================= -->
 
 <div
@@ -1324,8 +2163,11 @@ body{
   id="selectedPanel"
 >
 
+
   <div class="selectedLabel">
+
     MODELLO SELEZIONATO PER ROTTAMAZIONE
+
   </div>
 
 
@@ -1333,11 +2175,14 @@ body{
     class="selectedModel"
     id="selectedModel"
   >
+
     —
+
   </div>
 
 
   <div class="actions">
+
 
     <button
       class="actionBtn actionLight"
@@ -1354,13 +2199,17 @@ body{
       onclick="confirmSelection()"
     >
 
-      <i class="fa-solid fa-check"></i>
+      <i
+        class="fa-solid fa-check"
+      ></i>
 
       Inserisci
 
     </button>
 
+
   </div>
+
 
 </div>
 
@@ -1370,7 +2219,7 @@ body{
 
 
 <!-- =========================
-     CONFERMA PROFESSIONALE
+     CONFERMA PREMIUM
      ========================= -->
 
 <div
@@ -1378,14 +2227,41 @@ body{
   id="confirmOverlay"
 >
 
+
   <div class="confirmBox">
+
+
+    <!-- X -->
+
+
+    <button
+      class="confirmClose"
+      onclick="closeConfirmation()"
+      aria-label="Chiudi"
+    >
+
+      <i
+        class="fa-solid fa-xmark"
+      ></i>
+
+    </button>
+
+
+
+    <!-- SPUNTA -->
 
 
     <div class="confirmIcon">
 
-      <i class="fa-solid fa-check"></i>
+      <i
+        class="fa-solid fa-check"
+      ></i>
 
     </div>
+
+
+
+    <!-- TITOLO -->
 
 
     <div class="confirmTitle">
@@ -1393,6 +2269,10 @@ body{
       Scontistica rottamazione inserita
 
     </div>
+
+
+
+    <!-- MODELLO -->
 
 
     <div
@@ -1405,6 +2285,10 @@ body{
     </div>
 
 
+
+    <!-- TESTO -->
+
+
     <div class="confirmText">
 
       Il modello è stato acquisito correttamente
@@ -1413,9 +2297,15 @@ body{
     </div>
 
 
+
+    <!-- STATO -->
+
+
     <div class="confirmStatus">
 
-      <i class="fa-solid fa-circle-check"></i>
+      <i
+        class="fa-solid fa-circle-check"
+      ></i>
 
       PROCEDURA COMPLETATA
 
@@ -1423,6 +2313,7 @@ body{
 
 
   </div>
+
 
 </div>
 
@@ -1432,11 +2323,12 @@ body{
 
 
 const AUTH_KEY =
-"auth_ok";
+  "auth_ok";
 
 
 let selectedModel =
-"";
+  "";
+
 
 
 /* =========================
@@ -1444,15 +2336,20 @@ let selectedModel =
    ========================= */
 
 if(
-  localStorage.getItem(AUTH_KEY)
+
+  localStorage.getItem(
+    AUTH_KEY
+  )
   !==
   "1"
+
 ){
 
   window.location.href =
-  "./index.html?v=5";
+    "./index.html?v=5";
 
 }
+
 
 
 /* =========================
@@ -1465,19 +2362,25 @@ function haptic(
 
   try{
 
-    if(navigator.vibrate){
+    if(
+      navigator.vibrate
+    ){
 
       navigator.vibrate(
+
         type === "heavy"
         ? 40
         : 18
+
       );
 
     }
 
-  }catch(e){}
+  }
+  catch(e){}
 
 }
+
 
 
 /* =========================
@@ -1487,9 +2390,10 @@ function haptic(
 function goHome(){
 
   window.location.href =
-  "./index.html?v=5";
+    "./index.html?v=5";
 
 }
+
 
 
 /* =========================
@@ -1498,15 +2402,18 @@ function goHome(){
 
 function selectModel(card){
 
+
   document
   .querySelectorAll(
     ".modelCard"
   )
   .forEach(
+
     c =>
     c.classList.remove(
       "selected"
     )
+
   );
 
 
@@ -1516,7 +2423,7 @@ function selectModel(card){
 
 
   selectedModel =
-  card.dataset.model;
+    card.dataset.model;
 
 
   document
@@ -1524,7 +2431,7 @@ function selectModel(card){
     "selectedModel"
   )
   .textContent =
-  selectedModel;
+    selectedModel;
 
 
   document
@@ -1537,8 +2444,11 @@ function selectModel(card){
 
 
   localStorage.setItem(
+
     "folletto_rottamazione_modello",
+
     selectedModel
+
   );
 
 
@@ -1547,14 +2457,16 @@ function selectModel(card){
 }
 
 
+
 /* =========================
-   ANNULLA SELEZIONE
+   ANNULLA
    ========================= */
 
 function clearSelection(){
 
+
   selectedModel =
-  "";
+    "";
 
 
   localStorage.removeItem(
@@ -1567,10 +2479,12 @@ function clearSelection(){
     ".modelCard"
   )
   .forEach(
+
     c =>
     c.classList.remove(
       "selected"
     )
+
   );
 
 
@@ -1588,13 +2502,17 @@ function clearSelection(){
 }
 
 
+
 /* =========================
-   INSERISCI ROTTAMAZIONE
+   CONFERMA
    ========================= */
 
 function confirmSelection(){
 
-  if(!selectedModel){
+
+  if(
+    !selectedModel
+  ){
 
     return;
 
@@ -1602,8 +2520,11 @@ function confirmSelection(){
 
 
   localStorage.setItem(
+
     "folletto_rottamazione_modello",
+
     selectedModel
+
   );
 
 
@@ -1612,13 +2533,30 @@ function confirmSelection(){
     "confirmModel"
   )
   .textContent =
-  selectedModel;
+    selectedModel;
 
 
   const overlay =
-  document.getElementById(
-    "confirmOverlay"
+
+    document
+    .getElementById(
+      "confirmOverlay"
+    );
+
+
+  overlay
+  .classList.remove(
+    "show"
   );
+
+
+  /*
+  forza il browser
+  a riavviare l'animazione
+  ogni volta
+  */
+
+  void overlay.offsetWidth;
 
 
   overlay
@@ -1627,27 +2565,43 @@ function confirmSelection(){
   );
 
 
-  haptic("heavy");
-
-
-  setTimeout(
-    () => {
-
-      overlay
-      .classList.remove(
-        "show"
-      );
-
-    },
-
-    2800
+  haptic(
+    "heavy"
   );
 
 }
 
 
+
 /* =========================
-   CLICK SCHEDE
+   CHIUDI CONFERMA
+   ========================= */
+
+function closeConfirmation(){
+
+
+  const overlay =
+
+    document
+    .getElementById(
+      "confirmOverlay"
+    );
+
+
+  overlay
+  .classList.remove(
+    "show"
+  );
+
+
+  haptic();
+
+}
+
+
+
+/* =========================
+   CLICK MODELLI
    ========================= */
 
 document
@@ -1655,21 +2609,29 @@ document
   ".modelCard"
 )
 .forEach(
+
   card => {
 
+
     card.addEventListener(
+
       "click",
 
       () => {
 
-        selectModel(card);
+        selectModel(
+          card
+        );
 
       }
 
     );
 
+
   }
+
 );
+
 
 
 /* =========================
@@ -1681,14 +2643,17 @@ document
   "modelSearch"
 )
 .addEventListener(
+
   "input",
 
   (e) => {
 
+
     const q =
-    e.target.value
-    .trim()
-    .toLowerCase();
+
+      e.target.value
+      .trim()
+      .toLowerCase();
 
 
     document
@@ -1696,29 +2661,38 @@ document
       ".modelCard"
     )
     .forEach(
+
       card => {
 
+
         const testo =
-        (
-          card.dataset.search
-          +
-          " "
-          +
-          card.dataset.model
-        )
-        .toLowerCase();
+
+          (
+            card.dataset.search
+            +
+            " "
+            +
+            card.dataset.model
+          )
+          .toLowerCase();
 
 
         card.style.display =
-        testo.includes(q)
-        ? ""
-        : "none";
+
+          testo.includes(q)
+          ? ""
+          : "none";
+
 
       }
+
     );
 
+
   }
+
 );
+
 
 
 /* =========================
@@ -1726,32 +2700,45 @@ document
    ========================= */
 
 const previous =
-localStorage.getItem(
-  "folletto_rottamazione_modello"
-);
 
-
-if(previous){
-
-  const card =
-  [
-    ...document.querySelectorAll(
-      ".modelCard"
-    )
-  ]
-  .find(
-    c =>
-    c.dataset.model
-    ===
-    previous
+  localStorage.getItem(
+    "folletto_rottamazione_modello"
   );
 
 
-  if(card){
+if(
+  previous
+){
 
-    selectModel(card);
+
+  const card =
+
+    [
+      ...document.querySelectorAll(
+        ".modelCard"
+      )
+    ]
+
+    .find(
+
+      c =>
+      c.dataset.model
+      ===
+      previous
+
+    );
+
+
+  if(
+    card
+  ){
+
+    selectModel(
+      card
+    );
 
   }
+
 
 }
 
