@@ -44,17 +44,13 @@
   --red:#d72638;
 }
 
-
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
-
 body{
-
   margin:0;
-
   min-height:100vh;
 
   font-family:
@@ -70,27 +66,20 @@ body{
   );
 
   color:var(--txt);
-
 }
 
 
-
 /* =========================
-   BARRA SUPERIORE
+   TOP BAR
    ========================= */
 
 .topbar{
-
   position:sticky;
-
   top:0;
-
   z-index:100;
 
   display:flex;
-
   align-items:center;
-
   gap:12px;
 
   padding:14px;
@@ -99,61 +88,41 @@ body{
   rgba(255,255,255,.94);
 
   backdrop-filter:blur(14px);
-
   -webkit-backdrop-filter:blur(14px);
 
   box-shadow:
   0 5px 25px
   rgba(0,0,0,.07);
-
 }
 
-
 .back{
-
   width:44px;
-
   height:44px;
 
   border:0;
-
   border-radius:13px;
 
   background:#eef5f7;
-
   color:var(--blue);
 
   font-size:18px;
-
   cursor:pointer;
-
 }
-
 
 .topText{
   text-align:left;
 }
 
-
 .topTitle{
-
   font-weight:900;
-
   font-size:19px;
-
 }
-
 
 .topSub{
-
   font-size:12px;
-
   color:var(--muted);
-
   margin-top:2px;
-
 }
-
 
 
 /* =========================
@@ -161,18 +130,14 @@ body{
    ========================= */
 
 .wrap{
-
   width:min(920px,100%);
-
   margin:0 auto;
 
   padding:
   20px
   14px
   36px;
-
 }
-
 
 
 /* =========================
@@ -180,7 +145,6 @@ body{
    ========================= */
 
 .hero{
-
   padding:22px;
 
   border-radius:22px;
@@ -199,36 +163,23 @@ body{
   rgba(17,148,71,.20);
 
   margin-bottom:18px;
-
 }
-
 
 .hero h1{
-
-  margin:
-  0
-  0
-  7px;
+  margin:0 0 7px;
 
   font-size:27px;
-
   font-weight:900;
-
 }
 
-
 .hero p{
-
   margin:0;
 
   line-height:1.4;
-
   font-size:14px;
 
   opacity:.94;
-
 }
-
 
 
 /* =========================
@@ -236,11 +187,8 @@ body{
    ========================= */
 
 .searchBox{
-
   display:flex;
-
   align-items:center;
-
   gap:10px;
 
   background:#fff;
@@ -256,19 +204,14 @@ body{
   rgba(0,0,0,.06);
 
   margin-bottom:17px;
-
 }
-
 
 .searchBox i{
   color:var(--blue);
 }
 
-
 .searchBox input{
-
   border:0;
-
   outline:0;
 
   width:100%;
@@ -278,9 +221,7 @@ body{
   color:var(--txt);
 
   background:transparent;
-
 }
-
 
 
 /* =========================
@@ -288,7 +229,6 @@ body{
    ========================= */
 
 .grid{
-
   display:grid;
 
   grid-template-columns:
@@ -298,23 +238,18 @@ body{
   );
 
   gap:14px;
-
 }
 
 
-
 /* =========================
-   MODELLO
+   CARD
    ========================= */
 
 .modelCard{
-
   position:relative;
-
   overflow:hidden;
 
   border:0;
-
   padding:0;
 
   background:#fff;
@@ -332,19 +267,13 @@ body{
   transition:
   transform .12s ease,
   box-shadow .12s ease;
-
 }
-
 
 .modelCard:active{
-
   transform:scale(.985);
-
 }
 
-
 .modelCard.selected{
-
   outline:
   4px solid
   rgba(37,211,102,.40);
@@ -352,9 +281,7 @@ body{
   box-shadow:
   0 18px 50px
   rgba(37,211,102,.20);
-
 }
-
 
 
 /* =========================
@@ -362,7 +289,6 @@ body{
    ========================= */
 
 .photo{
-
   height:250px;
 
   background:#fff;
@@ -372,18 +298,12 @@ body{
   overflow:hidden;
 
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
 }
 
-
 .photo img{
-
   width:100%;
-
   height:100%;
 
   object-fit:contain;
@@ -391,21 +311,17 @@ body{
   padding:12px;
 
   display:block;
-
 }
 
 
-
 /* =========================
-   ROTTAMAZIONE
+   RIBBON
    ========================= */
 
 .ribbon{
-
   position:absolute;
 
   left:10px;
-
   top:10px;
 
   z-index:5;
@@ -430,76 +346,61 @@ body{
   box-shadow:
   0 7px 22px
   rgba(215,38,56,.22);
-
 }
 
 
-
 /* =========================
-   CARD
+   CARD BODY
    ========================= */
 
 .cardBody{
-
   padding:
   13px
   14px
   15px;
-
 }
 
-
 .modelName{
-
   font-size:21px;
-
   font-weight:900;
 
   margin:
   0
   0
   4px;
-
 }
 
-
 .modelDesc{
-
   font-size:12px;
 
   color:var(--muted);
 
   margin:0;
-
 }
 
-
 .selectLine{
-
   margin-top:11px;
 
   display:flex;
 
   align-items:center;
 
-  justify-content:space-between;
+  justify-content:
+  space-between;
 
   color:#138a4b;
 
   font-size:13px;
 
   font-weight:900;
-
 }
 
 
-
 /* =========================
-   MODELLO SELEZIONATO
+   SELEZIONE
    ========================= */
 
 .selectedPanel{
-
   display:none;
 
   position:sticky;
@@ -521,48 +422,32 @@ body{
   rgba(0,0,0,.24);
 
   z-index:80;
-
 }
-
 
 .selectedPanel.show{
   display:block;
 }
 
-
 .selectedLabel{
-
   font-size:12px;
-
   opacity:.72;
-
 }
 
-
 .selectedModel{
-
   font-size:22px;
-
   font-weight:900;
 
   margin-top:3px;
-
 }
 
-
 .actions{
-
   display:flex;
-
   gap:9px;
 
   margin-top:11px;
-
 }
 
-
 .actionBtn{
-
   flex:1;
 
   border:0;
@@ -578,12 +463,9 @@ body{
   cursor:pointer;
 
   font-size:14px;
-
 }
 
-
 .actionPrimary{
-
   background:
   linear-gradient(
     90deg,
@@ -592,18 +474,12 @@ body{
   );
 
   color:#fff;
-
 }
-
 
 .actionLight{
-
   background:#fff;
-
   color:#102a33;
-
 }
-
 
 
 /* =========================
@@ -611,22 +487,18 @@ body{
    ========================= */
 
 .confirmOverlay{
-
   position:fixed;
-
   inset:0;
 
   background:
   rgba(5,20,25,.80);
 
   backdrop-filter:blur(10px);
-
   -webkit-backdrop-filter:blur(10px);
 
   display:flex;
 
   align-items:center;
-
   justify-content:center;
 
   padding:22px;
@@ -640,21 +512,14 @@ body{
   transition:
   opacity .28s ease,
   visibility .28s ease;
-
 }
-
 
 .confirmOverlay.show{
-
   opacity:1;
-
   visibility:visible;
-
 }
 
-
 .confirmBox{
-
   position:relative;
 
   width:min(430px,100%);
@@ -684,21 +549,16 @@ body{
   transform .45s
   cubic-bezier(.16,1,.3,1),
   opacity .3s ease;
-
 }
-
 
 .confirmOverlay.show
 .confirmBox{
-
   transform:
   scale(1)
   translateY(0);
 
   opacity:1;
-
 }
-
 
 
 /* =========================
@@ -706,15 +566,12 @@ body{
    ========================= */
 
 .confirmClose{
-
   position:absolute;
 
   right:16px;
-
   top:16px;
 
   width:42px;
-
   height:42px;
 
   border:0;
@@ -730,30 +587,27 @@ body{
   display:flex;
 
   align-items:center;
-
   justify-content:center;
 
   cursor:pointer;
 
+  transition:
+  transform .15s ease,
+  background .15s ease;
 }
-
 
 .confirmClose:active{
-
   transform:scale(.90);
-
+  background:#e1e8ea;
 }
-
 
 
 /* =========================
-   CERCHIO VERDE
+   SPUNTA VERDE
    ========================= */
 
 .confirmIcon{
-
   width:100px;
-
   height:100px;
 
   margin:
@@ -766,7 +620,6 @@ body{
   display:flex;
 
   align-items:center;
-
   justify-content:center;
 
   background:
@@ -787,22 +640,17 @@ body{
   transform:scale(0);
 
   opacity:0;
-
 }
-
 
 .confirmOverlay.show
 .confirmIcon{
-
   animation:
   successPop
   .65s
   .18s
   cubic-bezier(.16,1,.3,1)
   forwards;
-
 }
-
 
 @keyframes successPop{
 
@@ -827,70 +675,51 @@ body{
 
 }
 
-
-
-/* =========================
-   SPUNTA
-   ========================= */
-
 .confirmIcon i{
-
   transform:
   scale(0)
   rotate(-25deg);
 
   opacity:0;
-
 }
-
 
 .confirmOverlay.show
 .confirmIcon i{
-
   animation:
   checkPop
   .45s
   .55s
   cubic-bezier(.16,1,.3,1)
   forwards;
-
 }
-
 
 @keyframes checkPop{
 
   0%{
-
     transform:
     scale(0)
     rotate(-25deg);
 
     opacity:0;
-
   }
 
   70%{
-
     transform:
-    scale(1.2)
+    scale(1.20)
     rotate(5deg);
 
     opacity:1;
-
   }
 
   100%{
-
     transform:
     scale(1)
     rotate(0);
 
     opacity:1;
-
   }
 
 }
-
 
 
 /* =========================
@@ -898,7 +727,6 @@ body{
    ========================= */
 
 .confirmTitle{
-
   font-size:25px;
 
   line-height:1.16;
@@ -915,12 +743,9 @@ body{
 
   transform:
   translateY(15px);
-
 }
 
-
 .confirmModel{
-
   margin-top:16px;
 
   font-size:31px;
@@ -933,12 +758,9 @@ body{
 
   transform:
   translateY(15px);
-
 }
 
-
 .confirmText{
-
   margin-top:10px;
 
   font-size:14px;
@@ -951,12 +773,9 @@ body{
 
   transform:
   translateY(15px);
-
 }
 
-
 .confirmStatus{
-
   display:inline-flex;
 
   align-items:center;
@@ -985,84 +804,65 @@ body{
 
   transform:
   translateY(15px);
-
 }
-
 
 .confirmOverlay.show
 .confirmTitle{
-
   animation:
   textEnter
   .45s
   .55s
   ease
   forwards;
-
 }
-
 
 .confirmOverlay.show
 .confirmModel{
-
   animation:
   textEnter
   .45s
   .68s
   ease
   forwards;
-
 }
-
 
 .confirmOverlay.show
 .confirmText{
-
   animation:
   textEnter
   .45s
   .78s
   ease
   forwards;
-
 }
-
 
 .confirmOverlay.show
 .confirmStatus{
-
   animation:
   textEnter
   .45s
   .88s
   ease
   forwards;
-
 }
-
 
 @keyframes textEnter{
 
   from{
-
     opacity:0;
 
     transform:
     translateY(15px);
-
   }
 
   to{
-
     opacity:1;
 
     transform:
     translateY(0);
-
   }
 
 }
-
 
 
 /* =========================
@@ -1072,27 +872,19 @@ body{
 @media(max-width:620px){
 
   .grid{
-
     grid-template-columns:1fr;
-
   }
 
   .photo{
-
     height:290px;
-
   }
 
   .confirmTitle{
-
     font-size:22px;
-
   }
 
   .confirmModel{
-
     font-size:30px;
-
   }
 
 }
@@ -1102,49 +894,33 @@ body{
 </head>
 
 
-
 <body>
 
 
-
-<!-- =========================
-     TOP BAR
-     ========================= -->
-
 <div class="topbar">
-
 
   <button
     class="back"
     onclick="goHome()"
+    aria-label="Indietro"
   >
 
-    <i
-      class="fa-solid fa-chevron-left"
-    ></i>
+    <i class="fa-solid fa-chevron-left"></i>
 
   </button>
 
 
   <div class="topText">
 
-
     <div class="topTitle">
-
       Rottamazione
-
     </div>
-
 
     <div class="topSub">
-
       Seleziona il modello del cliente
-
     </div>
 
-
   </div>
-
 
 </div>
 
@@ -1153,49 +929,29 @@ body{
 <main class="wrap">
 
 
-
-<!-- =========================
-     HERO
-     ========================= -->
-
 <section class="hero">
-
 
   <h1>
 
-    <i
-      class="fa-solid fa-recycle"
-    ></i>
+    <i class="fa-solid fa-recycle"></i>
 
     Rottamazione Folletto
 
   </h1>
 
-
   <p>
-
     Individua il Folletto del cliente,
     seleziona il modello corretto
     e inserisci la scontistica rottamazione.
-
   </p>
-
 
 </section>
 
 
 
-<!-- =========================
-     RICERCA
-     ========================= -->
-
 <div class="searchBox">
 
-
-  <i
-    class="fa-solid fa-magnifying-glass"
-  ></i>
-
+  <i class="fa-solid fa-magnifying-glass"></i>
 
   <input
     id="modelSearch"
@@ -1204,14 +960,9 @@ body{
     autocomplete="off"
   >
 
-
 </div>
 
 
-
-<!-- =========================
-     MODELLI
-     ========================= -->
 
 <div
   class="grid"
@@ -1219,8 +970,9 @@ body{
 >
 
 
-
-<!-- VK7 -->
+<!-- =========================
+     VK7 / VK7S
+     ========================= -->
 
 <button
   class="modelCard"
@@ -1235,7 +987,7 @@ body{
     </span>
 
     <img
-      src="./img/vk7.jpg"
+      src="https://accessorifolletto.com/cdn/shop/collections/Folletto-VK7_1200x1200.jpg"
       alt="Folletto VK7"
     >
 
@@ -1280,7 +1032,7 @@ body{
     </span>
 
     <img
-      src="./img/vk220s.jpg"
+      src="https://www.giordanoshop.com/cdn/shop/files/189322-2_4c5e11f9-18f0-445c-93c9-cd7a8c15534e_600x.jpg?v=1744183311"
       alt="Folletto VK220S"
     >
 
@@ -1325,7 +1077,7 @@ body{
     </span>
 
     <img
-      src="./img/vk200.jpg"
+      src="https://i.ebayimg.com/images/g/2vwAAOSwXnJkDzjy/s-l1600.jpg"
       alt="Folletto VK200"
     >
 
@@ -1370,7 +1122,7 @@ body{
     </span>
 
     <img
-      src="./img/vk150.jpg"
+      src="https://btest.ru/images/Fotki/Pulesos/Vorwerk/Vorwerk_Kobold_VK150_Staubsauger.jpg"
       alt="Folletto VK150"
     >
 
@@ -1415,7 +1167,7 @@ body{
     </span>
 
     <img
-      src="./img/vk140.jpg"
+      src="https://ddmricambi.it/cdn/shop/collections/FOLLETTO-VK-140.jpg?v=1703243820&width=900"
       alt="Folletto VK140"
     >
 
@@ -1460,7 +1212,7 @@ body{
     </span>
 
     <img
-      src="./img/vk136.jpg"
+      src="https://i.ebayimg.com/images/g/HUAAAOSwGHFhVMir/s-l1200.jpg"
       alt="Folletto VK136"
     >
 
@@ -1505,7 +1257,7 @@ body{
     </span>
 
     <img
-      src="./img/vk135.jpg"
+      src="https://www.mclgroupricambi.it/wp-content/uploads/2023/03/vk-135-rigenerato.jpg"
       alt="Folletto VK135"
     >
 
@@ -1550,7 +1302,7 @@ body{
     </span>
 
     <img
-      src="./img/vk131.jpg"
+      src="https://accessorifolletto.com/cdn/shop/collections/VK130.jpg?v=1714654019"
       alt="Folletto VK131"
     >
 
@@ -1595,7 +1347,7 @@ body{
     </span>
 
     <img
-      src="./img/vk130.jpg"
+      src="https://italricambi.org/wp-content/uploads/2020/01/Folletto-vk130.jpg"
       alt="Folletto VK130"
     >
 
@@ -1640,7 +1392,7 @@ body{
     </span>
 
     <img
-      src="./img/vk122.jpg"
+      src="https://www.vorwerk.com/language-master/en/c/dam-home/service/manual_faq/vk-upright-vacuum-cleaner/kobold_vk122_manual_faq.jpg.imgRendition/original/lg.jpg"
       alt="Folletto VK122"
     >
 
@@ -1685,7 +1437,7 @@ body{
     </span>
 
     <img
-      src="./img/vk121.jpg"
+      src="https://cipensamanolo.it/cdn/shop/files/PhotoRoom-20240107-190419.png?v=1704650684&width=1946"
       alt="Folletto VK121"
     >
 
@@ -1730,7 +1482,7 @@ body{
     </span>
 
     <img
-      src="./img/vk120.jpg"
+      src="https://www.ricambipiacentini.it/pub/media/catalog/category/VK120_1.jpg"
       alt="Folletto VK120"
     >
 
@@ -1744,96 +1496,6 @@ body{
 
     <p class="modelDesc">
       Folletto VK120
-    </p>
-
-    <div class="selectLine">
-
-      <span>Seleziona modello</span>
-
-      <i class="fa-solid fa-chevron-right"></i>
-
-    </div>
-
-  </div>
-
-</button>
-
-
-
-<!-- VK119 -->
-
-<button
-  class="modelCard"
-  data-model="VK119"
-  data-search="vk119 119"
->
-
-  <div class="photo">
-
-    <span class="ribbon">
-      ROTTAMAZIONE
-    </span>
-
-    <img
-      src="./img/vk119.jpg"
-      alt="Folletto VK119"
-    >
-
-  </div>
-
-  <div class="cardBody">
-
-    <div class="modelName">
-      VK119
-    </div>
-
-    <p class="modelDesc">
-      Folletto VK119
-    </p>
-
-    <div class="selectLine">
-
-      <span>Seleziona modello</span>
-
-      <i class="fa-solid fa-chevron-right"></i>
-
-    </div>
-
-  </div>
-
-</button>
-
-
-
-<!-- VK118 -->
-
-<button
-  class="modelCard"
-  data-model="VK118"
-  data-search="vk118 118"
->
-
-  <div class="photo">
-
-    <span class="ribbon">
-      ROTTAMAZIONE
-    </span>
-
-    <img
-      src="./img/vk118.jpg"
-      alt="Folletto VK118"
-    >
-
-  </div>
-
-  <div class="cardBody">
-
-    <div class="modelName">
-      VK118
-    </div>
-
-    <p class="modelDesc">
-      Folletto VK118
     </p>
 
     <div class="selectLine">
@@ -1865,7 +1527,7 @@ body{
     </span>
 
     <img
-      src="./img/vk117.jpg"
+      src="https://vime-srl.it/cdn/shop/collections/Folletto_VK_117.jpg?v=1700509322&width=2048"
       alt="Folletto VK117"
     >
 
@@ -1910,8 +1572,9 @@ body{
     </span>
 
     <img
-      src="./img/vk116.jpg"
+      src="https://www.evoluzione-casa.it/wp-content/uploads/2017/03/folletto-vk-116.jpg"
       alt="Folletto VK116"
+      onerror="this.src='https://vime-srl.it/cdn/shop/collections/Folletto_VK_117.jpg?v=1700509322&width=2048';"
     >
 
   </div>
@@ -1939,67 +1602,47 @@ body{
 </button>
 
 
-
 </div>
 
 
-
-<!-- =========================
-     MODELLO SELEZIONATO
-     ========================= -->
 
 <div
   class="selectedPanel"
   id="selectedPanel"
 >
 
-
   <div class="selectedLabel">
-
     MODELLO SELEZIONATO PER ROTTAMAZIONE
-
   </div>
-
 
   <div
     class="selectedModel"
     id="selectedModel"
   >
-
     —
-
   </div>
 
-
   <div class="actions">
-
 
     <button
       class="actionBtn actionLight"
       onclick="clearSelection()"
     >
-
       Annulla
-
     </button>
-
 
     <button
       class="actionBtn actionPrimary"
       onclick="confirmSelection()"
     >
 
-      <i
-        class="fa-solid fa-check"
-      ></i>
+      <i class="fa-solid fa-check"></i>
 
       Inserisci
 
     </button>
 
-
   </div>
-
 
 </div>
 
@@ -2009,14 +1652,13 @@ body{
 
 
 <!-- =========================
-     CONFERMA PREMIUM
+     CONFERMA
      ========================= -->
 
 <div
   class="confirmOverlay"
   id="confirmOverlay"
 >
-
 
   <div class="confirmBox">
 
@@ -2027,57 +1669,40 @@ body{
       aria-label="Chiudi"
     >
 
-      <i
-        class="fa-solid fa-xmark"
-      ></i>
+      <i class="fa-solid fa-xmark"></i>
 
     </button>
 
 
-
     <div class="confirmIcon">
 
-      <i
-        class="fa-solid fa-check"
-      ></i>
+      <i class="fa-solid fa-check"></i>
 
     </div>
-
 
 
     <div class="confirmTitle">
-
       Scontistica rottamazione inserita
-
     </div>
-
 
 
     <div
       class="confirmModel"
       id="confirmModel"
     >
-
       —
-
     </div>
-
 
 
     <div class="confirmText">
-
       Il modello è stato acquisito correttamente
       per la procedura di rottamazione.
-
     </div>
-
 
 
     <div class="confirmStatus">
 
-      <i
-        class="fa-solid fa-circle-check"
-      ></i>
+      <i class="fa-solid fa-circle-check"></i>
 
       PROCEDURA COMPLETATA
 
@@ -2086,47 +1711,32 @@ body{
 
   </div>
 
-
 </div>
 
 
 
 <script>
 
+const AUTH_KEY = "auth_ok";
 
-const AUTH_KEY =
-"auth_ok";
-
-
-let selectedModel =
-"";
+let selectedModel = "";
 
 
-
-/* =========================
-   CONTROLLO ACCESSO
-   ========================= */
+/* ACCESSO */
 
 if(
   localStorage.getItem(AUTH_KEY)
   !==
   "1"
 ){
-
   window.location.href =
   "./index.html?v=5";
-
 }
 
 
+/* VIBRAZIONE */
 
-/* =========================
-   VIBRAZIONE
-   ========================= */
-
-function haptic(
-  type = "light"
-){
+function haptic(type = "light"){
 
   try{
 
@@ -2146,10 +1756,7 @@ function haptic(
 }
 
 
-
-/* =========================
-   HOME
-   ========================= */
+/* HOME */
 
 function goHome(){
 
@@ -2159,240 +1766,148 @@ function goHome(){
 }
 
 
-
-/* =========================
-   SELEZIONE MODELLO
-   ========================= */
+/* SELEZIONE */
 
 function selectModel(card){
 
-
   document
-  .querySelectorAll(
-    ".modelCard"
-  )
+  .querySelectorAll(".modelCard")
   .forEach(
     c =>
-    c.classList.remove(
-      "selected"
-    )
+    c.classList.remove("selected")
   );
 
-
-  card.classList.add(
-    "selected"
-  );
-
+  card.classList.add("selected");
 
   selectedModel =
   card.dataset.model;
 
-
   document
-  .getElementById(
-    "selectedModel"
-  )
+  .getElementById("selectedModel")
   .textContent =
   selectedModel;
 
-
   document
-  .getElementById(
-    "selectedPanel"
-  )
-  .classList.add(
-    "show"
-  );
-
+  .getElementById("selectedPanel")
+  .classList.add("show");
 
   localStorage.setItem(
     "folletto_rottamazione_modello",
     selectedModel
   );
 
-
   haptic();
 
 }
 
 
-
-/* =========================
-   ANNULLA
-   ========================= */
+/* ANNULLA */
 
 function clearSelection(){
 
-
-  selectedModel =
-  "";
-
+  selectedModel = "";
 
   localStorage.removeItem(
     "folletto_rottamazione_modello"
   );
 
-
   document
-  .querySelectorAll(
-    ".modelCard"
-  )
+  .querySelectorAll(".modelCard")
   .forEach(
     c =>
-    c.classList.remove(
-      "selected"
-    )
+    c.classList.remove("selected")
   );
-
 
   document
-  .getElementById(
-    "selectedPanel"
-  )
-  .classList.remove(
-    "show"
-  );
-
+  .getElementById("selectedPanel")
+  .classList.remove("show");
 
   haptic();
 
 }
 
 
-
-/* =========================
-   INSERISCI
-   ========================= */
+/* INSERISCI */
 
 function confirmSelection(){
 
-
   if(!selectedModel){
-
     return;
-
   }
-
 
   localStorage.setItem(
     "folletto_rottamazione_modello",
     selectedModel
   );
 
-
   document
-  .getElementById(
-    "confirmModel"
-  )
+  .getElementById("confirmModel")
   .textContent =
   selectedModel;
 
-
   const overlay =
   document
-  .getElementById(
-    "confirmOverlay"
-  );
-
+  .getElementById("confirmOverlay");
 
   overlay
-  .classList.remove(
-    "show"
-  );
-
+  .classList.remove("show");
 
   void overlay.offsetWidth;
 
-
   overlay
-  .classList.add(
-    "show"
-  );
+  .classList.add("show");
 
-
-  haptic(
-    "heavy"
-  );
+  haptic("heavy");
 
 }
 
 
-
-/* =========================
-   CHIUDI CON X
-   ========================= */
+/* X CHIUSURA */
 
 function closeConfirmation(){
 
-
   document
-  .getElementById(
-    "confirmOverlay"
-  )
-  .classList.remove(
-    "show"
-  );
-
+  .getElementById("confirmOverlay")
+  .classList.remove("show");
 
   haptic();
 
 }
 
 
-
-/* =========================
-   CLICK MODELLO
-   ========================= */
+/* CLICK CARD */
 
 document
-.querySelectorAll(
-  ".modelCard"
-)
+.querySelectorAll(".modelCard")
 .forEach(
   card => {
 
     card.addEventListener(
       "click",
-      () => {
-
-        selectModel(
-          card
-        );
-
-      }
+      () => selectModel(card)
     );
 
   }
 );
 
 
-
-/* =========================
-   RICERCA
-   ========================= */
+/* RICERCA */
 
 document
-.getElementById(
-  "modelSearch"
-)
+.getElementById("modelSearch")
 .addEventListener(
   "input",
   e => {
-
 
     const q =
     e.target.value
     .trim()
     .toLowerCase();
 
-
     document
-    .querySelectorAll(
-      ".modelCard"
-    )
+    .querySelectorAll(".modelCard")
     .forEach(
       card => {
-
 
         const text =
         (
@@ -2404,34 +1919,26 @@ document
         )
         .toLowerCase();
 
-
         card.style.display =
         text.includes(q)
         ? ""
         : "none";
 
-
       }
     );
-
 
   }
 );
 
 
-
-/* =========================
-   RIPRISTINA SELEZIONE
-   ========================= */
+/* RIPRISTINO SELEZIONE */
 
 const previous =
 localStorage.getItem(
   "folletto_rottamazione_modello"
 );
 
-
 if(previous){
-
 
   const card =
   [
@@ -2446,18 +1953,11 @@ if(previous){
     previous
   );
 
-
   if(card){
-
-    selectModel(
-      card
-    );
-
+    selectModel(card);
   }
 
-
 }
-
 
 </script>
 
